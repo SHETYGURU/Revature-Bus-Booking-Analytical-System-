@@ -93,18 +93,36 @@ Or open and execute the cells in **[etl_pipeline.ipynb](file:///c:/Users/user/De
 
 ---
 
-## Contributors and Team Structure
+## The Squad
 
-Below is the team structure for the project:
+We are a core team of engineers and architects focused on product-driven systems engineering.
 
-| Team Member | Role | Profile & Responsibilities |
-| :--- | :--- | :--- |
-| **Gururaj Shetty (SHETYGURU)** | Project Lead & Core Data Engineer | **GitHub**: [SHETYGURU](https://github.com/SHETYGURU) <br> **Email**: shettygururaj279@gmail.com <br> Developed the dataset generator, built the ETL validation pipeline, configured SQLite/MySQL DB connections, and drafted the documentation structure. |
-| **Developer 2** | *[Vacant]* | SQL schema optimization and staging tests. |
-| **Developer 3** | *[Vacant]* | Power BI dashboard design and metric KPI report creations. |
+<table align="center" style="width: 100%; border-collapse: collapse; border: 1px solid #30363d; background-color: #0d1117;">
+  <tr style="border: none;">
+    <td align="center" valign="top" width="33.3%" style="border: 1px solid #30363d; padding: 20px;">
+      <img src="https://github.com/SHETYGURU.png" width="100" style="border-radius: 4px; margin-bottom: 10px;" alt="Gururaj Shetty"><br><br>
+      <strong><a href="https://github.com/SHETYGURU">Gururaj Shetty</a></strong><br>
+      <span style="color: #8b949e; font-size: 14px;">Chief Architect</span><br>
+      <span style="font-size: 13px; color: #c9d1d9;">System Design • Infrastructure • Product Strategy</span>
+    </td>
+    <td align="center" valign="top" width="33.3%" style="border: 1px solid #30363d; padding: 20px;">
+      <img src="https://api.dicebear.com/7.x/initials/svg?seed=AK" width="100" style="border-radius: 4px; margin-bottom: 10px;" alt="Adarsh K"><br><br>
+      <strong>Adarsh K</strong><br>
+      <span style="color: #8b949e; font-size: 14px;">Principal Frontend Architect</span><br>
+      <span style="font-size: 13px; color: #c9d1d9;">React • Next.js • UI Engineering</span>
+    </td>
+    <td align="center" valign="top" width="33.3%" style="border: 1px solid #30363d; padding: 20px;">
+      <img src="https://api.dicebear.com/7.x/initials/svg?seed=S" width="100" style="border-radius: 4px; margin-bottom: 10px;" alt="Shobith"><br><br>
+      <strong>Shobith</strong><br>
+      <span style="color: #8b949e; font-size: 14px;">Lead Systems & DevOps Engineer</span><br>
+      <span style="font-size: 13px; color: #c9d1d9;">Automation • CI/CD • Infrastructure</span>
+    </td>
+  </tr>
+</table>
 
 ---
 
 ## Project Documentation Links
-- **Detailed Cleaning Results & Database Counts**: See **[WALKTHROUGH.md](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WALKTHROUGH.md)**.
-- **Work Breakdown Structure & Sequences**: See **[WORK_STRUCTURE.md](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WORK_STRUCTURE.md)**.
+- **Detailed Cleaning Results & Database Counts**: See **[WALKTHROUGH.md](documents/WALKTHROUGH.md)** ([local absolute link](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WALKTHROUGH.md)).
+- **Work Breakdown Structure & Sequences**: See **[WORK_STRUCTURE.md](documents/WORK_STRUCTURE.md)** ([local absolute link](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WORK_STRUCTURE.md)).
+
