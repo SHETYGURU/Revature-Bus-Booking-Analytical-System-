@@ -1,4 +1,4 @@
-# Bus Booking Analytics System 🚌📊
+# Bus Booking Analytics System
 
 Welcome to the **Bus Booking Analytics System**, an end-to-end data engineering and analytics solution designed to ingest, cleanse, validate, and query bus booking operations, customer distribution, and revenue trends.
 
@@ -6,7 +6,7 @@ This project implements a multi-tier relational model using **Python** for ETL, 
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 - **Data Engineering & Analysis**: Python 3.10+, Pandas, NumPy
 - **Relational Databases**: SQLite (local development), MySQL (production persistence)
 - **Interactive UI & Presentation**: Jupyter Notebooks (`.ipynb`)
@@ -14,7 +14,7 @@ This project implements a multi-tier relational model using **Python** for ETL, 
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 ```
 Bus Booking Analytics System/
 │
@@ -49,7 +49,7 @@ Bus Booking Analytics System/
 
 ---
 
-## 🌟 Key Project Use Cases & Applications
+## Key Project Use Cases & Applications
 
 ### 1. Route Profitability & Optimization
 - **Goal**: Identify which routes generate the highest sales volume and travel demand to optimize route allocations.
@@ -69,7 +69,7 @@ Bus Booking Analytics System/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Installation
 Ensure you have Python installed, then install the required libraries:
@@ -93,21 +93,18 @@ Or open and execute the cells in **[etl_pipeline.ipynb](file:///c:/Users/user/De
 
 ---
 
-## 👥 Contributors & Team Structure
+## Contributors and Team Structure
 
-This project is developed and maintained by a 3-member team:
+Below is the team structure for the project:
 
-1. **Gururaj Shetty (SHETYGURU)** - *Project Lead & Core Data Engineer*
-   - **GitHub**: [SHETYGURU](https://github.com/SHETYGURU)
-   - **Email**: [shettygururaj279@gmail.com](mailto:shettygururaj279@gmail.com)
-   - **Responsibilities**: Developed the dataset generator, built the ETL validation pipeline, configured SQLite/MySQL DB connections, and drafted the documentation structure.
-2. **Developer 2** - *[Vacant]*
-   - **Responsibilities**: Responsible for SQL schema optimization and staging tests.
-3. **Developer 3** - *[Vacant]*
-   - **Responsibilities**: Power BI dashboard design and metric KPI report creations.
+| Team Member | Role | Profile & Responsibilities |
+| :--- | :--- | :--- |
+| **Gururaj Shetty (SHETYGURU)** | Project Lead & Core Data Engineer | **GitHub**: [SHETYGURU](https://github.com/SHETYGURU) <br> **Email**: shettygururaj279@gmail.com <br> Developed the dataset generator, built the ETL validation pipeline, configured SQLite/MySQL DB connections, and drafted the documentation structure. |
+| **Developer 2** | *[Vacant]* | SQL schema optimization and staging tests. |
+| **Developer 3** | *[Vacant]* | Power BI dashboard design and metric KPI report creations. |
 
 ---
 
-## 🔗 Project Documentation Links
-- **ETL Transformation Analysis & SQL Query Metrics**: See **[WALKTHROUGH.md](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WALKTHROUGH.md)**.
+## Project Documentation Links
+- **Detailed Cleaning Results & Database Counts**: See **[WALKTHROUGH.md](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WALKTHROUGH.md)**.
 - **Work Breakdown Structure & Sequences**: See **[WORK_STRUCTURE.md](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WORK_STRUCTURE.md)**.
