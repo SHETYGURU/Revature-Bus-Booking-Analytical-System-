@@ -18,12 +18,11 @@ This project implements a multi-tier relational model using **Python** for ETL, 
 ```
 Bus Booking Analytics System/
 │
-├── documents/                               # Project Specs & Raw Reference Data
+├── documents/                               # Project Specs, Reference Data & Core Docs
 │   ├── Bus Booking Analytics System.pdf     # System Objectives & Architecture Spec
 │   ├── bus_booking_1000_rows.csv            # Original baseline booking CSV
-│   ├── WALKTHROUGH.md                       # Detailed cleaning statistics and metrics
-│   ├── CONTRIBUTORS.md                      # Team structure (3 members)
-│   └── WORK_STRUCTURE.md                    # Work Breakdown Structure (WBS) & roles
+│   ├── WALKTHROUGH.md                       # Detailed cleaning stats & SQL analytics
+│   └── WORK_STRUCTURE.md                    # WBS & development workflow sequence
 │
 ├── data/                                    # Active Datasets Directory
 │   ├── bus_booking_raw.csv                  # Newly generated dirty bookings (>2,000 rows)
@@ -50,6 +49,26 @@ Bus Booking Analytics System/
 
 ---
 
+## 🌟 Key Project Use Cases & Applications
+
+### 1. Route Profitability & Optimization
+- **Goal**: Identify which routes generate the highest sales volume and travel demand to optimize route allocations.
+- **Application**: By analyzing SQL aggregates, we discovered that the **Chennai - Hyderabad** route generates the highest revenue ($180,185.00), while **Mumbai - Ahmedabad** has the highest booking frequency (178 bookings). Operators can allocate more premium AC Sleeper coaches to these routes to maximize returns.
+
+### 2. Dynamic Pricing & Fare Optimization
+- **Goal**: Evaluate fare structures across bus types and travel distances.
+- **Application**: The ETL logs show that Seater buses (both AC and Non-AC) generate more than 60% of total booking revenue due to higher passenger capacity. Dynamic pricing tiers can be modeled based on booking dates vs travel dates to capture premiums during last-minute travel windows.
+
+### 3. Capacity & Supply Chain Integrity
+- **Goal**: Prevent booking overlaps and coach over-selling.
+- **Application**: The ETL capacity engine automatically intercepts bookings where the seat number exceeds the physical bus capacity, preventing operational issues (such as over-allocating seats on Sleeper buses limited to 40 passengers).
+
+### 4. Automated Data Quality Control (ETL Gatekeeper)
+- **Goal**: Keep database structures clean and standardized.
+- **Application**: The pipeline standardizes mixed date strings (e.g. `DD/MM/YYYY` and `MM-DD-YYYY`) into ISO standard format `YYYY-MM-DD` and drops bookings with negative prices or corrupt foreign keys. This ensures Power BI models consume clean, validated records without encountering runtime rendering errors.
+
+---
+
 ## 🚀 Getting Started
 
 ### 1. Installation
@@ -59,25 +78,36 @@ pip install pandas numpy mysql-connector-python jupyter
 ```
 
 ### 2. Running the Data Generator
-To regenerate the large dirty dataset (2,100 rows + anomalies):
+To regenerate the raw dirty dataset (2,100 rows + anomalies):
 ```bash
 python data_generation/data_generator.py
 ```
-Or open and execute the cells in [data_generation.ipynb](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/data_generation/data_generation.ipynb).
+Or open and execute the cells in **[data_generation.ipynb](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/data_generation/data_generation.ipynb)**.
 
 ### 3. Running the ETL Pipeline
-To clean the dirty data, standardise formats (e.g. mixed date string parsing), perform validation checks, and load into the databases:
+To clean the dirty data, standardize formats (mixed date formats), perform integrity checks, and load into the databases:
 ```bash
 python etl_pipeline/etl_pipeline.py
 ```
-Or open and execute the cells in [etl_pipeline.ipynb](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/etl_pipeline/etl_pipeline.ipynb).
+Or open and execute the cells in **[etl_pipeline.ipynb](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/etl_pipeline/etl_pipeline.ipynb)**.
 
 ---
 
-## 📊 Key Highlights & Results
-- **Deduplication**: Successfully deduplicates raw records using Primary Keys (`Booking_ID`).
-- **Mixed Date Handling**: Parses varied dates (e.g., `DD/MM/YYYY`, `MM-DD-YYYY`, `YYYY-MM-DD`) into standard format without dropping rows.
-- **Referential Checks**: Ensures all bookings align with valid Customers, Buses, and Routes.
-- **Seat Capacities**: Ensures seat bookings do not exceed the physical capacity limits of coaches.
+## 👥 Contributors & Team Structure
 
-For a detailed analysis of the results, query counts, and database structures, please see **[WALKTHROUGH.md](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WALKTHROUGH.md)**.
+This project is developed and maintained by a 3-member team:
+
+1. **Gururaj Shetty (SHETYGURU)** - *Project Lead & Core Data Engineer*
+   - **GitHub**: [SHETYGURU](https://github.com/SHETYGURU)
+   - **Email**: [shettygururaj279@gmail.com](mailto:shettygururaj279@gmail.com)
+   - **Responsibilities**: Developed the dataset generator, built the ETL validation pipeline, configured SQLite/MySQL DB connections, and drafted the documentation structure.
+2. **Developer 2** - *[Vacant]*
+   - **Responsibilities**: Responsible for SQL schema optimization and staging tests.
+3. **Developer 3** - *[Vacant]*
+   - **Responsibilities**: Power BI dashboard design and metric KPI report creations.
+
+---
+
+## 🔗 Project Documentation Links
+- **ETL Transformation Analysis & SQL Query Metrics**: See **[WALKTHROUGH.md](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WALKTHROUGH.md)**.
+- **Work Breakdown Structure & Sequences**: See **[WORK_STRUCTURE.md](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WORK_STRUCTURE.md)**.
