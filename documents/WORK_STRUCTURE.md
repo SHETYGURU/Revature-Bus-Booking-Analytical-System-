@@ -1,10 +1,10 @@
-# Work Structure & Workflow 📋
+# Work Structure & Workflow
 
 This document outlines the **Work Breakdown Structure (WBS)** and system workflows for the 3-member team. It coordinates development across the Data Generation, ETL Pipeline, and Visualization phases.
 
 ---
 
-## 🗺️ Work Breakdown Structure (WBS)
+## Work Breakdown Structure (WBS)
 
 ```mermaid
 graph TD
@@ -41,7 +41,7 @@ graph TD
 
 ---
 
-## 🔄 Project Workflow
+## Project Workflow
 Our development follows a structured ETL data pipeline flow:
 
 ```mermaid

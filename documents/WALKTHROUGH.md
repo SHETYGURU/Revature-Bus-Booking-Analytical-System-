@@ -1,10 +1,10 @@
-# Project Walkthrough - Bus Booking Analytics System 📈
+# Project Walkthrough - Bus Booking Analytics System
 
 This document provides a summary of the data pipeline execution, details on the injected "dirty" data anomalies, and key analytical queries retrieved from the database.
 
 ---
 
-## 🧹 ETL Transformation & Cleaning Report
+## ETL Transformation & Cleaning Report
 
 Our ETL pipeline (`etl_pipeline/etl_pipeline.py`) acts as the gatekeeper for data quality. The script processes the raw datasets and outputs the following cleaning operations:
 
@@ -34,7 +34,7 @@ Our ETL pipeline (`etl_pipeline/etl_pipeline.py`) acts as the gatekeeper for dat
 
 ---
 
-## 📈 Summary of Dataset Counts
+## Summary of Dataset Counts
 
 | Dataset Name | Raw Rows | Cleaned Rows | Rows Removed / Handled |
 | :--- | :---: | :---: | :---: |
@@ -45,7 +45,7 @@ Our ETL pipeline (`etl_pipeline/etl_pipeline.py`) acts as the gatekeeper for dat
 
 ---
 
-## 📊 Verification & Analytical Queries (SQLite Database)
+## Verification & Analytical Queries (SQLite Database)
 
 Below are the key business insights retrieved from the SQLite database `data/bus_booking_analytics.db` after loading:
 
@@ -71,5 +71,5 @@ Below are the key business insights retrieved from the SQLite database `data/bus
 
 ---
 
-## 📂 Accessing the Outputs
+## Accessing the Outputs
 The cleaned files are available in CSV format in the [data/clean/](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/data/clean/) folder, and the fully populated database file is located at [data/bus_booking_analytics.db](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/data/bus_booking_analytics.db).
