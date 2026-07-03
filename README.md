@@ -102,20 +102,23 @@ We are a core team of engineers and architects focused on product-driven systems
     <td align="center" valign="top" width="33.3%" style="border: 1px solid #30363d; padding: 20px;">
       <img src="https://github.com/SHETYGURU.png" width="100" style="border-radius: 4px; margin-bottom: 10px;" alt="Gururaj Shetty"><br><br>
       <strong><a href="https://github.com/SHETYGURU">Gururaj Shetty</a></strong><br>
-      <span style="color: #8b949e; font-size: 14px;">Chief Architect</span><br>
-      <span style="font-size: 13px; color: #c9d1d9;">System Design • Infrastructure • Product Strategy</span>
+      <span style="color: #8b949e; font-size: 14px;">Project Lead & Core Data Engineer</span><br>
+      <span style="font-size: 13px; color: #c9d1d9;">GitHub: <a href="https://github.com/SHETYGURU">SHETYGURU</a><br>Email: shettygururaj279@gmail.com</span><br>
+      <span style="font-size: 12px; color: #8b949e; display: block; margin-top: 10px;">Developed generator, ETL validation, DB loaders, and docs.</span>
     </td>
     <td align="center" valign="top" width="33.3%" style="border: 1px solid #30363d; padding: 20px;">
-      <img src="https://api.dicebear.com/7.x/initials/svg?seed=AK" width="100" style="border-radius: 4px; margin-bottom: 10px;" alt="Adarsh K"><br><br>
-      <strong>Adarsh K</strong><br>
-      <span style="color: #8b949e; font-size: 14px;">Principal Frontend Architect</span><br>
-      <span style="font-size: 13px; color: #c9d1d9;">React • Next.js • UI Engineering</span>
+      <img src="https://api.dicebear.com/7.x/initials/svg?seed=D2" width="100" style="border-radius: 4px; margin-bottom: 10px;" alt="Developer 2"><br><br>
+      <strong>Developer 2</strong><br>
+      <span style="color: #8b949e; font-size: 14px;">[Vacant]</span><br>
+      <span style="font-size: 13px; color: #c9d1d9;">SQL Schema & Staging</span><br>
+      <span style="font-size: 12px; color: #8b949e; display: block; margin-top: 10px;">Responsibilities will include SQL schema optimization and database testing.</span>
     </td>
     <td align="center" valign="top" width="33.3%" style="border: 1px solid #30363d; padding: 20px;">
-      <img src="https://api.dicebear.com/7.x/initials/svg?seed=S" width="100" style="border-radius: 4px; margin-bottom: 10px;" alt="Shobith"><br><br>
-      <strong>Shobith</strong><br>
-      <span style="color: #8b949e; font-size: 14px;">Lead Systems & DevOps Engineer</span><br>
-      <span style="font-size: 13px; color: #c9d1d9;">Automation • CI/CD • Infrastructure</span>
+      <img src="https://api.dicebear.com/7.x/initials/svg?seed=D3" width="100" style="border-radius: 4px; margin-bottom: 10px;" alt="Developer 3"><br><br>
+      <strong>Developer 3</strong><br>
+      <span style="color: #8b949e; font-size: 14px;">[Vacant]</span><br>
+      <span style="font-size: 13px; color: #c9d1d9;">BI & Dashboard Design</span><br>
+      <span style="font-size: 12px; color: #8b949e; display: block; margin-top: 10px;">Responsibilities will include Power BI visualization and KPI dashboards.</span>
     </td>
   </tr>
 </table>
