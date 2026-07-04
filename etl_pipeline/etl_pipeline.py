@@ -199,11 +199,11 @@ def load_to_sqlite(bookings, customers, buses, routes, db_path):
 def load_to_mysql(bookings, customers, buses, routes, db_config):
     print("Connecting to MySQL...")
     try:
-        conn = mysql.connector.connect(**db_config)
+        conn_config = db_config.copy()
+        db_name = conn_config.pop('database', 'bus_booking_analytics')
+        conn = mysql.connector.connect(**conn_config)
         if conn.is_connected():
             cursor = conn.cursor()
-            
-            db_name = db_config.get('database', 'bus_booking_analytics')
             cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
             cursor.execute(f"USE {db_name}")
             
@@ -287,6 +287,18 @@ def load_to_mysql(bookings, customers, buses, routes, db_config):
             conn.close()
 
 def main():
+    import argparse
+    import getpass
+
+    parser = argparse.ArgumentParser(description="Run ETL Pipeline for Bus Booking Analytics System")
+    parser.add_argument('--mysql', action='store_true', help='Load clean datasets into MySQL database')
+    parser.add_argument('--user', default='root', help='MySQL database username (default: root)')
+    parser.add_argument('--password', help='MySQL database password')
+    parser.add_argument('--host', default='localhost', help='MySQL database host (default: localhost)')
+    parser.add_argument('--db-name', default='bus_booking_analytics', help='MySQL database name (default: bus_booking_analytics)')
+
+    args = parser.parse_args()
+
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     data_dir = os.path.join(base_dir, 'data')
     
@@ -308,6 +320,23 @@ def main():
     # Load into local SQLite database
     db_path = os.path.join(data_dir, 'bus_booking_analytics.db')
     load_to_sqlite(bookings_c, customers_c, buses_c, routes_c, db_path)
+
+    if args.mysql:
+        password = args.password
+        if not password:
+            try:
+                password = getpass.getpass("Enter MySQL Password: ")
+            except Exception:
+                # Fallback if getpass is not supported in the running environment
+                password = input("Enter MySQL Password: ")
+                
+        db_config = {
+            'host': args.host,
+            'user': args.user,
+            'password': password,
+            'database': args.db_name
+        }
+        load_to_mysql(bookings_c, customers_c, buses_c, routes_c, db_config)
 
 if __name__ == "__main__":
     main()
