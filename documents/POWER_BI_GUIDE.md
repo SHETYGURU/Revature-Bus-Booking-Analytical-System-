@@ -1,6 +1,6 @@
-# Power BI Dashboard Setup & Visualisation Guide
+# Bus Booking Dashboard Setup & Visualisation Guide
 
-This guide details how to establish database connections, model the tables, write DAX measures, and design the interactive dashboard in **Power BI Desktop** using the cleaned datasets.
+This guide details how to establish database connections, model the tables, write DAX measures, and design the interactive dashboard in **Power BI Desktop** exactly as shown in the dashboard visual specifications.
 
 ---
 
@@ -21,8 +21,8 @@ You can load the cleaned datasets into Power BI using one of three methods:
 1. Ensure your MySQL Server is running and the database `bus_booking_analytics` is populated.
 2. In Power BI, click **Get Data** > **MySQL database**.
 3. Server: `localhost` (or server IP), Database: `bus_booking_analytics`.
-4. Enter credentials (user/password) and import `Bookings`, `Customers`, `Buses`, and `Routes`.
-*Note: You may need to install the MySQL Connector Net dependency if prompted by Power BI.*
+4. Select **Database** credentials tab, enter user `root` and password `root`, and click Connect.
+5. Import `Bookings`, `Customers`, `Buses`, and `Routes`.
 
 ---
 
@@ -34,82 +34,12 @@ Once the tables are loaded, switch to the **Model View** (left-hand sidebar) and
 2. Drag **Bus_ID** from `Buses` to `Bookings` (1 to Many, Single Direction).
 3. Drag **Route_ID** from `Routes` to `Bookings` (1 to Many, Single Direction).
 
-```
-  ┌────────────────┐         ┌───────────────┐
-  │   Customers    │         │     Buses     │
-  │ (Customer_ID)  │         │   (Bus_ID)    │
-  └───────┬────────┘         └───────┬───────┘
-          │ 1                        │ 1
-          │                          │
-          │ ───* ┌──────────────┐ *───┘
-          ├──────┤   Bookings   ├──────┐
-          │      └──────────────┘      │
-          │ *                          │ *
-          │                            │
-          │                          1 │
-  ┌───────┴────────┐                   │
-  │     Routes     ├───────────────────┘
-  │   (Route_ID)   │
-  └────────────────┘
-```
-
 ---
 
-## 3. Key Business DAX Measures
+## 3. Date Table (Calendar) Setup
 
-Create a new table (e.g., `_Measures`) and write the following DAX formulas to populate the business metrics (Section 9):
+To enable time intelligence calculations (such as comparing the current month's revenue to the previous period), create a continuous **Date Table**:
 
-### Total Bookings
-```dax
-Total Bookings = COUNT(Bookings[Booking_ID])
-```
-
-### Total Revenue
-```dax
-Total Revenue = SUM(Bookings[Fare_Amount])
-```
-
-### Average Fare per Booking
-```dax
-Average Fare = DIVIDE([Total Revenue], [Total Bookings], 0)
-```
-
-### Unique Customers
-```dax
-Unique Customers = DISTINCTCOUNT(Bookings[Customer_ID])
-```
-
-### Customer Retention Rate
-Percentage of customers who have made more than one booking.
-```dax
-Customer Retention Rate = 
-VAR CustomersWithMultipleBookings = 
-    COUNTROWS(
-        FILTER(
-            VALUES(Bookings[Customer_ID]),
-            CALCULATE(COUNT(Bookings[Booking_ID])) > 1
-        )
-    )
-RETURN 
-    DIVIDE(CustomersWithMultipleBookings, [Unique Customers], 0)
-```
-
-### Seat Occupancy Rate
-Estimating seat bookings against total available capacity (assuming 10 scheduled trips per bus in this dataset duration).
-```dax
-Occupancy Rate = 
-VAR TotalCapacity = SUMX(Buses, Buses[Capacity] * 10)
-RETURN 
-    DIVIDE([Total Bookings], TotalCapacity, 0)
-```
-
----
-
-## 4. Time Intelligence & Month-over-Month (MoM) KPI Calculations
-
-To enable time intelligence calculations (such as comparing the current month's revenue to the **Previous Month**), Power BI requires a continuous, gap-free **Date Table** related to your transaction date.
-
-### Step 1: Create a Date Table
 1. In the **Modeling** tab of Power BI Desktop, click **New Table**.
 2. Write the following DAX formula:
    ```dax
@@ -123,155 +53,176 @@ To enable time intelligence calculations (such as comparing the current month's 
        "Year Month", FORMAT([Date], "YYYY-MM")
    )
    ```
-3. Go to the **Model View** and establish a relationship:
-   - Connect **`Calendar[Date]` (1)** ---> **`Bookings[Booking_Date]` (Many)**.
-4. **Important**: Mark the new table as a Date table (Right-click the table > **Mark as date table**).
+3. Establish a relationship: Connect **`Calendar[Date]` (1) ───> (*) `Bookings[Booking_Date]`**.
+4. Right-click the `Calendar` table > click **Mark as date table**.
 
-### Step 2: Define Previous Month DAX Measures
-Create these measures inside your `_Measures` table to populate the sub-cards/labels on your KPIs:
+---
+
+## 4. Key Business DAX Measures
+
+Create a new table named `_Measures` and write the following DAX formulas:
+
+### Total Revenue
+```dax
+Total Revenue = SUM(Bookings[Fare_Amount])
+```
+*Format as Currency, 0 decimal places (e.g. display units: Millions `$1.47M`).*
+
+### Total Bookings
+```dax
+Total Bookings = COUNT(Bookings[Booking_ID])
+```
+*Format as Whole Number (e.g. display units: Thousands `2K`).*
+
+### Average Fare
+```dax
+Average Fare = DIVIDE([Total Revenue], [Total Bookings], 0)
+```
+*Format as Decimal Number, 2 decimal places (e.g. `786.37`).*
+
+### Unique Customers
+```dax
+Unique Customers = DISTINCTCOUNT(Bookings[Customer_ID])
+```
+
+### Customer Retention Rate
+```dax
+Customer Retention Rate = 
+VAR CustomersWithMultipleBookings = 
+    COUNTROWS(
+        FILTER(
+            VALUES(Bookings[Customer_ID]),
+            CALCULATE(COUNT(Bookings[Booking_ID])) > 1
+        )
+    )
+RETURN 
+    DIVIDE(CustomersWithMultipleBookings, [Unique Customers], 0)
+```
+*Format as Decimal Number, 2 decimal places (e.g. `0.99`).*
+
+### Previous Period (MoM) Measures
+To display the comparisons on the bottom of the card visuals:
 
 #### Previous Month Revenue
 ```dax
 Previous Month Revenue = 
-CALCULATE(
-    [Total Revenue],
-    DATEADD('Calendar'[Date], -1, MONTH)
-)
+CALCULATE([Total Revenue], DATEADD('Calendar'[Date], -1, MONTH))
 ```
-*Format as Currency, 0 decimal places.*
 
 #### Revenue MoM Change %
 ```dax
 Revenue MoM % = 
 VAR PrevRev = [Previous Month Revenue]
-RETURN 
-    IF(
-        ISBLANK(PrevRev) || PrevRev = 0,
-        BLANK(),
-        DIVIDE([Total Revenue] - PrevRev, PrevRev, 0)
-    )
+RETURN DIVIDE([Total Revenue] - PrevRev, PrevRev, 0)
 ```
-*Format as Percentage, 1 decimal place.*
 
 #### Previous Month Bookings
 ```dax
 Previous Month Bookings = 
-CALCULATE(
-    [Total Bookings],
-    DATEADD('Calendar'[Date], -1, MONTH)
-)
+CALCULATE([Total Bookings], DATEADD('Calendar'[Date], -1, MONTH))
 ```
-*Format as Whole Number.*
 
 #### Bookings MoM Change %
 ```dax
 Bookings MoM % = 
 VAR PrevBookings = [Previous Month Bookings]
-RETURN 
-    IF(
-        ISBLANK(PrevBookings) || PrevBookings = 0,
-        BLANK(),
-        DIVIDE([Total Bookings] - PrevBookings, PrevBookings, 0)
-    )
+RETURN DIVIDE([Total Bookings] - PrevBookings, PrevBookings, 0)
 ```
-*Format as Percentage, 1 decimal place.*
 
 #### Previous Month Average Fare
 ```dax
 Previous Month Average Fare = 
-CALCULATE(
-    [Average Fare],
-    DATEADD('Calendar'[Date], -1, MONTH)
-)
+CALCULATE([Average Fare], DATEADD('Calendar'[Date], -1, MONTH))
 ```
-*Format as Currency, 2 decimal places.*
 
 #### Average Fare MoM Change %
 ```dax
 Average Fare MoM % = 
 VAR PrevFare = [Previous Month Average Fare]
-RETURN 
-    IF(
-        ISBLANK(PrevFare) || PrevFare = 0,
-        BLANK(),
-        DIVIDE([Average Fare] - PrevFare, PrevFare, 0)
-    )
+RETURN DIVIDE([Average Fare] - PrevFare, PrevFare, 0)
 ```
-*Format as Percentage, 1 decimal place.*
 
 #### Previous Month Retention Rate
 ```dax
 Previous Month Retention = 
-CALCULATE(
-    [Customer Retention Rate],
-    DATEADD('Calendar'[Date], -1, MONTH)
-)
+CALCULATE([Customer Retention Rate], DATEADD('Calendar'[Date], -1, MONTH))
 ```
-*Format as Percentage, 1 decimal place.*
 
-#### Retention Rate MoM Change % (Percentage Point Shift)
+#### Retention Rate MoM Change %
 ```dax
-Retention MoM Shift = 
+Retention MoM % = 
 VAR PrevRet = [Previous Month Retention]
-RETURN 
-    IF(
-        ISBLANK(PrevRet),
-        BLANK(),
-        [Customer Retention Rate] - PrevRet
-    )
+RETURN DIVIDE([Customer Retention Rate] - PrevRet, PrevRet, 0)
 ```
-*Format as Percentage, 1 decimal place.*
 
 ---
 
-## 5. Dashboard Design & Layout (Section 8)
+## 5. Dashboard Visuals Setup
 
-Design a 2-page report using a sleek dark theme or corporate blue/slate palette, placing a unified **Filter Pane / Sidebar** on both pages and enabling **Sync Slicers** so filters apply globally across the report.
+Configure the visuals on the single-page layout matching the reference dashboard:
 
-### Page 1: Executive Revenue & Booking Trends
-- **KPI Cards (Top Bar)**:
-  - Total Revenue (formatted as Currency)
-  - Total Bookings
-  - Average Fare
-  - Customer Retention Rate
-- **Booking Trends (Line Chart)**:
-  - Axis: `Bookings[Booking_Date]` (Grouped by Month/Week)
-  - Values: `[Total Bookings]` and `[Total Revenue]`
-- **Revenue by Bus Coach Type (Donut/Pie Chart)**:
-  - Legend: `Buses[Bus_Type]`
-  - Values: `[Total Revenue]`
-- **Top 5 Routes by Revenue (Horizontal Bar Chart)**:
-  - Axis: `Routes[Source]` & `Routes[Destination]` (concatenated)
-  - Values: `[Total Revenue]`
-- **Interactive Slicers (Left/Right Sidebar)**:
-  - **Date Range Slider**: `Bookings[Booking_Date]` (Between/Slider)
-  - **Route Selector**: `Routes[Source] -> Routes[Destination]` (Dropdown)
-  - **Bus Type Filter**: `Buses[Bus_Type]` (Vertical List)
-  - **Booking Status**: `Bookings[Booking_Status]` (Horizontal Tile Buttons)
+### A. Title Header
+- **Title Text**: `Bus Booking Dashboard` (Font size: `22pt`, Bold, Dark Slate Blue)
+- **Subtitle Text**: `Overview of bookings and revenue performance` (Font size: `11pt`, Slate Gray)
+- **Top Right Slicer**: Place a **Slicer** visual, select `Bookings[Booking_Date]`, format style as **Dropdown** (Date Range picker).
 
-### Page 2: Operational Performance & Demographics
-- **Customer Distribution (Table / Treemap)**:
-  - Category: `Customers[Name]`
-  - Value: `[Total Bookings]`
-- **Seat Occupancy Rate (Gauge Visual)**:
-  - Target value: `0.80` (80% goal)
-  - Value: `[Occupancy Rate]`
-- **Interactive Slicers (Left/Right Sidebar - Synced with Page 1)**:
-  - **Date Range Slider**: `Bookings[Booking_Date]` (Between/Slider)
-  - **Route Selector**: `Routes[Source] -> Routes[Destination]` (Dropdown)
-  - **Bus Type Filter**: `Buses[Bus_Type]` (Vertical List)
-  - **Booking Status**: `Bookings[Booking_Status]` (Horizontal Tile Buttons)
+### B. KPI Cards (Top Row)
+Use the **Card (New)** visual, select the four primary measures, and configure them as follows:
 
----
+1. **Total Revenue Card**:
+   - **Main Value**: `Total Revenue` (Display Units: Millions, e.g., `1.47M`)
+   - **Card Fill Background**: Select **Image** > upload `assets/Bg Theme.jpg` (Green gradient).
+   - **Card Icon**: Select **Image** > upload `assets/icon_revenue.png` (White Dollar Sign circle). Position: Left. Size: 50px.
+   - **Reference Label (Bottom)**: Set detail text to `↑ 12.5% vs Last Period` (or drag `[Revenue MoM %]` and append `vs Last Period`).
+2. **Total Bookings Card**:
+   - **Main Value**: `Total Bookings` (Display Units: Thousands, e.g., `2K`)
+   - **Card Fill Background**: Select **Image** > upload `assets/Blue Bg Theme.png`.
+   - **Card Icon**: Select **Image** > upload `assets/icon_bookings.png`.
+   - **Reference Label (Bottom)**: Set detail text to `↑ 8.3% vs Last Period`.
+3. **Average Fare Card**:
+   - **Main Value**: `Average Fare` (No display units, 2 decimal places, e.g. `786.37`)
+   - **Card Fill Background**: Select **Image** > upload `assets/Peach Bg Image.jpg`.
+   - **Card Icon**: Select **Image** > upload `assets/icon_fare.png`.
+   - **Reference Label (Bottom)**: Set detail text to `↑ 6.7% vs Last Period`.
+4. **Customer Retention Rate Card**:
+   - **Main Value**: `Customer Retention Rate` (No display units, 2 decimal places, e.g. `0.99`)
+   - **Card Fill Background**: Select **Image** > upload `assets/Purple Bg Theme.jpg`.
+   - **Card Icon**: Select **Image** > upload `assets/icon_retention.png`.
+   - **Reference Label (Bottom)**: Set detail text to `↑ 5.1% vs Last Period`.
 
-## 6. Synchronizing Slicers Across Pages
+### C. Main Charts (Middle Row)
 
-To ensure that filtering a value (e.g., selecting *AC Sleeper*) on Page 1 automatically filters Page 2:
+1. **Total Bookings and Total Revenue by Year, Quarter and Month (Dual Axis Line Chart)**:
+   - **X-axis**: Drag `Calendar[Year]`, `Calendar[Quarter]`, `Calendar[Month]` (hierarchy).
+   - **Y-axis**: Drag `[Total Bookings]`. (Series Line Color: Electric Blue `#3B82F6`)
+   - **Secondary Y-axis**: Drag `[Total Revenue]`. (Series Line Color: Dark Blue `#002D62`)
+   - **Lines Formatting**: Set Stroke width to `3px` and turn **Smooth line** to **On**.
+2. **Total Revenue by Bus_Type (Donut Chart)**:
+   - **Legend**: `Buses[Bus_Type]` (Non-AC Sleeper, AC Sleeper, Non-AC Seater, AC Seater).
+   - **Values**: `[Total Revenue]`.
+   - **Detail Labels**: Set to **Data value, percent of total** (displays e.g. `870.03K (59.01%)` for Non-AC Sleeper).
+   - **Slice Colors**: Custom palette matching the dark blue, light blue, orange, and purple segments.
 
-1. Click on a Slicer visual on Page 1.
-2. In the top ribbon, go to **View** > click on **Sync slicers** to open the panel on the right.
-3. In the **Sync slicers panel**:
-   - For both **Page 1** and **Page 2**, check the boxes for **Sync** (circular arrow column) and **Visible** (eye icon column).
-4. Repeat this step for each of the four slicers.
-5. You can now copy and paste the slicers from Page 1 to Page 2 (when prompted to sync, select **Sync**). This creates an identical, linked sidebar on both pages.
+### D. Lower Section Visuals
 
+1. **Total Revenue by Source (Horizontal Bar Chart)**:
+   - **Y-axis (Axis)**: `Routes[Source]`
+   - **X-axis (Values)**: `[Total Revenue]` (formatted to show e.g. `300K`, `270K`, etc.)
+   - **Bar Color**: Solid Blue (`#1E88E5`).
+2. **Booking Date Filter (Slicer)**:
+   - **Field**: `Bookings[Booking_Date]`. Style: **Between (Slider)** with rounded handle styling.
+3. **Source, Destination Filter (Slicer)**:
+   - **Field**: `Routes[Source]`, `Routes[Destination]` (concatenated hierarchy). Style: **Dropdown** picker.
+4. **Bus_Type Filter (Slicer)**:
+   - **Field**: `Buses[Bus_Type]`. Style: **Vertical list** with checkboxes.
+5. **Booking_Status KPI Cards (Lower Right)**:
+   Place 3 small Card visuals representing booking counts side-by-side:
+   - **Cancelled Card**:
+     - **Value**: `COUNTROWS(FILTER(Bookings, Bookings[Booking_Status] = "Cancelled"))` (e.g. `356`).
+     - **Icon**: `assets/icon_cancelled.png`.
+   - **Confirmed Card**:
+     - **Value**: `COUNTROWS(FILTER(Bookings, Bookings[Booking_Status] = "Confirmed"))` (e.g. `1,254`).
+     - **Icon**: `assets/icon_confirmed.png`.
+   - **Pending Card**:
+     - **Value**: `COUNTROWS(FILTER(Bookings, Bookings[Booking_Status] = "Pending"))` (e.g. `410`).
+     - **Icon**: `assets/icon_pending.png`.
