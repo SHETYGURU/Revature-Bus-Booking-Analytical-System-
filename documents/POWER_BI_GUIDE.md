@@ -116,8 +116,28 @@ Design a 2-page report using a sleek dark theme or corporate blue/slate palette:
   - Average Fare
   - Customer Retention Rate
 - **Booking Trends (Line Chart)**:
-  - Axis: `Bookings[Booking_Date]` (Grouped by Month/Week)
-  - Values: `[Total Bookings]` and `[Total Revenue]`
+  - **Visual Type**: Select the **Line chart** visual.
+  - **Fields Configuration**:
+    - **X-axis**: Drag `Bookings[Booking_Date]`. Right-click this field in the axis well and ensure it is set to **Date Hierarchy** (enables drill down from Year -> Quarter -> Month -> Day) or switch to raw `Booking_Date` for a continuous timeline view.
+    - **Y-axis**: Drag the `[Total Bookings]` measure (left scale).
+    - **Secondary Y-axis**: Drag the `[Total Revenue]` measure (right scale). This creates a dual-axis trend chart overlaying booking volume and financial revenue.
+  - **Visual Formatting (Format Pane)**:
+    - **Lines**:
+      - Under *Series*, select *All*. Set **Line Type** to **Smooth** (creates premium curved wave lines instead of straight jagged angles). Set **Stroke width** to `3px`.
+    - **Colors**:
+      - Set `Total Bookings` line color to Cyan/Electric Blue (`#06B6D4`).
+      - Set `Total Revenue` line color to Vibrant Amber/Gold (`#F59E0B`).
+    - **Markers**:
+      - Turn **On** markers. Set shape to **Circle**, size to `5pt`, and turn on *Show border* (white color, `1px` width) for a polished, dot-indicator appearance.
+    - **Gridlines**:
+      - Under *Gridlines*, turn **Off** vertical lines. Set **Horizontal lines** to **Dotted**, color to light gray (`#E2E8F0`), and transparency to `50%`.
+    - **Data Labels**:
+      - Turn **On** data labels ONLY if filtering down to a small date range (e.g. 1 month) to prevent visual clutter. Under label settings, select *Values* > set *Display units* to *Auto*.
+    - **Title**:
+      - Set title text to: `Booking and Revenue Trends Over Time`
+      - Font: `Segoe UI Semibold`, size `14pt`, bold, and centered.
+    - **Tooltip**:
+      - Ensure default tooltips are active so hovering over any marker displays the specific Date, exact Bookings count, and total Revenue formatted as Currency.
 - **Revenue by Bus Coach Type (Donut/Pie Chart)**:
   - Legend: `Buses[Bus_Type]`
   - Values: `[Total Revenue]`
