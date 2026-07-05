@@ -107,7 +107,7 @@ RETURN
 
 ## 4. Dashboard Design & Layout (Section 8)
 
-Design a 2-page report using a sleek dark theme or corporate blue/slate palette:
+Design a 2-page report using a sleek dark theme or corporate blue/slate palette, placing a unified **Filter Pane / Sidebar** on both pages and enabling **Sync Slicers** so filters apply globally across the report.
 
 ### Page 1: Executive Revenue & Booking Trends
 - **KPI Cards (Top Bar)**:
@@ -116,34 +116,19 @@ Design a 2-page report using a sleek dark theme or corporate blue/slate palette:
   - Average Fare
   - Customer Retention Rate
 - **Booking Trends (Line Chart)**:
-  - **Visual Type**: Select the **Line chart** visual.
-  - **Fields Configuration**:
-    - **X-axis**: Drag `Bookings[Booking_Date]`. Right-click this field in the axis well and ensure it is set to **Date Hierarchy** (enables drill down from Year -> Quarter -> Month -> Day) or switch to raw `Booking_Date` for a continuous timeline view.
-    - **Y-axis**: Drag the `[Total Bookings]` measure (left scale).
-    - **Secondary Y-axis**: Drag the `[Total Revenue]` measure (right scale). This creates a dual-axis trend chart overlaying booking volume and financial revenue.
-  - **Visual Formatting (Format Pane)**:
-    - **Lines**:
-      - Under *Series*, select *All*. Set **Line Type** to **Smooth** (creates premium curved wave lines instead of straight jagged angles). Set **Stroke width** to `3px`.
-    - **Colors**:
-      - Set `Total Bookings` line color to Cyan/Electric Blue (`#06B6D4`).
-      - Set `Total Revenue` line color to Vibrant Amber/Gold (`#F59E0B`).
-    - **Markers**:
-      - Turn **On** markers. Set shape to **Circle**, size to `5pt`, and turn on *Show border* (white color, `1px` width) for a polished, dot-indicator appearance.
-    - **Gridlines**:
-      - Under *Gridlines*, turn **Off** vertical lines. Set **Horizontal lines** to **Dotted**, color to light gray (`#E2E8F0`), and transparency to `50%`.
-    - **Data Labels**:
-      - Turn **On** data labels ONLY if filtering down to a small date range (e.g. 1 month) to prevent visual clutter. Under label settings, select *Values* > set *Display units* to *Auto*.
-    - **Title**:
-      - Set title text to: `Booking and Revenue Trends Over Time`
-      - Font: `Segoe UI Semibold`, size `14pt`, bold, and centered.
-    - **Tooltip**:
-      - Ensure default tooltips are active so hovering over any marker displays the specific Date, exact Bookings count, and total Revenue formatted as Currency.
+  - Axis: `Bookings[Booking_Date]` (Grouped by Month/Week)
+  - Values: `[Total Bookings]` and `[Total Revenue]`
 - **Revenue by Bus Coach Type (Donut/Pie Chart)**:
   - Legend: `Buses[Bus_Type]`
   - Values: `[Total Revenue]`
 - **Top 5 Routes by Revenue (Horizontal Bar Chart)**:
   - Axis: `Routes[Source]` & `Routes[Destination]` (concatenated)
   - Values: `[Total Revenue]`
+- **Interactive Slicers (Left/Right Sidebar)**:
+  - **Date Range Slider**: `Bookings[Booking_Date]` (Between/Slider)
+  - **Route Selector**: `Routes[Source] -> Routes[Destination]` (Dropdown)
+  - **Bus Type Filter**: `Buses[Bus_Type]` (Vertical List)
+  - **Booking Status**: `Bookings[Booking_Status]` (Horizontal Tile Buttons)
 
 ### Page 2: Operational Performance & Demographics
 - **Customer Distribution (Table / Treemap)**:
@@ -152,8 +137,22 @@ Design a 2-page report using a sleek dark theme or corporate blue/slate palette:
 - **Seat Occupancy Rate (Gauge Visual)**:
   - Target value: `0.80` (80% goal)
   - Value: `[Occupancy Rate]`
-- **Interactive Slicers / Filters (Left Sidebar)**:
-  - **Date Range Slider**: `Bookings[Booking_Date]`
-  - **Route Selector**: `Routes[Source] -> Routes[Destination]`
-  - **Bus Type Filter**: `Buses[Bus_Type]`
-  - **Booking Status Filter**: `Bookings[Booking_Status]`
+- **Interactive Slicers (Left/Right Sidebar - Synced with Page 1)**:
+  - **Date Range Slider**: `Bookings[Booking_Date]` (Between/Slider)
+  - **Route Selector**: `Routes[Source] -> Routes[Destination]` (Dropdown)
+  - **Bus Type Filter**: `Buses[Bus_Type]` (Vertical List)
+  - **Booking Status**: `Bookings[Booking_Status]` (Horizontal Tile Buttons)
+
+---
+
+## 5. Synchronizing Slicers Across Pages
+
+To ensure that filtering a value (e.g., selecting *AC Sleeper*) on Page 1 automatically filters Page 2:
+
+1. Click on a Slicer visual on Page 1.
+2. In the top ribbon, go to **View** > click on **Sync slicers** to open the panel on the right.
+3. In the **Sync slicers panel**:
+   - For both **Page 1** and **Page 2**, check the boxes for **Sync** (circular arrow column) and **Visible** (eye icon column).
+4. Repeat this step for each of the four slicers.
+5. You can now copy and paste the slicers from Page 1 to Page 2 (when prompted to sync, select **Sync**). This creates an identical, linked sidebar on both pages.
+
