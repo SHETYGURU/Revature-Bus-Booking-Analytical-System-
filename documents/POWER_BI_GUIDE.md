@@ -105,7 +105,126 @@ RETURN
 
 ---
 
-## 4. Dashboard Design & Layout (Section 8)
+## 4. Time Intelligence & Month-over-Month (MoM) KPI Calculations
+
+To enable time intelligence calculations (such as comparing the current month's revenue to the **Previous Month**), Power BI requires a continuous, gap-free **Date Table** related to your transaction date.
+
+### Step 1: Create a Date Table
+1. In the **Modeling** tab of Power BI Desktop, click **New Table**.
+2. Write the following DAX formula:
+   ```dax
+   Calendar = 
+   ADDCOLUMNS(
+       CALENDAR(MIN(Bookings[Booking_Date]), MAX(Bookings[Booking_Date])),
+       "Year", YEAR([Date]),
+       "Month Number", MONTH([Date]),
+       "Month Name", FORMAT([Date], "MMMM"),
+       "Quarter", "Q" & FORMAT([Date], "Q"),
+       "Year Month", FORMAT([Date], "YYYY-MM")
+   )
+   ```
+3. Go to the **Model View** and establish a relationship:
+   - Connect **`Calendar[Date]` (1)** ---> **`Bookings[Booking_Date]` (Many)**.
+4. **Important**: Mark the new table as a Date table (Right-click the table > **Mark as date table**).
+
+### Step 2: Define Previous Month DAX Measures
+Create these measures inside your `_Measures` table to populate the sub-cards/labels on your KPIs:
+
+#### Previous Month Revenue
+```dax
+Previous Month Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DATEADD('Calendar'[Date], -1, MONTH)
+)
+```
+*Format as Currency, 0 decimal places.*
+
+#### Revenue MoM Change %
+```dax
+Revenue MoM % = 
+VAR PrevRev = [Previous Month Revenue]
+RETURN 
+    IF(
+        ISBLANK(PrevRev) || PrevRev = 0,
+        BLANK(),
+        DIVIDE([Total Revenue] - PrevRev, PrevRev, 0)
+    )
+```
+*Format as Percentage, 1 decimal place.*
+
+#### Previous Month Bookings
+```dax
+Previous Month Bookings = 
+CALCULATE(
+    [Total Bookings],
+    DATEADD('Calendar'[Date], -1, MONTH)
+)
+```
+*Format as Whole Number.*
+
+#### Bookings MoM Change %
+```dax
+Bookings MoM % = 
+VAR PrevBookings = [Previous Month Bookings]
+RETURN 
+    IF(
+        ISBLANK(PrevBookings) || PrevBookings = 0,
+        BLANK(),
+        DIVIDE([Total Bookings] - PrevBookings, PrevBookings, 0)
+    )
+```
+*Format as Percentage, 1 decimal place.*
+
+#### Previous Month Average Fare
+```dax
+Previous Month Average Fare = 
+CALCULATE(
+    [Average Fare],
+    DATEADD('Calendar'[Date], -1, MONTH)
+)
+```
+*Format as Currency, 2 decimal places.*
+
+#### Average Fare MoM Change %
+```dax
+Average Fare MoM % = 
+VAR PrevFare = [Previous Month Average Fare]
+RETURN 
+    IF(
+        ISBLANK(PrevFare) || PrevFare = 0,
+        BLANK(),
+        DIVIDE([Average Fare] - PrevFare, PrevFare, 0)
+    )
+```
+*Format as Percentage, 1 decimal place.*
+
+#### Previous Month Retention Rate
+```dax
+Previous Month Retention = 
+CALCULATE(
+    [Customer Retention Rate],
+    DATEADD('Calendar'[Date], -1, MONTH)
+)
+```
+*Format as Percentage, 1 decimal place.*
+
+#### Retention Rate MoM Change % (Percentage Point Shift)
+```dax
+Retention MoM Shift = 
+VAR PrevRet = [Previous Month Retention]
+RETURN 
+    IF(
+        ISBLANK(PrevRet),
+        BLANK(),
+        [Customer Retention Rate] - PrevRet
+    )
+```
+*Format as Percentage, 1 decimal place.*
+
+---
+
+## 5. Dashboard Design & Layout (Section 8)
 
 Design a 2-page report using a sleek dark theme or corporate blue/slate palette, placing a unified **Filter Pane / Sidebar** on both pages and enabling **Sync Slicers** so filters apply globally across the report.
 
@@ -145,7 +264,7 @@ Design a 2-page report using a sleek dark theme or corporate blue/slate palette,
 
 ---
 
-## 5. Synchronizing Slicers Across Pages
+## 6. Synchronizing Slicers Across Pages
 
 To ensure that filtering a value (e.g., selecting *AC Sleeper*) on Page 1 automatically filters Page 2:
 
