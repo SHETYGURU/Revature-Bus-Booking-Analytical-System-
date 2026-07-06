@@ -249,16 +249,23 @@ Configure your workspace geometry to fit a single widescreen window:
    - Set coordinates: X = `0px`, Y = `0px`, Width = `80px`, Height = `720px` (full vertical height).
    - Fill: White (`#FFFFFF`). Border: Outline color Light Gray (`#E2E8F0`), Width: `1px`.
    - Place your navigation logo image (`assets/icon_nav_logo.png`) at X = `15px`, Y = `15px`, Width = `50px`, Height = `50px`.
-5. **Page Navigator Setup**:
-   - In the top ribbon, click **Insert** > **Buttons** > **Navigator** > **Page Navigator**.
-   - A menu button bar listing all your pages will appear on the canvas. Drag it onto your sidebar.
-   - Set coordinates: X = `0px`, Y = `100px`, Width = `80px`, Height = `500px`.
-   - In the **Format Page Navigator** pane:
-     - Under **Grid layout**: Set **Orientation** to **`Vertical`**, spacing to `15px`.
-     - Under **Shape**: Select **Rectangle** (or rounded rectangle).
-     - Under **Style (State: Default)**: Set Fill to Off (transparent), Text to Off. Enable **Icon** > type **Image URL** > bind each button state to its slate outline icon (e.g. `assets/icon_nav_overview.png`, etc.).
-     - Under **Style (State: Selected)**: Set Fill to Purple (`#7C3AED` or `#4F46E5`), Text to Off. Set **Icon** to display the white version of the navigation icons, matching the active Overview tab style.
-6. **Filters button**: Place the funnel icon (`assets/icon_nav_filters.png`) at the very bottom of the sidebar (X = `20px`, Y = `660px`, size `40px`).
+5. **Navigation Buttons Setup (Individual Buttons)**:
+   Because the native Page Navigator visual does not allow you to set *different* custom icons for each page, you must create individual buttons. Follow these steps to build the 7 vertical tabs:
+   - For each page, click **Insert** > **Buttons** > **Blank**.
+   - Set the size for each button: Width = `60px`, Height = `50px`.
+   - Place them vertically in the sidebar starting from Y = `100px` down to Y = `460px` (with X = `10px`).
+   - Format each button individually:
+     - **Button Style (State: Default)**:
+       - **Fill**: Off (transparent).
+       - **Icon**: Toggle **On**, set type to **`Custom`**, and browse to select the corresponding slate icon (e.g. `assets/icon_nav_overview.png` for the Overview button, `assets/icon_nav_bookings.png` for Bookings, etc.). Set fit to **`Fit`** or **`Fill`**.
+     - **Button Style (State: Selected)** (for the active page button on its respective sheet):
+       - **Fill**: Toggle **On**, set background color to Purple (`#7C3AED` or `#4F46E5`), transparency `0%`.
+       - **Icon**: Change the custom icon image to a white version of the icon (or adjust icon transparency/scaling).
+     - **Action**:
+       - Toggle **Action** to **`On`**.
+       - Set **Type** to **`Page navigation`**.
+       - Set **Destination** to the corresponding page name (e.g., the Overview button navigates to `Overview`, the Bookings button to `Bookings`, etc.).
+6. **Filters button**: Place a Blank Button at X = `20px`, Y = `660px`, size `40px` x `40px`. Under Style > Icon, upload `assets/icon_nav_filters.png`. Under Action, set it to toggle a Bookmark or Filter panel if needed, or leave it as a visual separator.
 
 ---
 
