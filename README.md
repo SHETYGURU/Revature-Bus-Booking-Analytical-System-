@@ -23,7 +23,8 @@ Bus Booking Analytics System/
 │   ├── bus_booking_1000_rows.csv            # Original baseline booking CSV
 │   ├── WALKTHROUGH.md                       # Detailed cleaning stats & SQL analytics
 │   ├── WORK_STRUCTURE.md                    # WBS & development workflow sequence
-│   └── POWER_BI_GUIDE.md                    # Power BI Setup & DAX Visualisation Guide
+│   ├── POWER_BI_GUIDE.md                    # Power BI Setup & DAX Visualisation Guide
+│   └── DASHBOARD_DESIGN_GUIDE.md            # Slicers sizing, grid coordinates & typography
 │
 ├── data/                                    # Active Datasets Directory
 │   ├── bus_booking_raw.csv                  # Newly generated dirty bookings (>2,000 rows)
@@ -130,4 +131,5 @@ We are a core team of engineers and architects focused on product-driven systems
 - **Detailed Cleaning Results & Database Counts**: See **[WALKTHROUGH.md](documents/WALKTHROUGH.md)** ([local absolute link](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WALKTHROUGH.md)).
 - **Work Breakdown Structure & Sequences**: See **[WORK_STRUCTURE.md](documents/WORK_STRUCTURE.md)** ([local absolute link](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WORK_STRUCTURE.md)).
 - **Power BI Connection & Dashboard Setup**: See **[POWER_BI_GUIDE.md](documents/POWER_BI_GUIDE.md)** ([local absolute link](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/POWER_BI_GUIDE.md)).
+- **Power BI Layout & Design Specs**: See **[DASHBOARD_DESIGN_GUIDE.md](documents/DASHBOARD_DESIGN_GUIDE.md)** ([local absolute link](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/DASHBOARD_DESIGN_GUIDE.md)).
 
