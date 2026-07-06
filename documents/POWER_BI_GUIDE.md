@@ -166,34 +166,102 @@ Configure the visuals on the single-page layout matching the reference dashboard
 - **Subtitle Text**: `Overview of bookings and revenue performance` (Font size: `11pt`, Slate Gray)
 - **Top Right Slicer**: Place a **Slicer** visual, select `Bookings[Booking_Date]`, format style as **Dropdown** (Date Range picker).
 
-### B. KPI Visuals (Top Row)
-To match the dashboard, use the dedicated **KPI** visual in Power BI (which displays a large indicator, a sparkline trend line in the background, and an automatic target comparison percentage at the bottom). Create four separate KPI visuals side-by-side:
+### B. KPI Cards (Top Row)
+To achieve this exact visual layout (circular icon on the left, primary value/label in the center-right, and the trend indicator styled as a pill at the bottom), use the **Card (New)** visual (not the native KPI visual) and configure it as follows:
 
-1. **Total Revenue KPI**:
-   - **Indicator**: `Total Revenue` (Display Units: Millions, e.g., `1.47M`)
-   - **Trend axis**: `Calendar[Date]` (or `Calendar[Year Month]`)
-   - **Target**: `Previous Month Revenue`
-   - **Visual Background**: In the Format pane, set background to **Image** > upload `assets/Bg Theme.jpg` (Green gradient).
-   - **Visual Icon**: Place the icon `assets/icon_revenue.png` on the left (e.g. overlaying an Image visual or setting card icon).
-   - **Status Label**: The bottom label will automatically display the growth rate (e.g. `12.5% vs Last Period`).
-2. **Total Bookings KPI**:
-   - **Indicator**: `Total Bookings` (Display Units: Thousands, e.g., `2K`)
-   - **Trend axis**: `Calendar[Date]` (or `Calendar[Year Month]`)
-   - **Target**: `Previous Month Bookings`
-   - **Visual Background**: Set background to **Image** > upload `assets/Blue Bg Theme.png`.
-   - **Visual Icon**: Place the icon `assets/icon_bookings.png` on the left.
-3. **Average Fare KPI**:
-   - **Indicator**: `Average Fare` (No display units, 2 decimal places, e.g. `786.37`)
-   - **Trend axis**: `Calendar[Date]` (or `Calendar[Year Month]`)
-   - **Target**: `Previous Month Average Fare`
-   - **Visual Background**: Set background to **Image** > upload `assets/Peach Bg Image.jpg`.
-   - **Visual Icon**: Place the icon `assets/icon_fare.png` on the left.
-4. **Customer Retention Rate KPI**:
-   - **Indicator**: `Customer Retention Rate` (No display units, 2 decimal places, e.g. `0.99`)
-   - **Trend axis**: `Calendar[Date]` (or `Calendar[Year Month]`)
-   - **Target**: `Previous Month Retention`
-   - **Visual Background**: Set background to **Image** > upload `assets/Purple Bg Theme.jpg`.
-   - **Visual Icon**: Place the icon `assets/icon_retention.png` on the left.
+#### Step 1: Create Trend Label DAX Measures
+Create these measures in your `_Measures` table to automatically format the text inside the bottom pills (including arrows and text):
+
+##### Revenue Trend Label
+```dax
+Revenue Trend Label = 
+VAR MoM = [Revenue MoM %]
+RETURN 
+    IF(
+        ISBLANK(MoM),
+        "No Data vs Last Period",
+        IF(
+            MoM >= 0,
+            "↑ " & FORMAT(MoM, "0.0%") & " vs Last Period",
+            "↓ " & FORMAT(MoM, "0.0%") & " vs Last Period"
+        )
+    )
+```
+
+##### Bookings Trend Label
+```dax
+Bookings Trend Label = 
+VAR MoM = [Bookings MoM %]
+RETURN 
+    IF(
+        ISBLANK(MoM),
+        "No Data vs Last Period",
+        IF(
+            MoM >= 0,
+            "↑ " & FORMAT(MoM, "0.0%") & " vs Last Period",
+            "↓ " & FORMAT(MoM, "0.0%") & " vs Last Period"
+        )
+    )
+```
+
+##### Average Fare Trend Label
+```dax
+Average Fare Trend Label = 
+VAR MoM = [Average Fare MoM %]
+RETURN 
+    IF(
+        ISBLANK(MoM),
+        "No Data vs Last Period",
+        IF(
+            MoM >= 0,
+            "↑ " & FORMAT(MoM, "0.0%") & " vs Last Period",
+            "↓ " & FORMAT(MoM, "0.0%") & " vs Last Period"
+        )
+    )
+```
+
+##### Retention Trend Label
+```dax
+Retention Trend Label = 
+VAR MoM = [Retention MoM %]
+RETURN 
+    IF(
+        ISBLANK(MoM),
+        "No Data vs Last Period",
+        IF(
+            MoM >= 0,
+            "↑ " & FORMAT(MoM, "0.0%") & " vs Last Period",
+            "↓ " & FORMAT(MoM, "0.0%") & " vs Last Period"
+        )
+    )
+```
+
+#### Step 2: Configure the Card (New) Visuals
+Create a **Card (New)** visual on your canvas and set the parameters:
+
+1. **Total Revenue Card**:
+   - **Data**: Drag `[Total Revenue]` (Main indicator) and `[Revenue Trend Label]` (for the pill).
+   - **Fill Background**: Under *Format Pane* > *Cards* > *Fill*, upload `assets/Bg Theme.jpg` (Green gradient). Image Fit: Fill.
+   - **Card Icon**: Under *Format Pane* > *Cards* > *Image*, upload `assets/icon_revenue.png`. Position: Left. Size: 50px.
+   - **Pill Shape (Reference Label)**:
+     - Go to *Format Pane* > *Reference labels* > select the `Total Revenue` series.
+     - Add `[Revenue Trend Label]` as the label value.
+     - Select the label, turn on **Background**, and set the background color to a dark semi-transparent green (e.g. Hex `#064E3B`, transparency `30%`) to create the rounded "pill" capsule look. Set text color to white.
+2. **Total Bookings Card**:
+   - **Data**: Drag `[Total Bookings]` and `[Bookings Trend Label]`.
+   - **Fill Background**: Upload `assets/Blue Bg Theme.png`.
+   - **Card Icon**: Upload `assets/icon_bookings.png`. Position: Left. Size: 50px.
+   - **Pill Shape (Reference Label)**: Configure background to a semi-transparent dark blue (Hex `#1E3A8A`, transparency `30%`). Set text color to white.
+3. **Average Fare Card**:
+   - **Data**: Drag `[Average Fare]` and `[Average Fare Trend Label]`.
+   - **Fill Background**: Upload `assets/Peach Bg Image.jpg`.
+   - **Card Icon**: Upload `assets/icon_fare.png`. Position: Left. Size: 50px.
+   - **Pill Shape (Reference Label)**: Configure background to a semi-transparent dark orange (Hex `#7C2D12`, transparency `30%`). Set text color to white.
+4. **Customer Retention Rate Card**:
+   - **Data**: Drag `[Customer Retention Rate]` and `[Retention Trend Label]`.
+   - **Fill Background**: Upload `assets/Purple Bg Theme.jpg`.
+   - **Card Icon**: Upload `assets/icon_retention.png`. Position: Left. Size: 50px.
+   - **Pill Shape (Reference Label)**: Configure background to a semi-transparent dark purple (Hex `#581C87`, transparency `30%`). Set text color to white.
 
 ### C. Main Charts (Middle Row)
 
