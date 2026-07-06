@@ -1,51 +1,54 @@
-# Bus Booking Dashboard Setup & Visualisation Guide
+# Power BI Step-by-Step Dashboard Setup Guide (From Scratch)
 
-This guide details how to establish database connections, model the tables, write DAX measures, and design the interactive dashboard in **Power BI Desktop** exactly as shown in the dashboard visual specifications.
-
----
-
-## 1. Connecting Data to Power BI
-
-You can load the cleaned datasets into Power BI using one of three methods:
-
-### Method A: Direct CSV Ingestion (Recommended for quick setup)
-1. Open **Power BI Desktop**.
-2. Click **Get Data** > **Text/CSV**.
-3. Import the four cleaned files from the `data/clean/` directory:
-   - `bookings_clean.csv`
-   - `customers_clean.csv`
-   - `buses_clean.csv`
-   - `routes_clean.csv`
-
-### Method B: MySQL Database Connection (Production)
-1. Ensure your MySQL Server is running and the database `bus_booking_analytics` is populated.
-2. In Power BI, click **Get Data** > **MySQL database**.
-3. Server: `localhost` (or server IP), Database: `bus_booking_analytics`.
-4. Select **Database** credentials tab, enter user `root` and password `root`, and click Connect.
-5. Import `Bookings`, `Customers`, `Buses`, and `Routes`.
+This comprehensive tutorial guides you through building the **Bus Booking Dashboard** from absolute scratch, including database ingestion, data modeling, DAX calculations, page layout configurations, and creating the vertical navigation sidebar exactly as specified.
 
 ---
 
-## 2. Data Modeling & Relationships (Star Schema)
+## Phase 1: Database Connection
 
-Once the tables are loaded, switch to the **Model View** (left-hand sidebar) and establish the relationships to construct a clean star schema:
+To load your cleansed data from the local MySQL database:
 
-1. Drag **Customer_ID** from `Customers` to `Bookings` (1 to Many, Single Direction).
-2. Drag **Bus_ID** from `Buses` to `Bookings` (1 to Many, Single Direction).
-3. Drag **Route_ID** from `Routes` to `Bookings` (1 to Many, Single Direction).
+1. Open **Power BI Desktop** (start with a blank report).
+2. On the **Home** ribbon, click **Get Data** > select **MySQL database**.
+3. In the Connection Dialog:
+   - **Server**: `localhost`
+   - **Database**: `bus_booking_analytics`
+   - **Connectivity mode**: `Import`
+4. Click **OK**.
+5. When the credential prompt appears:
+   - Select the **Database** tab in the left-hand sidebar (do *not* select Windows).
+   - **User name**: `root`
+   - **Password**: `root`
+   - Click **Connect**.
+6. In the **Navigator** window:
+   - Select the four tables: `bookings`, `buses`, `customers`, and `routes`.
+   - Click **Load**.
 
 ---
 
-## 3. Date Table (Calendar) Setup
+## Phase 2: Data Modeling (Star Schema)
 
-To enable time intelligence calculations (such as comparing the current month's revenue to the previous period), create a continuous **Date Table**:
+Establish relationships to allow filters to flow correctly:
 
-1. In the **Modeling** tab of Power BI Desktop, click **New Table**.
-2. Write the following DAX formula:
+1. Switch to the **Model View** (left-sidebar icon of Power BI).
+2. Create relationships by dragging and dropping keys (1 to Many, single-direction filter):
+   - **`customers[Customer_ID]` (1) ───> (*) `bookings[Customer_ID]`**
+   - **`buses[Bus_ID]` (1) ───> (*) `bookings[Bus_ID]`**
+   - **`routes[Route_ID]` (1) ───> (*) `bookings[Route_ID]`**
+
+---
+
+## Phase 3: Date Table (Calendar) Setup
+
+To enable Month-over-Month (MoM) calculations, set up a continuous calendar:
+
+1. Switch to the **Table View** (left-sidebar).
+2. In the **Modeling** ribbon, click **New Table**.
+3. Enter the following DAX formula:
    ```dax
    Calendar = 
    ADDCOLUMNS(
-       CALENDAR(MIN(Bookings[Booking_Date]), MAX(Bookings[Booking_Date])),
+       CALENDAR(MIN(bookings[Booking_Date]), MAX(bookings[Booking_Date])),
        "Year", YEAR([Date]),
        "Month Number", MONTH([Date]),
        "Month Name", FORMAT([Date], "MMMM"),
@@ -53,63 +56,67 @@ To enable time intelligence calculations (such as comparing the current month's 
        "Year Month", FORMAT([Date], "YYYY-MM")
    )
    ```
-3. Establish a relationship: Connect **`Calendar[Date]` (1) ───> (*) `Bookings[Booking_Date]`**.
-4. Right-click the `Calendar` table > click **Mark as date table**.
+4. Right-click the `Calendar` table in your Data pane > select **Mark as date table** > choose `Date` as the key column.
+5. Switch to **Model View** and link the dates:
+   - **`Calendar[Date]` (1) ───> (*) `bookings[Booking_Date]`**
+   - *Note: Ensure both `bookings[Booking_Date]` and `Calendar[Date]` are formatted as **Date** data type under the Column Tools ribbon.*
 
 ---
 
-## 4. Key Business DAX Measures
+## Phase 4: Core Business DAX Measures
 
-Create a new table named `_Measures` and write the following DAX formulas:
+Organize your formulas by clicking **Enter Data** on the Home tab, naming the table `_Measures`, loading it, and writing these calculations:
 
-### Total Revenue
+### 1. Main Indicators
+
+#### Total Revenue
 ```dax
-Total Revenue = SUM(Bookings[Fare_Amount])
+Total Revenue = SUM(bookings[Fare_Amount])
 ```
-*Format as Currency, 0 decimal places (e.g. display units: Millions `$1.47M`).*
+*Format: Currency (`$ English (United States)`), 0 decimal places.*
 
-### Total Bookings
+#### Total Bookings
 ```dax
-Total Bookings = COUNT(Bookings[Booking_ID])
+Total Bookings = COUNT(bookings[Booking_ID])
 ```
-*Format as Whole Number (e.g. display units: Thousands `2K`).*
+*Format: Whole Number.*
 
-### Average Fare
+#### Average Fare
 ```dax
 Average Fare = DIVIDE([Total Revenue], [Total Bookings], 0)
 ```
-*Format as Decimal Number, 2 decimal places (e.g. `786.37`).*
+*Format: Currency, 2 decimal places.*
 
-### Unique Customers
+#### Unique Customers
 ```dax
-Unique Customers = DISTINCTCOUNT(Bookings[Customer_ID])
+Unique Customers = DISTINCTCOUNT(bookings[Customer_ID])
 ```
 
-### Customer Retention Rate
+#### Customer Retention Rate
 ```dax
 Customer Retention Rate = 
 VAR CustomersWithMultipleBookings = 
     COUNTROWS(
         FILTER(
-            VALUES(Bookings[Customer_ID]),
-            CALCULATE(COUNT(Bookings[Booking_ID])) > 1
+            VALUES(bookings[Customer_ID]),
+            CALCULATE(COUNT(bookings[Booking_ID])) > 1
         )
     )
 RETURN 
     DIVIDE(CustomersWithMultipleBookings, [Unique Customers], 0)
 ```
-*Format as Decimal Number, 2 decimal places (e.g. `0.99`).*
+*Format: Decimal Number, 2 decimal places.*
 
-### Previous Period (MoM) Measures
-To display the comparisons on the bottom of the card visuals:
+---
+
+### 2. Time Intelligence (Previous Month)
 
 #### Previous Month Revenue
 ```dax
-Previous Month Revenue = 
-CALCULATE([Total Revenue], DATEADD('Calendar'[Date], -1, MONTH))
+Previous Month Revenue = CALCULATE([Total Revenue], DATEADD('Calendar'[Date], -1, MONTH))
 ```
 
-#### Revenue MoM Change %
+#### Revenue MoM %
 ```dax
 Revenue MoM % = 
 VAR PrevRev = [Previous Month Revenue]
@@ -118,11 +125,10 @@ RETURN DIVIDE([Total Revenue] - PrevRev, PrevRev, 0)
 
 #### Previous Month Bookings
 ```dax
-Previous Month Bookings = 
-CALCULATE([Total Bookings], DATEADD('Calendar'[Date], -1, MONTH))
+Previous Month Bookings = CALCULATE([Total Bookings], DATEADD('Calendar'[Date], -1, MONTH))
 ```
 
-#### Bookings MoM Change %
+#### Bookings MoM %
 ```dax
 Bookings MoM % = 
 VAR PrevBookings = [Previous Month Bookings]
@@ -131,24 +137,22 @@ RETURN DIVIDE([Total Bookings] - PrevBookings, PrevBookings, 0)
 
 #### Previous Month Average Fare
 ```dax
-Previous Month Average Fare = 
-CALCULATE([Average Fare], DATEADD('Calendar'[Date], -1, MONTH))
+Previous Month Average Fare = CALCULATE([Average Fare], DATEADD('Calendar'[Date], -1, MONTH))
 ```
 
-#### Average Fare MoM Change %
+#### Average Fare MoM %
 ```dax
 Average Fare MoM % = 
 VAR PrevFare = [Previous Month Average Fare]
 RETURN DIVIDE([Average Fare] - PrevFare, PrevFare, 0)
 ```
 
-#### Previous Month Retention Rate
+#### Previous Month Retention
 ```dax
-Previous Month Retention = 
-CALCULATE([Customer Retention Rate], DATEADD('Calendar'[Date], -1, MONTH))
+Previous Month Retention = CALCULATE([Customer Retention Rate], DATEADD('Calendar'[Date], -1, MONTH))
 ```
 
-#### Retention Rate MoM Change %
+#### Retention MoM %
 ```dax
 Retention MoM % = 
 VAR PrevRet = [Previous Month Retention]
@@ -157,22 +161,10 @@ RETURN DIVIDE([Customer Retention Rate] - PrevRet, PrevRet, 0)
 
 ---
 
-## 5. Dashboard Visuals Setup
+### 3. Pill-Shape Custom Labels
+These measures format the trend text inside the bottom capsules dynamically:
 
-Configure the visuals on the single-page layout matching the reference dashboard:
-
-### A. Title Header
-- **Title Text**: `Bus Booking Dashboard` (Font size: `22pt`, Bold, Dark Slate Blue)
-- **Subtitle Text**: `Overview of bookings and revenue performance` (Font size: `11pt`, Slate Gray)
-- **Top Right Slicer**: Place a **Slicer** visual, select `Bookings[Booking_Date]`, format style as **Dropdown** (Date Range picker).
-
-### B. KPI Cards (Top Row)
-To achieve this exact visual layout (circular icon on the left, primary value/label in the center-right, and the trend indicator styled as a pill at the bottom), use the **Card (New)** visual (not the native KPI visual) and configure it as follows:
-
-#### Step 1: Create Trend Label DAX Measures
-Create these measures in your `_Measures` table to automatically format the text inside the bottom pills (including arrows and text):
-
-##### Revenue Trend Label
+#### Revenue Trend Label
 ```dax
 Revenue Trend Label = 
 VAR MoM = [Revenue MoM %]
@@ -188,7 +180,7 @@ RETURN
     )
 ```
 
-##### Bookings Trend Label
+#### Bookings Trend Label
 ```dax
 Bookings Trend Label = 
 VAR MoM = [Bookings MoM %]
@@ -204,7 +196,7 @@ RETURN
     )
 ```
 
-##### Average Fare Trend Label
+#### Average Fare Trend Label
 ```dax
 Average Fare Trend Label = 
 VAR MoM = [Average Fare MoM %]
@@ -220,7 +212,7 @@ RETURN
     )
 ```
 
-##### Retention Trend Label
+#### Retention Trend Label
 ```dax
 Retention Trend Label = 
 VAR MoM = [Retention MoM %]
@@ -236,87 +228,115 @@ RETURN
     )
 ```
 
-#### Step 2: Configure the Card (New) Visuals
-Create a **Card (New)** visual on your canvas and set the parameters:
+---
 
-1. **Total Revenue Card**:
-   - **Data**: Drag `[Total Revenue]` (Main indicator) and `[Revenue Trend Label]` (for the pill).
-   - **Fill Background**: Under *Format Pane* > *Cards* > *Fill*, upload `assets/Bg Theme.jpg` (Green gradient). Image Fit: Fill.
-   - **Card Icon**: Under *Format Pane* > *Cards* > *Image*, upload `assets/icon_revenue.png`. Position: Left. Size: 50px.
-   - **Pill Shape (Reference Label)**:
-     - Go to *Format Pane* > *Reference labels* > select the `Total Revenue` series.
-     - Add `[Revenue Trend Label]` as the label value.
-     - Select the label, turn on **Background**, and set the background color to a dark semi-transparent green (e.g. Hex `#064E3B`, transparency `30%`) to create the rounded "pill" capsule look. Set text color to white.
-2. **Total Bookings Card**:
-   - **Data**: Drag `[Total Bookings]` and `[Bookings Trend Label]`.
-   - **Fill Background**: Upload `assets/Blue Bg Theme.png`.
-   - **Card Icon**: Upload `assets/icon_bookings.png`. Position: Left. Size: 50px.
-   - **Pill Shape (Reference Label)**: Configure background to a semi-transparent dark blue (Hex `#1E3A8A`, transparency `30%`). Set text color to white.
-3. **Average Fare Card**:
-   - **Data**: Drag `[Average Fare]` and `[Average Fare Trend Label]`.
-   - **Fill Background**: Upload `assets/Peach Bg Image.jpg`.
-   - **Card Icon**: Upload `assets/icon_fare.png`. Position: Left. Size: 50px.
-   - **Pill Shape (Reference Label)**: Configure background to a semi-transparent dark orange (Hex `#7C2D12`, transparency `30%`). Set text color to white.
-4. **Customer Retention Rate Card**:
-   - **Data**: Drag `[Customer Retention Rate]` and `[Retention Trend Label]`.
-   - **Fill Background**: Upload `assets/Purple Bg Theme.jpg`.
-   - **Card Icon**: Upload `assets/icon_retention.png`. Position: Left. Size: 50px.
-   - **Pill Shape (Reference Label)**: Configure background to a semi-transparent dark purple (Hex `#581C87`, transparency `30%`). Set text color to white.
+## Phase 5: Canvas & Sidebar Sizing Setup
+
+Configure your workspace geometry to fit a single widescreen window:
+
+1. Click on the canvas background. Go to the **Format** pane > **Canvas settings** > Type: **16:9 Widescreen** (`1280 x 720` pixels).
+2. In the top **View** ribbon, set **Page View** to **`Fit to Page`**.
+3. Create your multi-page structure in Power BI. Create the following page tabs:
+   - `Overview`
+   - `Bookings`
+   - `Revenue`
+   - `Customers`
+   - `Bus Types`
+   - `Routes`
+   - `Reports`
+4. **Left Navigation Sidebar**:
+   - Insert a **Rectangle Shape** (Insert > Shapes > Rectangle).
+   - Set coordinates: X = `0px`, Y = `0px`, Width = `80px`, Height = `720px` (full vertical height).
+   - Fill: White (`#FFFFFF`). Border: Outline color Light Gray (`#E2E8F0`), Width: `1px`.
+   - Place your navigation logo image (`assets/icon_nav_logo.png`) at X = `15px`, Y = `15px`, Width = `50px`, Height = `50px`.
+5. **Page Navigator Setup**:
+   - In the top ribbon, click **Insert** > **Buttons** > **Navigator** > **Page Navigator**.
+   - A menu button bar listing all your pages will appear on the canvas. Drag it onto your sidebar.
+   - Set coordinates: X = `0px`, Y = `100px`, Width = `80px`, Height = `500px`.
+   - In the **Format Page Navigator** pane:
+     - Under **Grid layout**: Set **Orientation** to **`Vertical`**, spacing to `15px`.
+     - Under **Shape**: Select **Rectangle** (or rounded rectangle).
+     - Under **Style (State: Default)**: Set Fill to Off (transparent), Text to Off. Enable **Icon** > type **Image URL** > bind each button state to its slate outline icon (e.g. `assets/icon_nav_overview.png`, etc.).
+     - Under **Style (State: Selected)**: Set Fill to Purple (`#7C3AED` or `#4F46E5`), Text to Off. Set **Icon** to display the white version of the navigation icons, matching the active Overview tab style.
+6. **Filters button**: Place the funnel icon (`assets/icon_nav_filters.png`) at the very bottom of the sidebar (X = `20px`, Y = `660px`, size `40px`).
+
+---
+
+## Phase 6: Creating Dashboard Visuals
+
+Configure the visuals on the single-page layout matching the reference dashboard:
+
+### A. Title Header
+- **Title Text**: `Bus Booking Dashboard` (X = `100px`, Y = `15px`, Width = `500px`, Height = `40px`. Font: `Segoe UI`, size `20pt`, Bold, color `#0F172A`).
+- **Subtitle Text**: `Overview of bookings and revenue performance` (X = `100px`, Y = `50px`, size `10pt`, color `#64748B`).
+- **Top Right Slicer**: Place a Slicer visual at X = `950px`, Y = `15px`, Width = `300px`, Height = `40px`. Select field `bookings[Booking_Date]`, format style as **Dropdown**.
+
+---
+
+### B. KPI Cards (Top Row)
+Create a single **Card (New)** visual spanning the top row (X = `100px`, Y = `85px`, Width = `1160px`, Height = `120px`):
+
+1. **Fields Assignment**:
+   - Drag `[Total Revenue]`, `[Total Bookings]`, `[Average Fare]`, and `[Customer Retention Rate]` into the Data box.
+2. **Horizontal Layout**:
+   - Go to **Format pane > Layout** > Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`.
+   - Set **Vertical alignment** to **`Middle`** (under Layout).
+3. **Card Alignment**:
+   - Go to **Callout values** > Horizontal alignment: **`Left`** (all text aligns next to the icons).
+4. **Card Background Gradients**:
+   Expand **Cards > Fill > Series** and select card-by-card:
+   - *Total Revenue*: Upload `assets/Bg Theme.jpg` (Green). Image Fit: Fill.
+   - *Total Bookings*: Upload `assets/Blue Bg Theme.png` (Blue). Image Fit: Fill.
+   - *Average Fare*: Upload `assets/Peach Bg Image.jpg` (Orange). Image Fit: Fill.
+   - *Customer Retention Rate*: Upload `assets/Purple Bg Theme.jpg` (Purple). Image Fit: Fill.
+5. **Floating Icons**:
+   Expand **Cards > Image > Series** and upload the transparent 3D shadow icons:
+   - *Total Revenue*: `assets/icon_revenue.png`. Position: Left, Spacing: `15px`, size `50px`.
+   - *Total Bookings*: `assets/icon_bookings.png`. Position: Left, size `50px`.
+   - *Average Fare*: `assets/icon_fare.png`. Position: Left, size `50px`.
+   - *Customer Retention Rate*: `assets/icon_retention.png`. Position: Left, size `50px`.
+6. **Pill-Shape Trend Indicators (Detail Background)**:
+   - Go to **Reference labels** > set **Cards** to **`Total Revenue`**.
+   - Add `[Revenue Trend Label]` to **Add label** field.
+   - Toggle **`Title`** to **`Off`** (removes duplicate measure name).
+   - Toggle **`Value`** to **`Off`** (removes duplicate text value).
+   - Toggle **`Detail`** to **`On`** and expand it:
+     - Drag `[Revenue Trend Label]` to detail. Set color to **White**, size **`10`**.
+     - Expand **Background** (inside Detail) > Toggle **`On`**. Set color to dark green (`#064E3B`), transparency **`30%`** (forms the capsule pill).
+     - Under **Reference label layout** (or layout settings), change **Alignment** to **`Left`** (shifts pill under text).
+   - Repeat the pill styling for the other three cards using their respective trend label measures and background colors (Blue, Orange, Purple) at `30%` transparency.
+
+---
 
 ### C. Main Charts (Middle Row)
 
 1. **Total Bookings and Total Revenue by Year, Quarter and Month (Dual Axis Line Chart)**:
-   - **X-axis**: Drag `Calendar[Year]`, `Calendar[Quarter]`, `Calendar[Month]` (hierarchy).
-   - **Y-axis**: Drag `[Total Bookings]`. (Series Line Color: Electric Blue `#3B82F6`)
-   - **Secondary Y-axis**: Drag `[Total Revenue]`. (Series Line Color: Dark Blue `#002D62`)
-   - **Lines Formatting**: Set Stroke width to `3px` and turn **Smooth line** to **On**.
+   - Coordinates: X = `100px`, Y = `220px`, Width = `570px`, Height = `240px`.
+   - **X-axis**: Drag `Calendar[Year]`, `Calendar[Quarter]`, `Calendar[Month]`.
+   - **Y-axis**: Drag `[Total Bookings]`. (Line Color: Electric Blue `#3B82F6`)
+   - **Secondary Y-axis**: Drag `[Total Revenue]`. (Line Color: Dark Blue `#002D62`)
+   - **Formatting**: Stroke width `3px`, Smooth line toggled **On**.
 2. **Total Revenue by Bus_Type (Donut Chart)**:
-   - **Legend**: `Buses[Bus_Type]` (Non-AC Sleeper, AC Sleeper, Non-AC Seater, AC Seater).
+   - Coordinates: X = `690px`, Y = `220px`, Width = `570px`, Height = `240px`.
+   - **Legend**: `buses[Bus_Type]` (Non-AC Sleeper, AC Sleeper, Non-AC Seater, AC Seater).
    - **Values**: `[Total Revenue]`.
-   - **Detail Labels**: Set to **Data value, percent of total** (displays e.g. `870.03K (59.01%)` for Non-AC Sleeper).
-   - **Slice Colors**: Custom palette matching the dark blue, light blue, orange, and purple segments.
+   - **Labels**: Set to **Data value, percent of total** (displays e.g. `870.03K (59.01%)`).
+
+---
 
 ### D. Lower Section Visuals
 
 1. **Total Revenue by Source (Horizontal Bar Chart)**:
-   - **Y-axis (Axis)**: `Routes[Source]`
-   - **X-axis (Values)**: `[Total Revenue]` (formatted to show e.g. `300K`, `270K`, etc.)
-   - **Bar Color**: Solid Blue (`#1E88E5`).
-2. **Booking Date Filter (Slicer)**:
-   - **Field**: `Bookings[Booking_Date]`. Style: **Between (Slider)** with rounded handle styling.
-3. **Source, Destination Filter (Slicer)**:
-   - **Field**: `Routes[Source]`, `Routes[Destination]` (concatenated hierarchy). Style: **Dropdown** picker.
-4. **Bus_Type Filter (Slicer)**:
-   - **Field**: `Buses[Bus_Type]`. Style: **Vertical list** with checkboxes.
-5. **Booking_Status KPI Cards (Lower Right)**:
-   Place 3 small Card visuals representing booking counts side-by-side:
-   - **Cancelled Card**:
-     - **Value**: `COUNTROWS(FILTER(Bookings, Bookings[Booking_Status] = "Cancelled"))` (e.g. `356`).
-     - **Icon**: `assets/icon_cancelled.png`.
-   - **Confirmed Card**:
-     - **Value**: `COUNTROWS(FILTER(Bookings, Bookings[Booking_Status] = "Confirmed"))` (e.g. `1,254`).
-     - **Icon**: `assets/icon_confirmed.png`.
-   - **Pending Card**:
-     - **Value**: `COUNTROWS(FILTER(Bookings, Bookings[Booking_Status] = "Pending"))` (e.g. `410`).
-     - **Icon**: `assets/icon_pending.png`.
-
-### Page 2: Operational Performance & Demographics
-To satisfy all remaining requirements in the Project Specification PDF, build this second tab in your report:
-
-1. **Customer Distribution (Treemap / Table)**:
-   - **Visual Type**: Treemap or Table.
-   - **Category (Group)**: `Customers[Name]`
-   - **Values**: `[Total Bookings]` (sorted descending to show your top-booking customers).
-2. **Seat Occupancy Rate (Gauge Visual)**:
-   - **Visual Type**: Gauge.
-   - **Value**: `[Occupancy Rate]`
-   - **Target Value**: `0.80` (representing your 80% occupancy target).
-3. **Route Performance (Matrix / Table)**:
-   - **Visual Type**: Matrix.
-   - **Rows**: `Routes[Source]` and `Routes[Destination]` (nested hierarchy).
-   - **Values**: 
-     - `[Total Bookings]`
-     - `[Total Revenue]`
-     - `[Occupancy Rate]`
-   - *This allows management to drill down and review passenger load factor and financial yield for each route.*
-
+   - Coordinates: X = `100px`, Y = `475px`, Width = `570px`, Height = `230px`.
+   - **Y-axis**: `routes[Source]`
+   - **X-axis**: `[Total Revenue]`. (Bar Color: Solid Blue `#1E88E5`).
+2. **Interactive Filters Sidebar Grid**:
+   Place these visuals side-by-side:
+   - **Date Filter Slicer**: X = `690px`, Y = `475px`, Width = `280px`, Height = `110px`. Field: `bookings[Booking_Date]`, Style: **Between (Slider)**.
+   - **Source/Destination Slicer**: X = `990px`, Y = `475px`, Width = `270px`, Height = `110px`. Field: `routes[Source]`, `routes[Destination]`, Style: **Dropdown**.
+   - **Bus Type Slicer**: X = `690px`, Y = `595px`, Width = `280px`, Height = `110px`. Field: `buses[Bus_Type]`, Style: **Vertical List**.
+3. **Booking_Status KPI Cards (Lower Right)**:
+   Place a Card (New) visual at X = `990px`, Y = `595px`, Width = `270px`, Height = `110px` showing status splits:
+   - **Cancelled**: Value `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Cancelled"))` (Icon: `assets/icon_cancelled.png`).
+   - **Confirmed**: Value `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Confirmed"))` (Icon: `assets/icon_confirmed.png`).
+   - **Pending**: Value `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Pending"))` (Icon: `assets/icon_pending.png`).
