@@ -299,3 +299,24 @@ Create a **Card (New)** visual on your canvas and set the parameters:
    - **Pending Card**:
      - **Value**: `COUNTROWS(FILTER(Bookings, Bookings[Booking_Status] = "Pending"))` (e.g. `410`).
      - **Icon**: `assets/icon_pending.png`.
+
+### Page 2: Operational Performance & Demographics
+To satisfy all remaining requirements in the Project Specification PDF, build this second tab in your report:
+
+1. **Customer Distribution (Treemap / Table)**:
+   - **Visual Type**: Treemap or Table.
+   - **Category (Group)**: `Customers[Name]`
+   - **Values**: `[Total Bookings]` (sorted descending to show your top-booking customers).
+2. **Seat Occupancy Rate (Gauge Visual)**:
+   - **Visual Type**: Gauge.
+   - **Value**: `[Occupancy Rate]`
+   - **Target Value**: `0.80` (representing your 80% occupancy target).
+3. **Route Performance (Matrix / Table)**:
+   - **Visual Type**: Matrix.
+   - **Rows**: `Routes[Source]` and `Routes[Destination]` (nested hierarchy).
+   - **Values**: 
+     - `[Total Bookings]`
+     - `[Total Revenue]`
+     - `[Occupancy Rate]`
+   - *This allows management to drill down and review passenger load factor and financial yield for each route.*
+
