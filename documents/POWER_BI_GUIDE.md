@@ -166,29 +166,34 @@ Configure the visuals on the single-page layout matching the reference dashboard
 - **Subtitle Text**: `Overview of bookings and revenue performance` (Font size: `11pt`, Slate Gray)
 - **Top Right Slicer**: Place a **Slicer** visual, select `Bookings[Booking_Date]`, format style as **Dropdown** (Date Range picker).
 
-### B. KPI Cards (Top Row)
-Use the **Card (New)** visual, select the four primary measures, and configure them as follows:
+### B. KPI Visuals (Top Row)
+To match the dashboard, use the dedicated **KPI** visual in Power BI (which displays a large indicator, a sparkline trend line in the background, and an automatic target comparison percentage at the bottom). Create four separate KPI visuals side-by-side:
 
-1. **Total Revenue Card**:
-   - **Main Value**: `Total Revenue` (Display Units: Millions, e.g., `1.47M`)
-   - **Card Fill Background**: Select **Image** > upload `assets/Bg Theme.jpg` (Green gradient).
-   - **Card Icon**: Select **Image** > upload `assets/icon_revenue.png` (White Dollar Sign circle). Position: Left. Size: 50px.
-   - **Reference Label (Bottom)**: Set detail text to `↑ 12.5% vs Last Period` (or drag `[Revenue MoM %]` and append `vs Last Period`).
-2. **Total Bookings Card**:
-   - **Main Value**: `Total Bookings` (Display Units: Thousands, e.g., `2K`)
-   - **Card Fill Background**: Select **Image** > upload `assets/Blue Bg Theme.png`.
-   - **Card Icon**: Select **Image** > upload `assets/icon_bookings.png`.
-   - **Reference Label (Bottom)**: Set detail text to `↑ 8.3% vs Last Period`.
-3. **Average Fare Card**:
-   - **Main Value**: `Average Fare` (No display units, 2 decimal places, e.g. `786.37`)
-   - **Card Fill Background**: Select **Image** > upload `assets/Peach Bg Image.jpg`.
-   - **Card Icon**: Select **Image** > upload `assets/icon_fare.png`.
-   - **Reference Label (Bottom)**: Set detail text to `↑ 6.7% vs Last Period`.
-4. **Customer Retention Rate Card**:
-   - **Main Value**: `Customer Retention Rate` (No display units, 2 decimal places, e.g. `0.99`)
-   - **Card Fill Background**: Select **Image** > upload `assets/Purple Bg Theme.jpg`.
-   - **Card Icon**: Select **Image** > upload `assets/icon_retention.png`.
-   - **Reference Label (Bottom)**: Set detail text to `↑ 5.1% vs Last Period`.
+1. **Total Revenue KPI**:
+   - **Indicator**: `Total Revenue` (Display Units: Millions, e.g., `1.47M`)
+   - **Trend axis**: `Calendar[Date]` (or `Calendar[Year Month]`)
+   - **Target**: `Previous Month Revenue`
+   - **Visual Background**: In the Format pane, set background to **Image** > upload `assets/Bg Theme.jpg` (Green gradient).
+   - **Visual Icon**: Place the icon `assets/icon_revenue.png` on the left (e.g. overlaying an Image visual or setting card icon).
+   - **Status Label**: The bottom label will automatically display the growth rate (e.g. `12.5% vs Last Period`).
+2. **Total Bookings KPI**:
+   - **Indicator**: `Total Bookings` (Display Units: Thousands, e.g., `2K`)
+   - **Trend axis**: `Calendar[Date]` (or `Calendar[Year Month]`)
+   - **Target**: `Previous Month Bookings`
+   - **Visual Background**: Set background to **Image** > upload `assets/Blue Bg Theme.png`.
+   - **Visual Icon**: Place the icon `assets/icon_bookings.png` on the left.
+3. **Average Fare KPI**:
+   - **Indicator**: `Average Fare` (No display units, 2 decimal places, e.g. `786.37`)
+   - **Trend axis**: `Calendar[Date]` (or `Calendar[Year Month]`)
+   - **Target**: `Previous Month Average Fare`
+   - **Visual Background**: Set background to **Image** > upload `assets/Peach Bg Image.jpg`.
+   - **Visual Icon**: Place the icon `assets/icon_fare.png` on the left.
+4. **Customer Retention Rate KPI**:
+   - **Indicator**: `Customer Retention Rate` (No display units, 2 decimal places, e.g. `0.99`)
+   - **Trend axis**: `Calendar[Date]` (or `Calendar[Year Month]`)
+   - **Target**: `Previous Month Retention`
+   - **Visual Background**: Set background to **Image** > upload `assets/Purple Bg Theme.jpg`.
+   - **Visual Icon**: Place the icon `assets/icon_retention.png` on the left.
 
 ### C. Main Charts (Middle Row)
 
