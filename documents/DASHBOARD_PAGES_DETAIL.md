@@ -61,10 +61,70 @@ Test it by holding `Ctrl` and clicking the buttons on your canvas!
 Here are the step-by-step layout grids and visual types for each page tab in your report:
 
 ### Page 1: Overview
-*This is the summary dashboard already built on page 1 of the guide, containing:*
-- **KPI Row**: Total Revenue, Total Bookings, Average Fare, Customer Retention.
-- **Middle Row**: Dual-Axis Line Chart (Booking Trends) & Donut Chart (Revenue by Bus Type).
-- **Bottom Row**: Horizontal Bar Chart (Revenue by Source) & Slicer/Status cards.
+Tracks high-level business performance, sales trends, and source yields:
+
+1. **Top Row KPI Cards (Card (New) Visual)**:
+   - **Visualization Pane**: Select **Card (new)** icon.
+   - **Coordinates**: X = `100px`, Y = `85px`, Width = `1160px`, Height = `120px`.
+   - **Field Wells Configuration**:
+     - Drag `_Measures[Total Revenue]` into the Values box.
+     - Drag `_Measures[Total Bookings]` into the Values box.
+     - Drag `_Measures[Average Fare]` into the Values box.
+     - Drag `_Measures[Customer Retention Rate]` into the Values box.
+   - **Visual Layout & Formatting**:
+     - Go to Layout > Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
+     - Go to Callout values > Horizontal alignment: **`Left`**.
+     - Go to Cards > Fill > select each series to upload background gradients:
+       - *Total Revenue*: `assets/Bg Theme.jpg`
+       - *Total Bookings*: `assets/Blue Bg Theme.png`
+       - *Average Fare*: `assets/Peach Bg Image.jpg`
+       - *Customer Retention Rate*: `assets/Purple Bg Theme.jpg`
+     - Go to Cards > Image > select each series to upload 3D icons:
+       - *Total Revenue*: `assets/icon_revenue.png` (Left-aligned, spacing `15px`, size `50px`).
+       - *Total Bookings*: `assets/icon_bookings.png`.
+       - *Average Fare*: `assets/icon_fare.png`.
+       - *Customer Retention Rate*: `assets/icon_retention.png`.
+     - Go to Reference labels > Add trend label measures as details, style backgrounds with `30%` transparency (capsule pill look), and set Alignment to **`Left`** (aligns under text).
+
+2. **Total Bookings and Total Revenue (Dual Axis Line Chart)**:
+   - **Visualization Pane**: Select **Line and Stacked Column Chart** or **Line and Clustered Column Chart** icon (or standard Line Chart with secondary Y-axis).
+   - **Coordinates**: X = `100px`, Y = `220px`, Width = `570px`, Height = `240px`.
+   - **Field Wells Configuration**:
+     - Drag `Calendar[Date]` (or Calendar Date Hierarchy) into the **X-axis** well.
+     - Drag `_Measures[Total Bookings]` into the primary **Y-axis** well.
+     - Drag `_Measures[Total Revenue]` into the **Secondary Y-axis** well.
+   - **Visual Formatting**:
+     - Set `Total Bookings` line color to Electric Blue (`#3B82F6`), stroke width `3px`.
+     - Set `Total Revenue` line color to Dark Blue (`#002D62`), stroke width `3px`.
+     - Go to formatting pane > expand **Lines** > toggle **Smooth line** to **`On`**.
+
+3. **Total Revenue by Bus_Type (Donut Chart)**:
+   - **Visualization Pane**: Select **Donut Chart** icon.
+   - **Coordinates**: X = `690px`, Y = `220px`, Width = `570px`, Height = `240px`.
+   - **Field Wells Configuration**:
+     - Drag `buses[Bus_Type]` into the **Legend** well.
+     - Drag `_Measures[Total Revenue]` into the **Values** well.
+   - **Visual Formatting**: Expand **Detail labels** > Label contents: select **Data value, percent of total** (displays values like `870.03K (59.01%)`).
+
+4. **Total Revenue by Source (Horizontal Bar Chart)**:
+   - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
+   - **Coordinates**: X = `100px`, Y = `475px`, Width = `570px`, Height = `230px`.
+   - **Field Wells Configuration**:
+     - Drag `routes[Source]` into the **Y-axis** well.
+     - Drag `_Measures[Total Revenue]` into the **X-axis** well.
+   - **Visual Formatting**: Set bar color to Solid Blue (`#1E88E5`), enable **Data labels**.
+
+5. **Booking Status Cards (Bottom Right Card (New) Visual)**:
+   - **Visualization Pane**: Select **Card (new)** icon.
+   - **Coordinates**: X = `990px`, Y = `595px`, Width = `270px`, Height = `110px`.
+   - **Field Wells Configuration**:
+     - Drag these custom status count measures into the Values box:
+       1. Cancelled Bookings: `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Cancelled"))`
+       2. Confirmed Bookings: `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Confirmed"))`
+       3. Pending Bookings: `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Pending"))`
+   - **Visual Formatting**:
+     - Align card values to the center.
+     - Go to Cards > Image > upload corresponding outline icons (`icon_cancelled.png`, `icon_confirmed.png`, `icon_pending.png`).
 
 ---
 
