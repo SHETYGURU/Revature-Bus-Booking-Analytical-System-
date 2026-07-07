@@ -105,7 +105,16 @@ VAR CustomersWithMultipleBookings =
 RETURN 
     DIVIDE(CustomersWithMultipleBookings, [Unique Customers], 0)
 ```
-*Format: Decimal Number, 2 decimal places.*
+#### Occupancy Rate
+```dax
+Occupancy Rate = 
+DIVIDE(
+    CALCULATE([Total Bookings], bookings[Booking_Status] <> "Cancelled"),
+    SUMX(bookings, RELATED(buses[Capacity])),
+    0
+)
+```
+*Format: Percentage (`%`), 1 decimal place.*
 
 ---
 
