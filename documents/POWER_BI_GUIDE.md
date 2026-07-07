@@ -353,15 +353,18 @@ Create a single **Card (New)** visual spanning the top row (X = `100px`, Y = `85
 
 1. **Total Revenue by Source (Horizontal Bar Chart)**:
    - Coordinates: X = `100px`, Y = `475px`, Width = `570px`, Height = `230px`.
-   - **Y-axis**: `routes[Source]`
-   - **X-axis**: `[Total Revenue]`. (Bar Color: Solid Blue `#1E88E5`).
-2. **Interactive Filters Sidebar Grid**:
-   Place these visuals side-by-side:
-   - **Date Filter Slicer**: X = `690px`, Y = `475px`, Width = `280px`, Height = `110px`. Field: `bookings[Booking_Date]`, Style: **Between (Slider)**.
-   - **Source/Destination Slicer**: X = `990px`, Y = `475px`, Width = `270px`, Height = `110px`. Field: `routes[Source]`, `routes[Destination]`, Style: **Dropdown**.
-   - **Bus Type Slicer**: X = `690px`, Y = `595px`, Width = `280px`, Height = `110px`. Field: `buses[Bus_Type]`, Style: **Vertical List**.
-3. **Booking_Status KPI Cards (Lower Right)**:
-   Place a Card (New) visual at X = `990px`, Y = `595px`, Width = `270px`, Height = `110px` showing status splits:
-   - **Cancelled**: Value `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Cancelled"))` (Icon: `assets/icon_cancelled.png`).
-   - **Confirmed**: Value `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Confirmed"))` (Icon: `assets/icon_confirmed.png`).
-   - **Pending**: Value `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Pending"))` (Icon: `assets/icon_pending.png`).
+   - **Y-axis (Axis)**: `routes[Source]`
+   - **X-axis (Values)**: `[Total Revenue]` (formatted to show e.g. `300K`, `270K`, etc.)
+   - **Bar Color**: Solid Blue (`#1E88E5`).
+2. **Booking_Status KPI Cards (Lower Right)**:
+   Place a single Card (New) visual on the bottom-right to display booking status counts side-by-side:
+   - **Coordinates**: X = `690px`, Y = `475px`, Width = `570px`, Height = `230px`.
+   - **Cancelled Card**:
+     - **Value**: `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Cancelled"))` (e.g. `356`).
+     - **Icon**: `assets/icon_cancelled.png`.
+   - **Confirmed Card**:
+     - **Value**: `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Confirmed"))` (e.g. `1,254`).
+     - **Icon**: `assets/icon_confirmed.png`.
+   - **Pending Card**:
+     - **Value**: `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Pending"))` (e.g. `410`).
+     - **Icon**: `assets/icon_pending.png`.
