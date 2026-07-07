@@ -72,20 +72,38 @@ Here are the step-by-step layout grids and visual types for each page tab in you
 Focuses on tracking booking statuses, volume metrics, and capacity:
 
 1. **Daily Bookings Volume (Area Chart)**:
-   - Coordinates: X = `200px`, Y = `85px`, Width = `650px`, Height = `280px`.
-   - **X-axis**: `Calendar[Date]`
-   - **Y-axis**: `[Total Bookings]`
-   - *Formatting*: Set line stroke to Electric Blue (`#3B82F6`) with a soft light-blue filled area underneath.
+   - **Visualization Pane**: Select **Area Chart** icon.
+   - **Coordinates**: X = `200px`, Y = `85px`, Width = `650px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `Calendar[Date]` from the Data pane into the **X-axis** well.
+     - Drag `_Measures[Total Bookings]` from the Data pane into the **Y-axis** well.
+     - Leave **Legend** and **Small multiples** empty.
+   - **Visual Formatting**: Go to the format paintbrush icon > expand **Lines**:
+     - Set Stroke width to `3px`.
+     - Set Color to Electric Blue (`#3B82F6`).
+     - Expand **Shade area** > Turn **On** (Set transparency to `80%`, color `#D1E8FF`).
+
 2. **Status Split (Clustered Column Chart)**:
-   - Coordinates: X = `870px`, Y = `85px`, Width = `380px`, Height = `280px`.
-   - **X-axis**: `bookings[Booking_Status]` (Confirmed, Cancelled, Pending)
-   - **Y-axis**: `[Total Bookings]`
-   - *Colors*: Confirmed = Green (`#10B981`), Cancelled = Red (`#EF4444`), Pending = Orange (`#F59E0B`).
+   - **Visualization Pane**: Select **Clustered Column Chart** icon.
+   - **Coordinates**: X = `870px`, Y = `85px`, Width = `380px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `bookings[Booking_Status]` into the **X-axis** well.
+     - Drag `_Measures[Total Bookings]` into the **Y-axis** well.
+   - **Visual Formatting**: Go to formatting paintbrush > expand **Columns** > **Colors** > select **Show all** to color each status:
+     - `Confirmed` = Green (`#10B981`)
+     - `Cancelled` = Red (`#EF4444`)
+     - `Pending` = Orange (`#F59E0B`)
+
 3. **Status vs Bus Type Matrix (Matrix Table)**:
-   - Coordinates: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
-   - **Rows**: `buses[Bus_Type]`
-   - **Columns**: `bookings[Booking_Status]`
-   - **Values**: `[Total Bookings]` (Enable Row & Column Subtotals and Conditional Formatting Data Bars).
+   - **Visualization Pane**: Select **Matrix** icon.
+   - **Coordinates**: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
+   - **Field Wells Configuration**:
+     - Drag `buses[Bus_Type]` into the **Rows** well.
+     - Drag `bookings[Booking_Status]` into the **Columns** well.
+     - Drag `_Measures[Total Bookings]` into the **Values** well.
+   - **Visual Formatting**:
+     - Expand **Subtotals** > turn **On** for both rows and columns.
+     - Select `[Total Bookings]` under Values in the build pane > click the down arrow > select **Conditional Formatting** > **Data Bars** > set positive bar color to light blue.
 
 ---
 
@@ -93,35 +111,67 @@ Focuses on tracking booking statuses, volume metrics, and capacity:
 Tracks cash flows, pricing trends, and revenue yields:
 
 1. **Cumulative Revenue Trend (Line Chart)**:
-   - Coordinates: X = `200px`, Y = `85px`, Width = `650px`, Height = `280px`.
-   - **X-axis**: `Calendar[Year Month]`
-   - **Y-axis**: `[Total Revenue]` (Set to show **Running Total** using Quick Measures or custom DAX).
+   - **Visualization Pane**: Select **Line Chart** icon.
+   - **Coordinates**: X = `200px`, Y = `85px`, Width = `650px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `Calendar[Year Month]` into the **X-axis** well.
+     - Drag `_Measures[Total Revenue]` into the **Y-axis** well. 
+     - *To show running cumulative total*: Click the down arrow next to `Total Revenue` inside the Y-axis well > hover over **Show value as** > select **Running total**.
+   - **Visual Formatting**: Set Line stroke width to `3px`, Color to Indigo (`#4F46E5`), and turn **Data labels** to **`On`**.
+
 2. **Average Fare by Bus Type (Horizontal Bar Chart)**:
-   - Coordinates: X = `870px`, Y = `85px`, Width = `380px`, Height = `280px`.
-   - **Y-axis**: `buses[Bus_Type]`
-   - **X-axis**: `[Average Fare]`
+   - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
+   - **Coordinates**: X = `870px`, Y = `85px`, Width = `380px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `buses[Bus_Type]` into the **Y-axis** well.
+     - Drag `_Measures[Average Fare]` into the **X-axis** well.
+   - **Visual Formatting**: Set bar color to warm amber (`#F59E0B`), turn on **Data labels**.
+
 3. **Revenue Yield per Distance Class (Clustered Column Chart)**:
-   - Coordinates: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
-   - **X-axis**: `routes[Distance_km]` (binned)
-   - **Y-axis**: `[Total Revenue]` and `[Average Fare]` (Dual Axis).
+   - **Visualization Pane**: Select **Clustered Column Chart** icon.
+   - **Coordinates**: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
+   - **Field Wells Configuration**:
+     - Drag `routes[Distance_km]` into the **X-axis** well.
+     - Drag `_Measures[Total Revenue]` into the **Y-axis** well.
+     - Drag `_Measures[Average Fare]` into the **Tooltips** well (so hover-overs show both revenue and average fare yield).
 
 ---
 
 ### Page 4: Customers (Demographics & Retention Profiles)
-Analyzes user booking behaviors and repeat customer rates:
+Analyzes user booking behaviors and repeat customer rates. 
+
+*Before building, create an **Age Group** calculated column:*
+- Select the `customers` table in the Data pane > click **New Column** in the Modeling ribbon:
+  ```dax
+  Age_Group = IF(customers[Age] < 25, "Under 25", IF(customers[Age] <= 45, "25-45", "45+"))
+  ```
 
 1. **Customer Bookings Leaderboard (Table)**:
-   - Coordinates: X = `200px`, Y = `85px`, Width = `650px`, Height = `590px` (tall listing).
-   - **Columns**: `Customers[Name]`, `Customers[Gender]`, `Customers[Age]`, `[Total Bookings]`, `[Total Revenue]`.
-   - *Formatting*: Sort descending by `[Total Revenue]`.
+   - **Visualization Pane**: Select **Table** icon.
+   - **Coordinates**: X = `200px`, Y = `85px`, Width = `650px`, Height = `590px`.
+   - **Field Wells Configuration**:
+     - Drag these fields into the **Columns** well in this order:
+       1. `customers[Name]`
+       2. `customers[Gender]`
+       3. `customers[Age_Group]`
+       4. `_Measures[Total Bookings]`
+       5. `_Measures[Total Revenue]`
+     - *Sorting*: Click on the `Total Revenue` column header in the table visual once loaded to sort the list in descending order.
+
 2. **Age Group Distribution (Clustered Column Chart)**:
-   - Coordinates: X = `870px`, Y = `85px`, Width = `380px`, Height = `280px`.
-   - **X-axis**: Age Groups (e.g. Under 25, 25-45, 45+)
-   - **Y-axis**: `[Unique Customers]`
+   - **Visualization Pane**: Select **Clustered Column Chart** icon.
+   - **Coordinates**: X = `870px`, Y = `85px`, Width = `380px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `customers[Age_Group]` into the **X-axis** well.
+     - Drag `_Measures[Unique Customers]` into the **Y-axis** well.
+   - **Visual Formatting**: Sort the X-axis chronologically: Click the `...` on the visual > Sort Axis > select `Age_Group`.
+
 3. **Customer Retention Profile (Gauge Visual)**:
-   - Coordinates: X = `870px`, Y = `385px`, Width = `380px`, Height = `280px`.
-   - **Value**: `[Customer Retention Rate]`
-   - **Target**: `0.80` (80% management target).
+   - **Visualization Pane**: Select **Gauge** icon.
+   - **Coordinates**: X = `870px`, Y = `385px`, Width = `380px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `_Measures[Customer Retention Rate]` into the **Value** well.
+     - Under **Target value** in the formatting pane (Visual > Gauge axis > Target), set the static value to `0.80` (representing the 80% customer retention goal).
 
 ---
 
@@ -129,16 +179,31 @@ Analyzes user booking behaviors and repeat customer rates:
 Analyzes which coach configurations perform best:
 
 1. **Seat Occupancy Rate (Gauge Visual)**:
-   - Coordinates: X = `200px`, Y = `85px`, Width = `380px`, Height = `280px`.
-   - **Value**: `[Occupancy Rate]`
-   - **Target**: `0.80` (80% load factor).
-2. **Total Revenue by Coach configuration (Pie Chart)**:
-   - Coordinates: X = `600px`, Y = `85px`, Width = `650px`, Height = `280px`.
-   - **Legend**: `buses[Bus_Type]`
-   - **Values**: `[Total Revenue]`
-3. **Asset Yield Matrix (Table)**:
-   - Coordinates: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
-   - **Columns**: `buses[Bus_ID]`, `buses[Bus_Type]`, `buses[Capacity]`, `[Total Bookings]`, `[Total Revenue]`, `[Occupancy Rate]`.
+   - **Visualization Pane**: Select **Gauge** icon.
+   - **Coordinates**: X = `200px`, Y = `85px`, Width = `380px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `_Measures[Occupancy Rate]` into the **Value** well.
+     - Under the formatting pane (Visual > Gauge axis > Target), set the target value to `0.80` (80% load factor capacity target).
+
+2. **Total Revenue by Coach Configuration (Pie Chart)**:
+   - **Visualization Pane**: Select **Pie Chart** icon.
+   - **Coordinates**: X = `600px`, Y = `85px`, Width = `650px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `buses[Bus_Type]` into the **Legend** well.
+     - Drag `_Measures[Total Revenue]` into the **Values** well.
+
+3. **Asset Yield Table (Table)**:
+   - **Visualization Pane**: Select **Table** icon.
+   - **Coordinates**: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
+   - **Field Wells Configuration**:
+     - Drag these fields into the **Columns** well in this order:
+       1. `buses[Bus_ID]`
+       2. `buses[Bus_Number]`
+       3. `buses[Bus_Type]`
+       4. `buses[Capacity]`
+       5. `_Measures[Total Bookings]`
+       6. `_Measures[Total Revenue]`
+       7. `_Measures[Occupancy Rate]`
 
 ---
 
@@ -146,13 +211,21 @@ Analyzes which coach configurations perform best:
 Identifies the best-performing travel corridors:
 
 1. **Route Performance Matrix (Matrix)**:
-   - Coordinates: X = `200px`, Y = `85px`, Width = `1050px`, Height = `280px`.
-   - **Rows**: `routes[Source]`, `routes[Destination]` (drill-down).
-   - **Values**: `[Total Bookings]`, `[Total Revenue]`, `[Average Fare]`, `[Occupancy Rate]`.
+   - **Visualization Pane**: Select **Matrix** icon.
+   - **Coordinates**: X = `200px`, Y = `85px`, Width = `1050px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `routes[Source]` and then `routes[Destination]` into the **Rows** well (in that order, to create a nestable hierarchy).
+     - Drag `_Measures[Total Bookings]`, `_Measures[Total Revenue]`, and `_Measures[Occupancy Rate]` into the **Values** well.
+   - **Formatting**: Expand **Row headers** in style options > Turn **On** the **Stepped layout** (this lets users click the `+` sign next to a source city to expand and view destinations).
+
 2. **Top Corridors by Revenue (Horizontal Bar Chart)**:
-   - Coordinates: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
-   - **Y-axis**: Route Corridor (concatenated `routes[Source]` & `routes[Destination]`).
-   - **X-axis**: `[Total Revenue]`. Sort descending.
+   - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
+   - **Coordinates**: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
+   - **Field Wells Configuration**:
+     - Drag `routes[Route_ID]` (or corridor) into the **Y-axis** well.
+     - Drag `_Measures[Total Revenue]` into the **X-axis** well.
+     - Drag `routes[Source]` and `routes[Destination]` into the **Tooltips** well.
+   - **Formatting**: Sort the visual descending: click `...` on the visual > Sort Axis > select `Total Revenue`.
 
 ---
 
@@ -160,17 +233,20 @@ Identifies the best-performing travel corridors:
 Dedicated print-ready and exportable transaction ledger:
 
 1. **Master Transaction Report (Table)**:
-   - Coordinates: X = `200px`, Y = `85px`, Width = `1050px`, Height = `610px`.
-   - **Columns**: 
-     - `bookings[Booking_ID]`
-     - `Customers[Name]`
-     - `bookings[Booking_Date]`
-     - `routes[Source]`
-     - `routes[Destination]`
-     - `buses[Bus_Type]`
-     - `bookings[Fare_Amount]`
-     - `bookings[Booking_Status]`
-   - *Formatting Settings*:
-     - Grid style: **Minimal** or **Alternating Rows** (light gray `#F8FAFC`).
-     - Enable **Visual Headers > Export Data** (allows users to extract the table to Excel with one click).
-     - Column alignment: numbers right-aligned, text left-aligned.
+   - **Visualization Pane**: Select **Table** icon.
+   - **Coordinates**: X = `200px`, Y = `85px`, Width = `1050px`, Height = `610px`.
+   - **Field Wells Configuration**:
+     - Drag these fields into the **Columns** well in this order:
+       1. `bookings[Booking_ID]`
+       2. `customers[Name]`
+       3. `bookings[Booking_Date]`
+       4. `routes[Source]`
+       5. `routes[Destination]`
+       6. `buses[Bus_Type]`
+       7. `bookings[Fare_Amount]`
+       8. `bookings[Booking_Status]`
+   - **Formatting Settings**:
+     - Go to Style presets > select **Alternating rows** (renders light gray alternating rows).
+     - Go to Column headers > set font size to `10pt`, Bold.
+     - Under **Visual Headers**, ensure **Export data** icon is checked **On** (enables users to export this table to a CSV/Excel file in the Power BI Service).
+
