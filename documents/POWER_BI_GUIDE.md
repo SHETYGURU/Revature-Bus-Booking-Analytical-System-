@@ -246,26 +246,31 @@ Configure your workspace geometry to fit a single widescreen window:
    - `Reports`
 4. **Left Navigation Sidebar**:
    - Insert a **Rectangle Shape** (Insert > Shapes > Rectangle).
-   - Set coordinates: X = `0px`, Y = `0px`, Width = `80px`, Height = `720px` (full vertical height).
+   - Set coordinates: X = `0px`, Y = `0px`, Width = `180px`, Height = `720px` (full vertical height).
    - Fill: White (`#FFFFFF`). Border: Outline color Light Gray (`#E2E8F0`), Width: `1px`.
-   - Place your navigation logo image (`assets/icon_nav_logo.png`) at X = `15px`, Y = `15px`, Width = `50px`, Height = `50px`.
-5. **Navigation Buttons Setup (Individual Buttons)**:
-   Because the native Page Navigator visual does not allow you to set *different* custom icons for each page, you must create individual buttons. Follow these steps to build the 7 vertical tabs:
-   - For each page, click **Insert** > **Buttons** > **Blank**.
-   - Set the size for each button: Width = `60px`, Height = `50px`.
-   - Place them vertically in the sidebar starting from Y = `100px` down to Y = `460px` (with X = `10px`).
-   - Format each button individually:
-     - **Button Style (State: Default)**:
-       - **Fill**: Off (transparent).
-       - **Icon**: Toggle **On**, set type to **`Custom`**, and browse to select the corresponding slate icon (e.g. `assets/icon_nav_overview.png` for the Overview button, `assets/icon_nav_bookings.png` for Bookings, etc.). Set fit to **`Fit`** or **`Fill`**.
-     - **Button Style (State: Selected)** (for the active page button on its respective sheet):
-       - **Fill**: Toggle **On**, set background color to Purple (`#7C3AED` or `#4F46E5`), transparency `0%`.
-       - **Icon**: Change the custom icon image to a white version of the icon (or adjust icon transparency/scaling).
-     - **Action**:
-       - Toggle **Action** to **`On`**.
-       - Set **Type** to **`Page navigation`**.
-       - Set **Destination** to the corresponding page name (e.g., the Overview button navigates to `Overview`, the Bookings button to `Bookings`, etc.).
-6. **Filters button**: Place a Blank Button at X = `20px`, Y = `660px`, size `40px` x `40px`. Under Style > Icon, upload `assets/icon_nav_filters.png`. Under Action, set it to toggle a Bookmark or Filter panel if needed, or leave it as a visual separator.
+   - Place your navigation logo image (`assets/icon_nav_logo.png`) at X = `15px`, Y = `20px`, Width = `45px`, Height = `45px`.
+5. **Navigation Buttons Setup (Individual Sidebar Buttons)**:
+   Because the native Page Navigator visual does not allow you to set *different* custom icons for each page, you must create 7 individual buttons. 
+
+   Furthermore, since each page tab in Power BI (Overview, Bookings, etc.) is a separate canvas, **there is no native "Selected" state setting**. Instead, you will style the **Default** state of the active button differently on each specific page:
+
+   - **Active State** (e.g. style the `Overview` button this way only when editing the `Overview` page canvas):
+     - **Fill**: Toggle **On**, set background color to very light purple (Hex `#F3E8FF` or `#F5F3FF`), transparency `0%`.
+     - **Icon**: Toggle **On**, set type to **`Custom`** and upload the **purple version** (e.g. `assets/icon_nav_overview_purple.png`). Position: **`Left`**, size **`20px`**.
+     - **Text**: Toggle **On**, set value to the page name (e.g. `Overview`). Font: `Segoe UI Semibold`, size `10pt`, color Purple (`#7C3AED`). Alignment: **`Left`**. In padding settings, set **Left padding** to **`45px`** to push the text next to the icon.
+     - **Accent Bar**: Toggle **On**, set position to **`Left`**, color to Purple (`#7C3AED`), thickness to **`3px`**. (This creates the vertical indicator line).
+   
+   - **Inactive State** (style the other 6 buttons this way on the current page canvas):
+     - **Fill**: Toggle **Off** (transparent background).
+     - **Icon**: Toggle **On**, set type to **`Custom`** and upload the **slate gray version** (e.g. `assets/icon_nav_bookings.png` for Bookings button). Position: **`Left`**, size **`20px`**.
+     - **Text**: Toggle **On**, set value to the page name. Font: `Segoe UI Semibold`, size `10pt`, color Slate Gray (`#64748B`). Alignment: **`Left`**, **Left padding** set to **`45px`**.
+     - **Accent Bar**: Toggle **Off**.
+
+   Set the size for all 7 buttons: Width = `160px`, Height = `45px`. Place them vertically in the sidebar starting from Y = `100px` down to Y = `460px` (with X = `10px`). Copy and paste this sidebar set to all page canvases, then swap which button is styled as **Active** on each page.
+
+6. **Filters button**: Place a Blank Button at X = `15px`, Y = `660px`, size `150px` x `40px`. 
+   - Under Style > Icon, upload `assets/icon_nav_filters.png`. 
+   - Under Style > Text, toggle **On**, set text to `Filters`. Font size `10pt`, color Slate Gray (`#64748B`). Left padding set to `45px`. Action set to toggle a Bookmark or Filter panel.
 
 ---
 
