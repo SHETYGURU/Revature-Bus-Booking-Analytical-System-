@@ -116,7 +116,7 @@ Tracks high-level business performance, sales trends, and source yields:
 
 5. **Booking Status Cards (Bottom Right Card (New) Visual)**:
    - **Visualization Pane**: Select **Card (new)** icon.
-   - **Coordinates**: X = `990px`, Y = `595px`, Width = `270px`, Height = `110px`.
+   - **Coordinates**: X = `690px`, Y = `475px`, Width = `570px`, Height = `230px`.
    - **Field Wells Configuration**:
      - Drag these custom status count measures into the Values box:
        1. Cancelled Bookings: `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Cancelled"))`
@@ -124,7 +124,7 @@ Tracks high-level business performance, sales trends, and source yields:
        3. Pending Bookings: `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Pending"))`
    - **Visual Formatting**:
      - Align card values to the center.
-     - Go to Cards > Image > upload corresponding outline icons (`icon_cancelled.png`, `icon_confirmed.png`, `icon_pending.png`).
+     - Go to Cards > Image > upload corresponding outline icons (`icon_cancelled.png`, `icon_confirmed.png`, `icon_pending.png`). Set Image Fit to **`Fit`** and size to **`24px`**.
 
 ---
 
