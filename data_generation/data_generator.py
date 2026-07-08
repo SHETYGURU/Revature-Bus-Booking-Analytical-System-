@@ -110,17 +110,38 @@ def generate_base_customers():
         
         # Inconsistent phone number format and some missing
         if idx % 15 == 0:
-            # Null phone number
             phone = None
         else:
             phone_prefix = random.choice(['7', '8', '9'])
             phone = phone_prefix + "".join(random.choices("0123456789", k=9))
             
+        # Generate Gender with dirty casing and abbreviations
+        gender = random.choice(["Male", "Female"])
+        if idx % 12 == 0:
+            gender = gender.lower()
+        elif idx % 12 == 1:
+            gender = gender.upper()
+        elif idx % 12 == 2:
+            gender = gender[0]  # 'M' or 'F'
+        elif idx % 25 == 0:
+            gender = None  # Missing
+            
+        # Generate Age with outliers and nulls
+        age = random.randint(18, 75)
+        if idx % 20 == 0:
+            age = None  # Missing
+        elif idx % 20 == 1:
+            age = random.randint(-15, -1)  # Negative age anomaly
+        elif idx % 20 == 2:
+            age = random.randint(110, 150)  # Outlier age anomaly
+            
         customers_data.append({
             "Customer_ID": c_id,
             "Name": name,
             "Email": email,
-            "Phone": phone
+            "Phone": phone,
+            "Gender": gender,
+            "Age": age
         })
     return pd.DataFrame(customers_data)
 

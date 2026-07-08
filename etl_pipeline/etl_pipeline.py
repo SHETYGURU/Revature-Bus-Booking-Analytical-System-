@@ -55,6 +55,38 @@ def transform_and_validate(bookings, customers, buses, routes):
     customers_clean['Phone'] = customers_clean['Phone'].fillna('Unknown')
     print(f"Null Handling: Filled {null_phones_count} missing customer phone numbers with 'Unknown'.")
     
+    # Clean Gender column: normalize, map, fill nulls
+    null_genders_count = customers_clean['Gender'].isnull().sum()
+    customers_clean['Gender'] = customers_clean['Gender'].fillna('Female')
+    
+    def standardize_gender(val):
+        if not isinstance(val, str):
+            return 'Female'
+        val_clean = val.strip().lower()
+        if val_clean in ['m', 'male']:
+            return 'Male'
+        elif val_clean in ['f', 'female']:
+            return 'Female'
+        return 'Female'
+        
+    customers_clean['Gender'] = customers_clean['Gender'].apply(standardize_gender)
+    print(f"Null Handling/Standardization: Cleansed Gender field, filling {null_genders_count} missing values.")
+    
+    # Clean Age column: fill nulls/outliers with median age
+    valid_ages = pd.to_numeric(customers_clean['Age'], errors='coerce').dropna()
+    valid_ages = valid_ages[(valid_ages >= 18) & (valid_ages <= 100)]
+    median_age = int(valid_ages.median()) if len(valid_ages) > 0 else 35
+    
+    customers_clean['Age'] = pd.to_numeric(customers_clean['Age'], errors='coerce')
+    null_ages_count = customers_clean['Age'].isnull().sum()
+    customers_clean['Age'] = customers_clean['Age'].fillna(median_age)
+    
+    outlier_ages_mask = (customers_clean['Age'] < 18) | (customers_clean['Age'] > 100)
+    outlier_ages_count = outlier_ages_mask.sum()
+    customers_clean.loc[outlier_ages_mask, 'Age'] = median_age
+    customers_clean['Age'] = customers_clean['Age'].astype(int)
+    print(f"Null Handling/Outliers: Cleansed Age field, filling {null_ages_count} nulls and correcting {outlier_ages_count} outliers to median ({median_age}).")
+    
     # --- 4. Data Standardization ---
     # Convert dates to standard YYYY-MM-DD string format
     bookings_clean['Booking_Date'] = bookings_clean['Booking_Date'].dt.strftime('%Y-%m-%d')
@@ -147,7 +179,9 @@ def load_to_sqlite(bookings, customers, buses, routes, db_path):
         Customer_ID INTEGER PRIMARY KEY,
         Name TEXT NOT NULL,
         Email TEXT NOT NULL UNIQUE,
-        Phone TEXT NOT NULL
+        Phone TEXT NOT NULL,
+        Gender TEXT NOT NULL,
+        Age INTEGER NOT NULL
     );
     """)
     
@@ -217,7 +251,9 @@ def load_to_mysql(bookings, customers, buses, routes, db_config):
                 Customer_ID INT PRIMARY KEY,
                 Name VARCHAR(255) NOT NULL,
                 Email VARCHAR(255) NOT NULL UNIQUE,
-                Phone VARCHAR(20) NOT NULL
+                Phone VARCHAR(20) NOT NULL,
+                Gender VARCHAR(10) NOT NULL,
+                Age INT NOT NULL
             );
             """)
             
@@ -258,7 +294,7 @@ def load_to_mysql(bookings, customers, buses, routes, db_config):
             
             # Insert Customers
             cust_tuples = [tuple(x) for x in customers.to_numpy()]
-            cursor.executemany("INSERT INTO Customers (Customer_ID, Name, Email, Phone) VALUES (%s, %s, %s, %s)", cust_tuples)
+            cursor.executemany("INSERT INTO Customers (Customer_ID, Name, Email, Phone, Gender, Age) VALUES (%s, %s, %s, %s, %s, %s)", cust_tuples)
             
             # Insert Buses
             bus_tuples = [tuple(x) for x in buses.to_numpy()]
