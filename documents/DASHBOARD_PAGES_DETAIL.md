@@ -1,6 +1,6 @@
 # Power BI Pages & Bookmark Filter Panel Setup Guide
 
-This guide details the configurations for your overlay **Bookmark Filter Panel** (which slides open and close on command) and provides the step-by-step layout for the visualizations across all 7 dedicated report pages.
+This guide details the configurations for your overlay **Bookmark Filter Panel** (which slides open and close on command), details page-specific filtering criteria, and provides the step-by-step layout for the visualizations across all 7 dedicated report pages.
 
 ---
 
@@ -8,51 +8,55 @@ This guide details the configurations for your overlay **Bookmark Filter Panel**
 
 To create a clean overlay filter pane that appears when clicking the sidebar **Filters** button and closes when clicking a **Close (X)** button:
 
-### Step 1: Create the Filter Panel Visual Group
-On your canvas, build the filter container directly next to the sidebar:
-1. **Background Panel**: Insert a **Rectangle Shape** (Insert > Shapes > Rectangle).
-   - Coordinates: X = `180px` (directly adjacent to the sidebar), Y = `0px`, Width = `250px`, Height = `720px`.
-   - Fill: Solid White (`#FFFFFF`). Border: Outline color Light Gray (`#E2E8F0`), Width: `1px`.
-   - Shadow: Enable a soft shadow offset to the right.
-2. **Close Button (X)**: Insert a **Blank Button** at the top right of the panel (X = `390px`, Y = `15px`, Width = `30px`, Height = `30px`).
-   - Format Style: Under Text, toggle **On**, set value to `X`. Font: `Segoe UI Bold`, size `12pt`, color Slate Gray (`#64748B`).
-3. **Place the Slicers**: Drag your 3 existing slicers into this panel:
-   - **Date Range Slicer** (Y = `80px`)
-   - **Source/Destination Slicer** (Y = `220px`)
-   - **Bus Type Slicer** (Y = `420px`)
-4. **Group the Elements**:
-   - Go to the **View** ribbon > select and open the **Selection Pane**.
-   - Select all 5 visual elements (the panel rectangle, the close button, and the 3 slicers) by holding `Ctrl`.
-   - Right-click one of the selected items > select **Group** > rename this group to **`Filter Panel`**.
+### Step 1: Create the Filter Panel Visual Group (Duplicate per Page Tab)
+Since each page tab has unique data, you will build a localized **`Filter Panel`** group on each page tab containing page-specific slicers.
+
+**Background Panel**: Insert a **Rectangle Shape** (Insert > Shapes > Rectangle).
+- Coordinates: X = `180px` (directly adjacent to the sidebar), Y = `0px`, Width = `250px`, Height = `720px`.
+- Fill: Solid White (`#FFFFFF`). Border: Outline color Light Gray (`#E2E8F0`), Width: `1px`.
+- Shadow: Enable a soft shadow offset to the right.
 
 ---
 
-### Step 2: Create the Toggle Bookmarks
-1. Go to the **View** ribbon > select and open the **Bookmarks Pane**.
-2. **Configure "Show Filters" Bookmark**:
-   - In the **Selection Pane**, click the eye icon next to **`Filter Panel`** to make it **Visible**.
-   - In the **Bookmarks Pane**, click **Add** > rename the bookmark to **`Show Filters`**.
-3. **Configure "Hide Filters" Bookmark**:
-   - In the **Selection Pane**, click the eye icon next to **`Filter Panel`** to make it **Hidden**.
-   - In the **Bookmarks Pane**, click **Add** > rename the bookmark to **`Hide Filters`**.
-4. **CRITICAL STEP (Uncheck Data)**:
-   - In the Bookmarks pane, click the three dots `...` next to both **`Show Filters`** and **`Hide Filters`** bookmarks.
-   - **Uncheck "Data"** (ensure there is no checkmark next to *Data*).
-   - *Why?* This ensures that opening or closing the filter panel only controls visual visibility and does *not* reset any active filter choices made by the user.
+### Step 2: Configure the 3-State Close Button (X)
+Instead of a simple text close button, use a **Blank Button** styled with the three newly generated transparent Close (X) icons to represent Default, Hover, and Pressed states:
+
+1. Insert a **Blank Button** at the top right of the panel (X = `390px`, Y = `15px`, Width = `30px`, Height = `30px`).
+2. Go to the **Format Pane > Button > Style**:
+   - Set **State** to **`Default`**: 
+     - Expand **Icon** > set type to **`Custom`** > Browse and upload **`assets/icon_close_slate.png`** (Sleek slate-gray outline).
+   - Set **State** to **`On hover`**:
+     - Expand **Icon** > set type to **`Custom`** > Browse and upload **`assets/icon_close_purple.png`** (White cross in a purple circle background for clear visual feedback).
+   - Set **State** to **`On press`**:
+     - Expand **Icon** > set type to **`Custom`** > Browse and upload **`assets/icon_close_white.png`** (Minimalist clean white cross).
+3. Set **Image Fit** to **`Fit`** for all states.
 
 ---
 
-### Step 3: Assign Actions to Buttons
-1. **Filters Sidebar Button** (On the main sidebar):
-   - Select the `Filters` button.
-   - In the Format pane, expand **Action** > toggle it **On**.
-   - Set Type to **`Bookmark`**, and select Bookmark: **`Show Filters`**.
-2. **Close Button (X)** (Inside the filter panel):
-   - Select the `X` button.
-   - In the Format pane, expand **Action** > toggle it **On**.
-   - Set Type to **`Bookmark`**, and select Bookmark: **`Hide Filters`**.
+### Step 3: Page-Specific Slicer Configurations (Inside the Overlay Panel)
+Drag the appropriate slicers into the panel for each sheet:
 
-Test it by holding `Ctrl` and clicking the buttons on your canvas!
+| Page Tab | Slicer 1 (Y = `80px`) | Slicer 2 (Y = `220px`) | Slicer 3 (Y = `420px`) |
+| :--- | :--- | :--- | :--- |
+| **Page 1: Overview** | `Calendar[Date]` (Between Slider) | `routes[Source]` (Dropdown) | `buses[Bus_Type]` (Checkbox List) |
+| **Page 2: Bookings** | `bookings[Booking_Status]` (Tile / Horizontal List) | `Calendar[Date]` (Between Slider) | `buses[Capacity]` (Numeric Range Slider) |
+| **Page 3: Revenue** | `Calendar[Date]` (Between Slider) | `bookings[Fare_Amount]` (Numeric Range Slider) | `routes[Source]` (Dropdown) |
+| **Page 4: Customers** | `customers[Gender]` (Tile) | `customers[Age_Group]` (Checkbox List) | `customers[Name]` (Searchable Dropdown) |
+| **Page 5: Bus Types** | `buses[Bus_Type]` (Checkbox List) | `buses[Capacity]` (Numeric Range Slider) | *Leave Empty* |
+| **Page 6: Routes** | `routes[Source]` (Dropdown) | `routes[Destination]` (Dropdown) | `routes[Distance]` (Numeric Range Slider) |
+| **Page 7: Reports** | *No panel overlay (Uses Top Right Search Bar - See Page 7 visual guide)* | *None* | *None* |
+
+---
+
+### Step 4: Create local bookmarks (Selected Visuals scope)
+To prevent bookmarks from affecting other pages:
+1. In the **Selection Pane**, select the `Filter Panel` group you created on the active page.
+2. In the **Bookmarks Pane**, click **Add** > rename to **`PageName_ShowFilters`** (e.g. `Overview_ShowFilters`).
+3. Right-click the bookmark > check **Selected Visuals** (change it from *All Visuals*).
+4. Uncheck **Data** on the bookmark.
+5. Hide the `Filter Panel` group in the Selection Pane, add another bookmark, rename it to **`PageName_HideFilters`**, set to **Selected Visuals**, and uncheck **Data**.
+6. Bind these bookmark actions to the page's sidebar **Filters** button and local **Close (X)** button.
+7. Repeat this setup for Pages 1 through 6.
 
 ---
 
@@ -292,7 +296,17 @@ Identifies the best-performing travel corridors:
 ### Page 7: Reports (Master Transaction Export Table)
 Dedicated print-ready and exportable transaction ledger:
 
-1. **Master Transaction Report (Table)**:
+1. **Top Right Search Bar (Search Slicer)**:
+   - **Visualization Pane**: Select **Slicer** icon.
+   - **Coordinates**: X = `1000px`, Y = `25px`, Width = `250px`, Height = `50px`.
+   - **Field Wells Configuration**:
+     - Drag `customers[Name]` into the **Field** box.
+   - **Visual Settings**:
+     - Under Slicer Settings > Style: Select **`Dropdown`**.
+     - Click the `...` (More options) on the visual header > Select **`Search`** (this adds a text entry field inside the dropdown, turning it into an interactive text search bar).
+     - Selection Settings: Toggle **`Show "Select all"`** to **`On`**.
+
+2. **Master Transaction Report (Table)**:
    - **Visualization Pane**: Select **Table** icon.
    - **Coordinates**: X = `200px`, Y = `85px`, Width = `1050px`, Height = `610px`.
    - **Field Wells Configuration**:
