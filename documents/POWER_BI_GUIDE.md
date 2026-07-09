@@ -264,22 +264,22 @@ Configure your workspace geometry to fit a single widescreen window:
    Furthermore, since each page tab in Power BI (Overview, Bookings, etc.) is a separate canvas, **there is no native "Selected" state setting**. Instead, you will style the **Default** state of the active button differently on each specific page:
 
    - **Active State** (e.g. style the `Overview` button this way only when editing the `Overview` page canvas):
-     - **Fill**: Toggle **On**, set background color to very light purple (Hex `#F3E8FF` or `#F5F3FF`), transparency `0%`.
-     - **Icon**: Toggle **On**, set type to **`Custom`** and upload the **filled purple version** (e.g. `assets/icon_nav_overview_purple.png`). Position: **`Left`**, size **`20px`**.
-     - **Text**: Toggle **On**, set value to the page name (e.g. `Overview`). Font: `Segoe UI Semibold`, size `10pt`, color Purple (`#7C3AED`). Alignment: **`Left`**. In padding settings, set **Left padding** to **`45px`** to push the text next to the icon.
-     - **Vertical Purple Indicator Bar (Workaround)**: 
+     - **Fill**: Toggle **On**, set background color to very light blue (Hex `#E0F2FE` or `#E0F7FA`), transparency `0%`.
+     - **Icon**: Toggle **On**, set type to **`Custom`** and upload the active blue version (e.g. `assets/icon_nav_overview_blue.png` which is color-matched to Deep Marine Blue). Position: **`Left`**, size **`20px`**.
+     - **Text**: Toggle **On**, set value to the page name (e.g. `Overview`). Font: `Segoe UI Semibold`, size `10pt`, color Deep Marine Blue (`#0F172A`). Alignment: **`Left`**. In padding settings, set **Left padding** to **`45px`** to push the text next to the icon.
+     - **Vertical Blue Indicator Bar (Workaround)**: 
        Since standard Blank Buttons only support uniform 4-sided borders (no native left-only border), build the line using a small shape:
        - Insert a **Rectangle Shape** (Insert > Shapes > Rectangle).
        - Set dimensions: Width = `3px`, Height = `45px` (matching the button height).
        - Position it on the far left edge of the active button (X = `10px`).
-       - Turn off the shape outline border, and set **Fill Color** to Purple (`#7C3AED`).
+       - Turn off the shape outline border, and set **Fill Color** to Deep Marine Blue (`#0F172A`).
    
    - **Inactive State** (style the other 6 buttons this way on the current page canvas):
      - **Fill**: Toggle **Off** (transparent background).
-     - **Icon**: Toggle **On**, set type to **`Custom`** and upload the **slate gray version** (e.g. `assets/icon_nav_bookings.png` for Bookings button). Position: **`Left`**, size **`20px`**.
+     - **Icon**: Toggle **On**, set type to **`Custom`** and upload the slate gray version (e.g. `assets/icon_nav_bookings.png` for Bookings button). Position: **`Left`**, size **`20px`**.
      - **Text**: Toggle **On**, set value to the page name. Font: `Segoe UI Semibold`, size `10pt`, color Slate Gray (`#64748B`). Alignment: **`Left`**, **Left padding** set to **`45px`**.
 
-   Set the size for all 7 buttons: Width = `160px`, Height = `45px`. Place them vertically in the sidebar starting from Y = `100px` down to Y = `460px` (with X = `10px`). Copy and paste this sidebar set to all page canvases, then swap which button is styled as **Active** on each page and move the vertical purple indicator bar shape next to it.
+   Set the size for all 7 buttons: Width = `160px`, Height = `45px`. Place them vertically in the sidebar starting from Y = `100px` down to Y = `460px` (with X = `10px`). Copy and paste this sidebar set to all page canvases, then swap which button is styled as **Active** on each page and move the vertical blue indicator bar shape next to it.
 
 6. **Filters button**: Place a Blank Button at X = `15px`, Y = `660px`, size `150px` x `40px`. 
    - Under Style > Icon, upload `assets/icon_nav_filters.png`. 
@@ -313,7 +313,7 @@ Create a single **Card (New)** visual spanning the top row (X = `100px`, Y = `85
    - *Total Revenue*: Upload `assets/Bg Theme.jpg` (Green). Image Fit: Fill.
    - *Total Bookings*: Upload `assets/Blue Bg Theme.png` (Blue). Image Fit: Fill.
    - *Average Fare*: Upload `assets/Peach Bg Image.jpg` (Orange). Image Fit: Fill.
-   - *Customer Retention Rate*: Upload `assets/Purple Bg Theme.jpg` (Purple). Image Fit: Fill.
+   - *Customer Retention Rate*: Upload `assets/Blue Bg Theme.png` (or Hex `#0891B2` Slate Cyan). Image Fit: Fill.
 5. **Floating Icons**:
    Expand **Cards > Image > Series** and upload the transparent 3D shadow icons:
    - *Total Revenue*: `assets/icon_revenue.png`. Position: Left, Spacing: `15px`, size `50px`.
@@ -329,7 +329,7 @@ Create a single **Card (New)** visual spanning the top row (X = `100px`, Y = `85
      - Drag `[Revenue Trend Label]` to detail. Set color to **White**, size **`10`**.
      - Expand **Background** (inside Detail) > Toggle **`On`**. Set color to dark green (`#064E3B`), transparency **`30%`** (forms the capsule pill).
      - Under **Reference label layout** (or layout settings), change **Alignment** to **`Left`** (shifts pill under text).
-   - Repeat the pill styling for the other three cards using their respective trend label measures and background colors (Blue, Orange, Purple) at `30%` transparency.
+   - Repeat the pill styling for the other three cards using their respective trend label measures and background colors (Blue, Orange, Cyan/Slate) at `30%` transparency.
 
 ---
 

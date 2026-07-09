@@ -26,7 +26,7 @@ Instead of a simple text close button, use a **Blank Button** styled with the th
    - Set **State** to **`Default`**: 
      - Expand **Icon** > set type to **`Custom`** > Browse and upload **`assets/icon_close_slate.png`** (Sleek slate-gray outline).
    - Set **State** to **`On hover`**:
-     - Expand **Icon** > set type to **`Custom`** > Browse and upload **`assets/icon_close_purple.png`** (White cross in a purple circle background for clear visual feedback).
+     - Expand **Icon** > set type to **`Custom`** > Browse and upload **`assets/icon_close_purple.png`** (White cross in a deep blue circle background for clear visual feedback).
    - Set **State** to **`On press`**:
      - Expand **Icon** > set type to **`Custom`** > Browse and upload **`assets/icon_close_white.png`** (Minimalist clean white cross).
 3. Set **Image Fit** to **`Fit`** for all states.
@@ -82,7 +82,7 @@ Tracks high-level business performance, sales trends, and source yields:
        - *Total Revenue*: `assets/Bg Theme.jpg`
        - *Total Bookings*: `assets/Blue Bg Theme.png`
        - *Average Fare*: `assets/Peach Bg Image.jpg`
-       - *Customer Retention Rate*: `assets/Purple Bg Theme.jpg`
+       - *Customer Retention Rate*: `assets/Blue Bg Theme.png`
      - Go to Cards > Image > select each series to upload 3D icons:
        - *Total Revenue*: `assets/icon_revenue.png` (Left-aligned, spacing `15px`, size `50px`).
        - *Total Bookings*: `assets/icon_bookings.png`.
