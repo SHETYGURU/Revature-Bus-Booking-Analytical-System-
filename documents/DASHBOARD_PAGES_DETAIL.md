@@ -120,19 +120,31 @@ Tracks high-level business performance, sales trends, and source yields:
 ### Page 2: Bookings (Detailed Booking Status Analysis)
 Focuses on tracking booking statuses, customer planning behavior, and traffic load distribution:
 
-1. **Daily Bookings Volume (Area Chart)**:
+1. **Top Row KPI Cards (Card (New) Visual - NEW)**:
+   - **Business Value**: Solves **"What are our primary booking volume, completion, and load factors today?"** (tracks absolute volumes, cancellations, and capacity rates at a glance).
+   - **Visualization Pane**: Select **Card (new)** icon.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `120px`.
+   - **Field Wells Configuration**:
+     - Drag `_Measures[Total Bookings]`, `_Measures[Confirmed Bookings]`, `_Measures[Cancelled Bookings]`, and `_Measures[Occupancy Rate]` into the Values box.
+   - **Visual Layout & Formatting**:
+     - Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
+     - Go to Cards > Fill > upload gradients matching theme: `Blue Bg Theme.png` (Total Bookings / Confirmed / Occupancy), `Purple Bg Theme.jpg` or solid `#EF4444` at low opacity (Cancelled Bookings).
+     - Go to Cards > Image > upload matching 3D icons (`icon_bookings.png`, `icon_confirmed.png`, `icon_cancelled.png`, `icon_retention.png`). Set size to **`50px`**.
+     - Go to Reference labels > Add trend labels, style backgrounds with `30%` transparency (capsule pill look).
+
+2. **Daily Bookings Volume (Area Chart)**:
    - **Business Value**: Solves **"What are our daily booking volumes and seasonal spikes?"** (helps with staffing and server infrastructure management).
    - **Visualization Pane**: Select **Area Chart** icon.
-   - **Coordinates**: X = `15px`, Y = `85px`, Width = `560px`, Height = `280px`.
+   - **Coordinates**: X = `15px`, Y = `220px`, Width = `560px`, Height = `240px`.
    - **Field Wells Configuration**:
      - Drag `Calendar[Date]` from the Data pane into the **X-axis** well.
      - Drag `_Measures[Total Bookings]` from the Data pane into the **Y-axis** well.
    - **Visual Formatting**: Set Stroke width to `3px`, Color to Ocean Blue (`#054A75`), expand **Shade area** > Turn **On** (Set transparency to `85%`, color `#E0F2FE`).
 
-2. **Planning Behavior (Donut Chart)**:
+3. **Planning Behavior (Donut Chart)**:
    - **Business Value**: Solves **"Do customers book last-minute or plan in advance?"** (helps adjust dynamic pricing models and booking policies).
    - **Visualization Pane**: Select **Donut Chart** icon.
-   - **Coordinates**: X = `590px`, Y = `85px`, Width = `310px`, Height = `280px`.
+   - **Coordinates**: X = `590px`, Y = `220px`, Width = `310px`, Height = `240px`.
    - **Field Wells Configuration**:
      - Create a calculated column: `Lead Time Days = DATEDIFF(bookings[Booking_Date], bookings[Travel_Date], DAY)`.
      - Create a grouping column: `Lead Time Group = IF([Lead Time Days]=0, "Same Day", IF([Lead Time Days]<=3, "1-3 Days", IF([Lead Time Days]<=7, "4-7 Days", "8+ Days")))`.
@@ -140,28 +152,28 @@ Focuses on tracking booking statuses, customer planning behavior, and traffic lo
      - Drag `_Measures[Total Bookings]` into the **Values** well.
    - **Visual Formatting**: Use light slate, ocean blue, and cyan colors for the segments.
 
-3. **Status Split (Clustered Column Chart)**:
+4. **Status Split (Clustered Column Chart)**:
    - **Business Value**: Solves **"Is our cancellation volume within acceptable boundaries?"** (helps operations identify booking leakage).
    - **Visualization Pane**: Select **Clustered Column Chart** icon.
-   - **Coordinates**: X = `915px`, Y = `85px`, Width = `350px`, Height = `280px`.
+   - **Coordinates**: X = `915px`, Y = `220px`, Width = `350px`, Height = `240px`.
    - **Field Wells Configuration**:
      - Drag `bookings[Booking_Status]` into the **X-axis** well.
      - Drag `_Measures[Total Bookings]` into the **Y-axis** well.
    - **Visual Formatting**: Color columns: Confirmed = Teal (`#0D9488`), Cancelled = Rose Red (`#EF4444`), Pending = Amber / Orange (`#F59E0B`).
 
-4. **Status vs Bus Type Matrix (Matrix Table)**:
+5. **Status vs Bus Type Matrix (Matrix Table)**:
    - **Business Value**: Solves **"Are cancellations concentrated on specific bus configurations?"** (identifies if seater or sleeper configurations experience more booking changes).
    - **Visualization Pane**: Select **Matrix** icon.
-   - **Coordinates**: X = `15px`, Y = `385px`, Width = `700px`, Height = `310px`.
+   - **Coordinates**: X = `15px`, Y = `475px`, Width = `700px`, Height = `230px`.
    - **Field Wells Configuration**:
      - Drag `buses[Bus_Type]` into the **Rows** well.
      - Drag `_Measures[Confirmed Bookings]`, `_Measures[Cancelled Bookings]`, and `_Measures[Pending Bookings]` into the **Values** well.
    - **Visual Formatting**: Cell Elements > enable Data Bars individually for each column using matching status colors.
 
-5. **Route Demands & Traffic Load (Horizontal Clustered Bar Chart)**:
+6. **Route Demands & Traffic Load (Horizontal Clustered Bar Chart)**:
    - **Business Value**: Solves **"Which routes have the highest passenger traffic?"** (guides fleet allocation managers to dispatch extra buses to high-demand corridors).
    - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
-   - **Coordinates**: X = `730px`, Y = `385px`, Width = `535px`, Height = `310px`.
+   - **Coordinates**: X = `730px`, Y = `475px`, Width = `535px`, Height = `230px`.
    - **Field Wells Configuration**:
      - Drag `Routes[Source] & " → " & Routes[Destination]` into the **Y-axis** well.
      - Drag `_Measures[Total Bookings]` into the **X-axis** well.
