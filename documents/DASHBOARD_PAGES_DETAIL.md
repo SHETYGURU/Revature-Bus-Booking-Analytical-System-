@@ -133,41 +133,57 @@ Tracks high-level business performance, sales trends, and source yields:
 ---
 
 ### Page 2: Bookings (Detailed Booking Status Analysis)
-Focuses on tracking booking statuses, volume metrics, and capacity:
+Focuses on tracking booking statuses, customer planning behavior, and traffic load distribution:
 
 1. **Daily Bookings Volume (Area Chart)**:
    - **Visualization Pane**: Select **Area Chart** icon.
-   - **Coordinates**: X = `200px`, Y = `85px`, Width = `650px`, Height = `280px`.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `560px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `Calendar[Date]` from the Data pane into the **X-axis** well.
      - Drag `_Measures[Total Bookings]` from the Data pane into the **Y-axis** well.
-     - Leave **Legend** and **Small multiples** empty.
    - **Visual Formatting**: Go to the format paintbrush icon > expand **Lines**:
      - Set Stroke width to `3px`.
-     - Set Color to Electric Blue (`#3B82F6`).
-     - Expand **Shade area** > Turn **On** (Set transparency to `80%`, color `#D1E8FF`).
+     - Set Color to Ocean Blue (`#054A75`).
+     - Expand **Shade area** > Turn **On** (Set transparency to `85%`, color `#E0F2FE`).
 
-2. **Status Split (Clustered Column Chart)**:
+2. **Planning Behavior (Donut Chart - NEW)**:
+   - **Business Value**: Solves **"Do customers book last-minute or plan in advance?"** (helps adjust dynamic pricing and scheduling).
+   - **Visualization Pane**: Select **Donut Chart** icon.
+   - **Coordinates**: X = `590px`, Y = `85px`, Width = `310px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Create a calculated column: `Lead Time Days = DATEDIFF(bookings[Booking_Date], bookings[Travel_Date], DAY)`.
+     - Create a grouping column: `Lead Time Group = IF([Lead Time Days]=0, "Same Day", IF([Lead Time Days]<=3, "1-3 Days", IF([Lead Time Days]<=7, "4-7 Days", "8+ Days")))`.
+     - Drag `Lead Time Group` into the **Legend** well.
+     - Drag `_Measures[Total Bookings]` into the **Values** well.
+   - **Visual Formatting**: Use light slate, ocean blue, and cyan colors for the segments.
+
+3. **Status Split (Clustered Column Chart)**:
    - **Visualization Pane**: Select **Clustered Column Chart** icon.
-   - **Coordinates**: X = `870px`, Y = `85px`, Width = `380px`, Height = `280px`.
+   - **Coordinates**: X = `915px`, Y = `85px`, Width = `350px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `bookings[Booking_Status]` into the **X-axis** well.
      - Drag `_Measures[Total Bookings]` into the **Y-axis** well.
    - **Visual Formatting**: Go to formatting paintbrush > expand **Columns** > **Colors** > select **Show all** to color each status:
-     - `Confirmed` = Green (`#10B981`)
-     - `Cancelled` = Red (`#EF4444`)
-     - `Pending` = Orange (`#F59E0B`)
+     - `Confirmed` = Teal (`#0D9488`)
+     - `Cancelled` = Rose Red (`#EF4444`)
+     - `Pending` = Amber / Orange (`#F59E0B`)
 
-3. **Status vs Bus Type Matrix (Matrix Table)**:
+4. **Status vs Bus Type Matrix (Matrix Table)**:
    - **Visualization Pane**: Select **Matrix** icon.
-   - **Coordinates**: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
+   - **Coordinates**: X = `15px`, Y = `385px`, Width = `700px`, Height = `310px`.
    - **Field Wells Configuration**:
      - Drag `buses[Bus_Type]` into the **Rows** well.
-     - Drag `bookings[Booking_Status]` into the **Columns** well.
-     - Drag `_Measures[Total Bookings]` into the **Values** well.
-   - **Visual Formatting**:
-     - Expand **Subtotals** > turn **On** for both rows and columns.
-     - Select `[Total Bookings]` under Values in the build pane > click the down arrow > select **Conditional Formatting** > **Data Bars** > set positive bar color to light blue.
+     - Drag `_Measures[Confirmed Bookings]`, `_Measures[Cancelled Bookings]`, and `_Measures[Pending Bookings]` into the **Values** well.
+   - **Visual Formatting**: Under formatting, select Cell Elements > enable Data Bars individually for each column using matching colors (Teal, Rose Red, Amber).
+
+5. **Route Demands & Traffic Load (Horizontal Clustered Bar Chart - NEW)**:
+   - **Business Value**: Solves **"Which routes have the highest passenger traffic?"** (helps dispatch more buses to high-demand routes).
+   - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
+   - **Coordinates**: X = `730px`, Y = `385px`, Width = `535px`, Height = `310px`.
+   - **Field Wells Configuration**:
+     - Drag a concatenated field `Routes[Source] & " → " & Routes[Destination]` into the **Y-axis** well.
+     - Drag `_Measures[Total Bookings]` into the **X-axis** well.
+   - **Visual Formatting**: Set bar color to Arctic Cyan (`#06B6D4`), enable **Data labels**.
 
 ---
 

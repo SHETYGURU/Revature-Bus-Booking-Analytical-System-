@@ -69,17 +69,22 @@ Use the following exact font sizes and styles to match the premium, clean look o
 
 ## 5. Color Palette & Theming (Nordic Ocean)
 
-To maintain the premium, cool-analytical Nordic Ocean theme, apply the following color codes across all pages:
+Here are the exact Nordic Ocean color codes to apply across your new Power BI report:
 
-- **Canvas Background**: Hex `#F8FAFC` (Frost White)
+### 🎨 Background & Layout Colors
+- **Canvas Background**: Hex `#F8FAFC` (Frost White / very light gray)
 - **Visual Cards Background**: Hex `#FFFFFF` (Pure White)
-- **Visual Card Borders**: Hex `#E2E8F0` (Light Gray, `8px` rounded corners)
-- **Sidebar Navigation Bar**: Hex `#FFFFFF` (Pure White) or `#F1F5F9` (Light Slate)
-- **Title Text & Section Headers**: Hex `#0F172A` (Deep Marine Blue)
-- **Primary Action Accent / Highlights**: Hex `#06B6D4` (Arctic Cyan)
-- **Default/Unselected State**: Hex `#64748B` (Slate Gray)
-- **KPI Background Fill / Trend Pill**: Hex `#E0F2FE` (Cool Ice Blue) or `Blue Bg Theme.png`
-- **Status Indicators (Data Bars / Cards)**:
-  - *Confirmed*: Hex `#0D9488` (Teal) or `#06B6D4` (Cyan)
-  - *Pending*: Hex `#F59E0B` (Amber)
-  - *Cancelled*: Hex `#EF4444` (Rose Red)
+- **Visual Card Borders**: Hex `#E2E8F0` (Light Gray)
+- **Sidebar Navigation Panel**: Hex `#FFFFFF` (Pure White) or `#F1F5F9` (Light Slate)
+
+### 🔵 Typography & Selection States
+- **Main Titles & Dark Text**: Hex `#0F172A` (Deep Marine Blue)
+- **Active Selection Background (Sidebar)**: Hex `#E0F2FE` (Very light blue / ice-blue)
+- **Slicer Headers & Inactive Text**: Hex `#64748B` (Slate Gray)
+
+### ⚡ Chart & Status Highlights
+- **Main Highlights / Action Accents**: Hex `#06B6D4` (Arctic Cyan)
+- **Secondary Chart Accents**: Hex `#054A75` (Ocean Blue - the color from the image crop)
+- **Confirmed / Success Status**: Hex `#0D9488` (Teal)
+- **Pending / Caution Status**: Hex `#F59E0B` (Amber / Orange)
+- **Cancelled / Warning Status**: Hex `#EF4444` (Rose Red)
