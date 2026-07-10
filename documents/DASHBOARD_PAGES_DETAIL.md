@@ -256,25 +256,37 @@ Analyzes user booking behaviors and repeat customer rates.
 ---
 
 ### Page 5: Bus Types (Asset Utilization & Seat Capacity)
-Analyzes which coach configurations perform best:
+Analyzes which coach configurations perform best and maps the fleet composition:
 
 1. **Seat Occupancy Rate (Gauge Visual)**:
    - **Visualization Pane**: Select **Gauge** icon.
-   - **Coordinates**: X = `200px`, Y = `85px`, Width = `380px`, Height = `280px`.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `350px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `_Measures[Occupancy Rate]` into the **Value** well.
      - Under the formatting pane (Visual > Gauge axis > Target), set the target value to `0.80` (80% load factor capacity target).
+   - **Visual Formatting**: Color the active arc Deep Marine Blue (`#0F172A`).
 
-2. **Total Revenue by Coach Configuration (Pie Chart)**:
+2. **Fleet Composition (Pie Chart 1 - NEW)**:
+   - **Business Value**: Solves **"What is the configuration split of our active fleet?"** (helps with resource and procurement planning).
    - **Visualization Pane**: Select **Pie Chart** icon.
-   - **Coordinates**: X = `600px`, Y = `85px`, Width = `650px`, Height = `280px`.
+   - **Coordinates**: X = `380px`, Y = `85px`, Width = `430px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `buses[Bus_Type]` into the **Legend** well.
-     - Drag `_Measures[Total Revenue]` into the **Values** well.
+     - Drag `buses[Bus_Number]` into the **Values** well (set aggregation type to **`Count (Distinct)`**).
+   - **Visual Formatting**: Set slice colors to Deep Marine Blue (`#054A75`), Arctic Cyan (`#06B6D4`), and Slate Gray (`#64748B`).
 
-3. **Asset Yield Table (Table)**:
+3. **Bookings Demand by Coach (Donut Chart 2 - NEW)**:
+   - **Business Value**: Solves **"Which bus types do customers choose the most?"** (directly guides purchase decisions for high-demand configurations).
+   - **Visualization Pane**: Select **Donut Chart** icon.
+   - **Coordinates**: X = `825px`, Y = `85px`, Width = `440px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `buses[Bus_Type]` into the **Legend** well.
+     - Drag `_Measures[Total Bookings]` into the **Values** well.
+   - **Visual Formatting**: Enable detail labels showing value and percentage. Color match slices to the fleet composition chart.
+
+4. **Asset Yield Table (Table)**:
    - **Visualization Pane**: Select **Table** icon.
-   - **Coordinates**: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
+   - **Coordinates**: X = `15px`, Y = `385px`, Width = `1250px`, Height = `310px`.
    - **Field Wells Configuration**:
      - Drag these fields into the **Columns** well in this order:
        1. `buses[Bus_ID]`
@@ -284,6 +296,7 @@ Analyzes which coach configurations perform best:
        5. `_Measures[Total Bookings]`
        6. `_Measures[Total Revenue]`
        7. `_Measures[Occupancy Rate]`
+   - **Visual Formatting**: Under style presets, select **Minimal** or **Alternating rows** (using Hex `#F8FAFC`). Color column headers Deep Marine Blue.
 
 ---
 
