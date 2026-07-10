@@ -121,15 +121,15 @@ Tracks high-level business performance, sales trends, and source yields:
 Focuses on tracking booking statuses, customer planning behavior, and traffic load distribution:
 
 1. **Top Row KPI Cards (Card (New) Visual - NEW)**:
-   - **Business Value**: Solves **"What are our primary booking volume, completion, and load factors today?"** (tracks absolute volumes, cancellations, and capacity rates at a glance).
+   - **Business Value**: Solves **"How healthy are our passenger booking workflows, planning lead times, and financial cancellation impacts?"** (tracks user behavior efficiency, transaction attrition, and lost sales value instead of simple volume aggregates).
    - **Visualization Pane**: Select **Card (new)** icon.
    - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `120px`.
    - **Field Wells Configuration**:
-     - Drag `_Measures[Total Bookings]`, `_Measures[Confirmed Bookings]`, `_Measures[Cancelled Bookings]`, and `_Measures[Occupancy Rate]` into the Values box.
+     - Drag `_Measures[Average Lead Time]`, `_Measures[Cancellation Rate]`, `_Measures[Revenue Leakage]`, and `_Measures[Active Route Footprint]` into the Values box.
    - **Visual Layout & Formatting**:
      - Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
-     - Go to Cards > Fill > upload gradients matching theme: `Blue Bg Theme.png` (Total Bookings / Confirmed / Occupancy), `Purple Bg Theme.jpg` or solid `#EF4444` at low opacity (Cancelled Bookings).
-     - Go to Cards > Image > upload matching 3D icons (`icon_bookings.png`, `icon_confirmed.png`, `icon_cancelled.png`, `icon_retention.png`). Set size to **`50px`**.
+     - Go to Cards > Fill > upload gradients matching theme: `Blue Bg Theme.png` (Lead Time / Routes), `Peach Bg Image.jpg` (Cancellation Rate), `Purple Bg Theme.jpg` (Revenue Leakage).
+     - Go to Cards > Image > upload matching 3D icons (`icon_fare.png` for lead time, `icon_cancelled.png` for cancellation rate, `icon_revenue.png` for leakage, `icon_confirmed.png` for routes). Set size to **`50px`**.
      - Go to Reference labels > Add trend labels, style backgrounds with `30%` transparency (capsule pill look).
 
 2. **Daily Bookings Volume (Area Chart)**:

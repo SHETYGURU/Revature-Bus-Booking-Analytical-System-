@@ -116,6 +116,30 @@ DIVIDE(
 ```
 *Format: Percentage (`%`), 1 decimal place.*
 
+#### Average Lead Time
+```dax
+Average Lead Time = AVERAGE(bookings[Lead Time Days])
+```
+*Format: Decimal Number, 1 decimal place.*
+
+#### Cancellation Rate
+```dax
+Cancellation Rate = DIVIDE([Cancelled Bookings], [Total Bookings], 0)
+```
+*Format: Percentage (`%`), 1 decimal place.*
+
+#### Revenue Leakage
+```dax
+Revenue Leakage = CALCULATE([Total Revenue], bookings[Booking_Status] = "Cancelled")
+```
+*Format: Currency (`$ English (United States)`), 0 decimal places.*
+
+#### Active Route Footprint
+```dax
+Active Route Footprint = DISTINCTCOUNT(bookings[Route_ID])
+```
+*Format: Whole Number.*
+
 ---
 
 ### 2. Time Intelligence (Previous Month)
