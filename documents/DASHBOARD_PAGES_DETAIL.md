@@ -301,24 +301,43 @@ Analyzes which coach configurations perform best and maps the fleet composition:
 ---
 
 ### Page 6: Routes (Financial Yields per Sourced City)
-Identifies the best-performing travel corridors:
+Identifies the best-performing travel corridors and correlates distance with revenue output:
 
 1. **Route Performance Matrix (Matrix)**:
    - **Visualization Pane**: Select **Matrix** icon.
-   - **Coordinates**: X = `200px`, Y = `85px`, Width = `1050px`, Height = `280px`.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `780px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `routes[Source]` and then `routes[Destination]` into the **Rows** well (in that order, to create a nestable hierarchy).
      - Drag `_Measures[Total Bookings]`, `_Measures[Total Revenue]`, and `_Measures[Occupancy Rate]` into the **Values** well.
    - **Formatting**: Expand **Row headers** in style options > Turn **On** the **Stepped layout** (this lets users click the `+` sign next to a source city to expand and view destinations).
 
-2. **Top Corridors by Revenue (Horizontal Bar Chart)**:
+2. **Traffic Share by Source Hub (Donut Chart - NEW)**:
+   - **Business Value**: Solves **"Which city hubs generate the highest volume of bookings?"** (essential for hub scheduling and fleet parking positioning).
+   - **Visualization Pane**: Select **Donut Chart** icon.
+   - **Coordinates**: X = `815px`, Y = `85px`, Width = `450px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `routes[Source]` into the **Legend** well.
+     - Drag `_Measures[Total Bookings]` into the **Values** well.
+   - **Visual Formatting**: Set slice colors to match the cool Nordic Ocean theme (Arctic Cyan, Ocean Blue, Slate Gray).
+
+3. **Top Corridors by Revenue (Horizontal Bar Chart)**:
    - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
-   - **Coordinates**: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
+   - **Coordinates**: X = `15px`, Y = `385px`, Width = `780px`, Height = `310px`.
    - **Field Wells Configuration**:
      - Drag `routes[Route_ID]` (or corridor) into the **Y-axis** well.
      - Drag `_Measures[Total Revenue]` into the **X-axis** well.
      - Drag `routes[Source]` and `routes[Destination]` into the **Tooltips** well.
-   - **Formatting**: Sort the visual descending: click `...` on the visual > Sort Axis > select `Total Revenue`.
+   - **Formatting**: Sort the visual descending: click `...` on the visual > Sort Axis > select `Total Revenue`. Set bar color to Ocean Blue (`#054A75`).
+
+4. **Distance vs. Revenue Efficiency (Scatter Plot - NEW)**:
+   - **Business Value**: Solves **"Do longer travel distances guarantee higher revenue, or are short corridors more profitable?"** (directly helps price route tickets).
+   - **Visualization Pane**: Select **Scatter Chart** icon.
+   - **Coordinates**: X = `815px`, Y = `385px`, Width = `450px`, Height = `310px`.
+   - **Field Wells Configuration**:
+     - Drag `routes[Distance]` into the **X-axis** well.
+     - Drag `_Measures[Total Revenue]` into the **Y-axis** well.
+     - Drag `routes[Route_ID]` (or the source-destination path) into the **Values / Details** well.
+   - **Visual Formatting**: Enable gridlines, color plot markers Arctic Cyan (`#06B6D4`) with a dark blue outline, and enable zoom sliders.
 
 ---
 
