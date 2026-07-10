@@ -62,73 +62,58 @@ To prevent bookmarks from affecting other pages:
 
 ## Part 2: Page-by-Page Dedicated Visualizations
 
-Here are the step-by-step layout grids and visual types for each page tab in your report:
+Here are the step-by-step layout grids, visual types, and business rationale for each page tab in your report:
 
 ### Page 1: Overview
 Tracks high-level business performance, sales trends, and source yields:
 
 1. **Top Row KPI Cards (Card (New) Visual)**:
+   - **Business Value**: Solves **"What is the overall financial and volume health of our business today?"** (tracks core executive indicators at a glance).
    - **Visualization Pane**: Select **Card (new)** icon.
-   - **Coordinates**: X = `100px`, Y = `85px`, Width = `1160px`, Height = `120px`.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `120px`.
    - **Field Wells Configuration**:
-     - Drag `_Measures[Total Revenue]` into the Values box.
-     - Drag `_Measures[Total Bookings]` into the Values box.
-     - Drag `_Measures[Average Fare]` into the Values box.
-     - Drag `_Measures[Customer Retention Rate]` into the Values box.
+     - Drag `_Measures[Total Revenue]`, `_Measures[Total Bookings]`, `_Measures[Average Fare]`, and `_Measures[Customer Retention Rate]` into the Values box.
    - **Visual Layout & Formatting**:
-     - Go to Layout > Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
-     - Go to Callout values > Horizontal alignment: **`Left`**.
-     - Go to Cards > Fill > select each series to upload background gradients:
-       - *Total Revenue*: `assets/Bg Theme.jpg`
-       - *Total Bookings*: `assets/Blue Bg Theme.png`
-       - *Average Fare*: `assets/Peach Bg Image.jpg`
-       - *Customer Retention Rate*: `assets/Blue Bg Theme.png`
-     - Go to Cards > Image > select each series to upload 3D icons:
-       - *Total Revenue*: `assets/icon_revenue.png` (Left-aligned, spacing `15px`, size `50px`).
-       - *Total Bookings*: `assets/icon_bookings.png`.
-       - *Average Fare*: `assets/icon_fare.png`.
-       - *Customer Retention Rate*: `assets/icon_retention.png`.
-     - Go to Reference labels > Add trend label measures as details, style backgrounds with `30%` transparency (capsule pill look), and set Alignment to **`Left`** (aligns under text).
+     - Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
+     - Go to Cards > Fill > upload gradients matching theme: `Bg Theme.jpg` (Revenue), `Blue Bg Theme.png` (Bookings/Retention), `Peach Bg Image.jpg` (Fare).
+     - Go to Cards > Image > upload matching 3D icons (`icon_revenue.png`, `icon_bookings.png`, `icon_fare.png`, `icon_retention.png`). Set Image Fit to **`Fit`** and size to **`50px`**.
+     - Go to Reference labels > Add trend labels, style backgrounds with `30%` transparency (capsule pill look).
 
 2. **Total Bookings and Total Revenue (Dual Axis Line Chart)**:
-   - **Visualization Pane**: Select **Line and Stacked Column Chart** or **Line and Clustered Column Chart** icon (or standard Line Chart with secondary Y-axis).
-   - **Coordinates**: X = `100px`, Y = `220px`, Width = `570px`, Height = `240px`.
+   - **Business Value**: Solves **"Are revenue trends matching booking volume trends over the months?"** (identifies price performance alignment and booking peaks).
+   - **Visualization Pane**: Select **Line Chart** icon (with secondary Y-axis).
+   - **Coordinates**: X = `15px`, Y = `220px`, Width = `610px`, Height = `240px`.
    - **Field Wells Configuration**:
-     - Drag `Calendar[Date]` (or Calendar Date Hierarchy) into the **X-axis** well.
+     - Drag `Calendar[Date]` (or Hierarchy) into the **X-axis** well.
      - Drag `_Measures[Total Bookings]` into the primary **Y-axis** well.
      - Drag `_Measures[Total Revenue]` into the **Secondary Y-axis** well.
-   - **Visual Formatting**:
-     - Set `Total Bookings` line color to Electric Blue (`#3B82F6`), stroke width `3px`.
-     - Set `Total Revenue` line color to Dark Blue (`#002D62`), stroke width `3px`.
-     - Go to formatting pane > expand **Lines** > toggle **Smooth line** to **`On`**.
+   - **Visual Formatting**: Set `Total Bookings` line to Ocean Blue (`#054A75`), `Total Revenue` line to Arctic Cyan (`#06B6D4`), stroke width `3px`, enable **Smooth line**.
 
-3. **Total Revenue by Bus_Type (Donut Chart)**:
+3. **Total Revenue by Bus Type (Donut Chart)**:
+   - **Business Value**: Solves **"Which coach types are our main profit drivers?"** (identifies if premium sleeper vs. seater coaches generate more cash).
    - **Visualization Pane**: Select **Donut Chart** icon.
-   - **Coordinates**: X = `690px`, Y = `220px`, Width = `570px`, Height = `240px`.
+   - **Coordinates**: X = `645px`, Y = `220px`, Width = `620px`, Height = `240px`.
    - **Field Wells Configuration**:
      - Drag `buses[Bus_Type]` into the **Legend** well.
      - Drag `_Measures[Total Revenue]` into the **Values** well.
-   - **Visual Formatting**: Expand **Detail labels** > Label contents: select **Data value, percent of total** (displays values like `870.03K (59.01%)`).
+   - **Visual Formatting**: Set colors to Deep Marine Blue, Arctic Cyan, and Slate Gray. Set detail labels to **Data value, percent of total**.
 
 4. **Total Revenue by Source (Horizontal Bar Chart)**:
+   - **Business Value**: Solves **"Which starting hubs yield the highest revenue return?"** (assists with marketing campaigns and routing priority).
    - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
-   - **Coordinates**: X = `100px`, Y = `475px`, Width = `570px`, Height = `230px`.
+   - **Coordinates**: X = `15px`, Y = `475px`, Width = `610px`, Height = `230px`.
    - **Field Wells Configuration**:
      - Drag `routes[Source]` into the **Y-axis** well.
      - Drag `_Measures[Total Revenue]` into the **X-axis** well.
-   - **Visual Formatting**: Set bar color to Solid Blue (`#1E88E5`), enable **Data labels**.
+   - **Visual Formatting**: Set bar color to Arctic Cyan (`#06B6D4`), enable **Data labels**.
 
 5. **Booking Status Cards (Bottom Right Card (New) Visual)**:
+   - **Business Value**: Solves **"What is the status split of our bookings at this moment?"** (directly highlights cancellation volumes and pending ticket issues).
    - **Visualization Pane**: Select **Card (new)** icon.
-   - **Coordinates**: X = `690px`, Y = `475px`, Width = `570px`, Height = `230px`.
+   - **Coordinates**: X = `645px`, Y = `475px`, Width = `620px`, Height = `230px`.
    - **Field Wells Configuration**:
-     - Drag these custom status count measures into the Values box:
-       1. Cancelled Bookings: `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Cancelled"))`
-       2. Confirmed Bookings: `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Confirmed"))`
-       3. Pending Bookings: `COUNTROWS(FILTER(bookings, bookings[Booking_Status] = "Pending"))`
-   - **Visual Formatting**:
-     - Align card values to the center.
-     - Go to Cards > Image > upload corresponding outline icons (`icon_cancelled.png`, `icon_confirmed.png`, `icon_pending.png`). Set Image Fit to **`Fit`** and size to **`24px`**.
+     - Drag custom count measures: `_Measures[Confirmed Bookings]`, `_Measures[Cancelled Bookings]`, and `_Measures[Pending Bookings]` into the Values box.
+   - **Visual Formatting**: Align text to center, set border shapes. Upload outline icons (`icon_confirmed.png`, `icon_cancelled.png`, `icon_pending.png`) with size `24px`. Color borders based on status: Confirmed (Teal `#0D9488`), Cancelled (Rose Red `#EF4444`), Pending (Amber `#F59E0B`).
 
 ---
 
@@ -136,18 +121,16 @@ Tracks high-level business performance, sales trends, and source yields:
 Focuses on tracking booking statuses, customer planning behavior, and traffic load distribution:
 
 1. **Daily Bookings Volume (Area Chart)**:
+   - **Business Value**: Solves **"What are our daily booking volumes and seasonal spikes?"** (helps with staffing and server infrastructure management).
    - **Visualization Pane**: Select **Area Chart** icon.
    - **Coordinates**: X = `15px`, Y = `85px`, Width = `560px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `Calendar[Date]` from the Data pane into the **X-axis** well.
      - Drag `_Measures[Total Bookings]` from the Data pane into the **Y-axis** well.
-   - **Visual Formatting**: Go to the format paintbrush icon > expand **Lines**:
-     - Set Stroke width to `3px`.
-     - Set Color to Ocean Blue (`#054A75`).
-     - Expand **Shade area** > Turn **On** (Set transparency to `85%`, color `#E0F2FE`).
+   - **Visual Formatting**: Set Stroke width to `3px`, Color to Ocean Blue (`#054A75`), expand **Shade area** > Turn **On** (Set transparency to `85%`, color `#E0F2FE`).
 
-2. **Planning Behavior (Donut Chart - NEW)**:
-   - **Business Value**: Solves **"Do customers book last-minute or plan in advance?"** (helps adjust dynamic pricing and scheduling).
+2. **Planning Behavior (Donut Chart)**:
+   - **Business Value**: Solves **"Do customers book last-minute or plan in advance?"** (helps adjust dynamic pricing models and booking policies).
    - **Visualization Pane**: Select **Donut Chart** icon.
    - **Coordinates**: X = `590px`, Y = `85px`, Width = `310px`, Height = `280px`.
    - **Field Wells Configuration**:
@@ -158,30 +141,29 @@ Focuses on tracking booking statuses, customer planning behavior, and traffic lo
    - **Visual Formatting**: Use light slate, ocean blue, and cyan colors for the segments.
 
 3. **Status Split (Clustered Column Chart)**:
+   - **Business Value**: Solves **"Is our cancellation volume within acceptable boundaries?"** (helps operations identify booking leakage).
    - **Visualization Pane**: Select **Clustered Column Chart** icon.
    - **Coordinates**: X = `915px`, Y = `85px`, Width = `350px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `bookings[Booking_Status]` into the **X-axis** well.
      - Drag `_Measures[Total Bookings]` into the **Y-axis** well.
-   - **Visual Formatting**: Go to formatting paintbrush > expand **Columns** > **Colors** > select **Show all** to color each status:
-     - `Confirmed` = Teal (`#0D9488`)
-     - `Cancelled` = Rose Red (`#EF4444`)
-     - `Pending` = Amber / Orange (`#F59E0B`)
+   - **Visual Formatting**: Color columns: Confirmed = Teal (`#0D9488`), Cancelled = Rose Red (`#EF4444`), Pending = Amber / Orange (`#F59E0B`).
 
 4. **Status vs Bus Type Matrix (Matrix Table)**:
+   - **Business Value**: Solves **"Are cancellations concentrated on specific bus configurations?"** (identifies if seater or sleeper configurations experience more booking changes).
    - **Visualization Pane**: Select **Matrix** icon.
    - **Coordinates**: X = `15px`, Y = `385px`, Width = `700px`, Height = `310px`.
    - **Field Wells Configuration**:
      - Drag `buses[Bus_Type]` into the **Rows** well.
      - Drag `_Measures[Confirmed Bookings]`, `_Measures[Cancelled Bookings]`, and `_Measures[Pending Bookings]` into the **Values** well.
-   - **Visual Formatting**: Under formatting, select Cell Elements > enable Data Bars individually for each column using matching colors (Teal, Rose Red, Amber).
+   - **Visual Formatting**: Cell Elements > enable Data Bars individually for each column using matching status colors.
 
-5. **Route Demands & Traffic Load (Horizontal Clustered Bar Chart - NEW)**:
-   - **Business Value**: Solves **"Which routes have the highest passenger traffic?"** (helps dispatch more buses to high-demand routes).
+5. **Route Demands & Traffic Load (Horizontal Clustered Bar Chart)**:
+   - **Business Value**: Solves **"Which routes have the highest passenger traffic?"** (guides fleet allocation managers to dispatch extra buses to high-demand corridors).
    - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
    - **Coordinates**: X = `730px`, Y = `385px`, Width = `535px`, Height = `310px`.
    - **Field Wells Configuration**:
-     - Drag a concatenated field `Routes[Source] & " → " & Routes[Destination]` into the **Y-axis** well.
+     - Drag `Routes[Source] & " → " & Routes[Destination]` into the **Y-axis** well.
      - Drag `_Measures[Total Bookings]` into the **X-axis** well.
    - **Visual Formatting**: Set bar color to Arctic Cyan (`#06B6D4`), enable **Data labels**.
 
@@ -191,67 +173,73 @@ Focuses on tracking booking statuses, customer planning behavior, and traffic lo
 Tracks cash flows, pricing trends, and revenue yields:
 
 1. **Cumulative Revenue Trend (Line Chart)**:
+   - **Business Value**: Solves **"Is our business on track to hit its total revenue goals over time?"** (tracks running cumulative totals to forecast quarterly sales).
    - **Visualization Pane**: Select **Line Chart** icon.
-   - **Coordinates**: X = `200px`, Y = `85px`, Width = `650px`, Height = `280px`.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `610px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `Calendar[Year Month]` into the **X-axis** well.
-     - Drag `_Measures[Total Revenue]` into the **Y-axis** well. 
-     - *To show running cumulative total*: Click the down arrow next to `Total Revenue` inside the Y-axis well > hover over **Show value as** > select **Running total**.
-   - **Visual Formatting**: Set Line stroke width to `3px`, Color to Indigo (`#4F46E5`), and turn **Data labels** to **`On`**.
+     - Drag `_Measures[Total Revenue]` into the **Y-axis** well. Click down arrow > Show value as > select **Running total**.
+   - **Visual Formatting**: Set Line color to Ocean Blue (`#054A75`), stroke width `3px`, turn on **Data labels**.
 
-2. **Average Fare by Bus Type (Horizontal Bar Chart)**:
+2. **Revenue Share by Coach Type (Donut Chart)**:
+   - **Business Value**: Solves **"Which coach configuration yields the highest financial return share?"** (tells procurement if they should invest in Seaters or Sleepers).
+   - **Visualization Pane**: Select **Donut Chart** icon.
+   - **Coordinates**: X = `645px`, Y = `85px`, Width = `620px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `buses[Bus_Type]` into the **Legend** well.
+     - Drag `_Measures[Total Revenue]` into the **Values** well.
+   - **Visual Formatting**: Set slice colors to match theme. Enable detail labels showing values and percentages.
+
+3. **Average Fare by Bus Type (Horizontal Bar Chart)**:
+   - **Business Value**: Solves **"What is the average pricing yield for each seat configuration?"** (helps pricing teams verify that sleepers are priced sufficiently higher than seaters).
    - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
-   - **Coordinates**: X = `870px`, Y = `85px`, Width = `380px`, Height = `280px`.
+   - **Coordinates**: X = `15px`, Y = `385px`, Width = `610px`, Height = `310px`.
    - **Field Wells Configuration**:
      - Drag `buses[Bus_Type]` into the **Y-axis** well.
      - Drag `_Measures[Average Fare]` into the **X-axis** well.
-   - **Visual Formatting**: Set bar color to warm amber (`#F59E0B`), turn on **Data labels**.
+   - **Visual Formatting**: Set bar color to Arctic Cyan (`#06B6D4`), turn on **Data labels**.
 
-3. **Revenue Yield per Distance Class (Clustered Column Chart)**:
+4. **Revenue Yield per Distance Class (Clustered Column Chart)**:
+   - **Business Value**: Solves **"Are longer routes generating proportionate revenue relative to their operating distance?"** (identifies if pricing models reflect journey distance fairly).
    - **Visualization Pane**: Select **Clustered Column Chart** icon.
-   - **Coordinates**: X = `200px`, Y = `385px`, Width = `1050px`, Height = `310px`.
+   - **Coordinates**: X = `645px`, Y = `385px`, Width = `620px`, Height = `310px`.
    - **Field Wells Configuration**:
-     - Drag `routes[Distance_km]` into the **X-axis** well.
+     - Drag `routes[Distance]` into the **X-axis** well.
      - Drag `_Measures[Total Revenue]` into the **Y-axis** well.
-     - Drag `_Measures[Average Fare]` into the **Tooltips** well (so hover-overs show both revenue and average fare yield).
+     - Drag `_Measures[Average Fare]` into the **Tooltips** well.
+   - **Visual Formatting**: Set column colors to Deep Marine Blue (`#0F172A`).
 
 ---
 
 ### Page 4: Customers (Demographics & Retention Profiles)
-Analyzes user booking behaviors and repeat customer rates. 
+Analyzes user booking behaviors and repeat customer rates:
 
-*Before building, create an **Age Group** calculated column:*
-- Select the `customers` table in the Data pane > click **New Column** in the Modeling ribbon:
-  ```dax
-  Age_Group = IF(customers[Age] < 25, "Under 25", IF(customers[Age] <= 45, "25-45", "45+"))
-  ```
-
-1. **Customer Bookings Leaderboard (Table)**:
-   - **Visualization Pane**: Select **Table** icon.
-   - **Coordinates**: X = `200px`, Y = `85px`, Width = `650px`, Height = `590px`.
-   - **Field Wells Configuration**:
-     - Drag these fields into the **Columns** well in this order:
-       1. `customers[Name]`
-       2. `customers[Gender]`
-       3. `customers[Age_Group]`
-       4. `_Measures[Total Bookings]`
-       5. `_Measures[Total Revenue]`
-     - *Sorting*: Click on the `Total Revenue` column header in the table visual once loaded to sort the list in descending order.
-
-2. **Age Group Distribution (Clustered Column Chart)**:
+1. **Age Group Distribution (Clustered Column Chart)**:
+   - **Business Value**: Solves **"Which age demographic is our primary customer base?"** (allows marketing to refine digital ad campaign age targets).
    - **Visualization Pane**: Select **Clustered Column Chart** icon.
-   - **Coordinates**: X = `870px`, Y = `85px`, Width = `380px`, Height = `280px`.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `610px`, Height = `280px`.
    - **Field Wells Configuration**:
-     - Drag `customers[Age_Group]` into the **X-axis** well.
+     - Drag `customers[Age_Group]` (calculated column) into the **X-axis** well.
      - Drag `_Measures[Unique Customers]` into the **Y-axis** well.
-   - **Visual Formatting**: Sort the X-axis chronologically: Click the `...` on the visual > Sort Axis > select `Age_Group`.
+   - **Visual Formatting**: Set color to Arctic Cyan (`#06B6D4`), sort the X-axis chronologically.
 
-3. **Customer Retention Profile (Gauge Visual)**:
+2. **Customer Retention Profile (Gauge Visual)**:
+   - **Business Value**: Solves **"Are we retaining customers month-over-month, or relying entirely on new acquisitions?"** (tracks customer loyalty against a high-performance 80% target).
    - **Visualization Pane**: Select **Gauge** icon.
-   - **Coordinates**: X = `870px`, Y = `385px`, Width = `380px`, Height = `280px`.
+   - **Coordinates**: X = `645px`, Y = `85px`, Width = `620px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `_Measures[Customer Retention Rate]` into the **Value** well.
-     - Under **Target value** in the formatting pane (Visual > Gauge axis > Target), set the static value to `0.80` (representing the 80% customer retention goal).
+     - Under Gauge axis > Target, set target to `0.80`.
+   - **Visual Formatting**: Color active gauge area Ocean Blue (`#054A75`).
+
+3. **Customer Bookings Leaderboard (Table)**:
+   - **Business Value**: Solves **"Who are our top-value customers?"** (enables the CRM/loyalty team to distribute targeted rewards or premium memberships).
+   - **Visualization Pane**: Select **Table** icon.
+   - **Coordinates**: X = `15px`, Y = `385px`, Width = `1250px`, Height = `310px`.
+   - **Field Wells Configuration**:
+     - Drag `customers[Name]`, `customers[Gender]`, `customers[Age_Group]`, `_Measures[Total Bookings]`, and `_Measures[Total Revenue]` into the Columns well.
+     - Click `Total Revenue` column header to sort descending.
+   - **Visual Formatting**: Apply **Alternating rows** styling with light blue/slate accents.
 
 ---
 
@@ -259,15 +247,16 @@ Analyzes user booking behaviors and repeat customer rates.
 Analyzes which coach configurations perform best and maps the fleet composition:
 
 1. **Seat Occupancy Rate (Gauge Visual)**:
+   - **Business Value**: Solves **"Are our buses running mostly full or empty?"** (essential for capacity utilization planning).
    - **Visualization Pane**: Select **Gauge** icon.
    - **Coordinates**: X = `15px`, Y = `85px`, Width = `350px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `_Measures[Occupancy Rate]` into the **Value** well.
-     - Under the formatting pane (Visual > Gauge axis > Target), set the target value to `0.80` (80% load factor capacity target).
+     - Under Gauge axis > Target, set target to `0.80`.
    - **Visual Formatting**: Color the active arc Deep Marine Blue (`#0F172A`).
 
-2. **Fleet Composition (Pie Chart 1 - NEW)**:
-   - **Business Value**: Solves **"What is the configuration split of our active fleet?"** (helps with resource and procurement planning).
+2. **Fleet Composition (Pie Chart)**:
+   - **Business Value**: Solves **"What is the configuration split of our active fleet?"** (guides procurement planning for new coaches).
    - **Visualization Pane**: Select **Pie Chart** icon.
    - **Coordinates**: X = `380px`, Y = `85px`, Width = `430px`, Height = `280px`.
    - **Field Wells Configuration**:
@@ -275,28 +264,22 @@ Analyzes which coach configurations perform best and maps the fleet composition:
      - Drag `buses[Bus_Number]` into the **Values** well (set aggregation type to **`Count (Distinct)`**).
    - **Visual Formatting**: Set slice colors to Deep Marine Blue (`#054A75`), Arctic Cyan (`#06B6D4`), and Slate Gray (`#64748B`).
 
-3. **Bookings Demand by Coach (Donut Chart 2 - NEW)**:
-   - **Business Value**: Solves **"Which bus types do customers choose the most?"** (directly guides purchase decisions for high-demand configurations).
+3. **Bookings Demand by Coach (Donut Chart)**:
+   - **Business Value**: Solves **"Which bus types do customers choose the most?"** (identifies if fleet composition matches consumer demand).
    - **Visualization Pane**: Select **Donut Chart** icon.
    - **Coordinates**: X = `825px`, Y = `85px`, Width = `440px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `buses[Bus_Type]` into the **Legend** well.
      - Drag `_Measures[Total Bookings]` into the **Values** well.
-   - **Visual Formatting**: Enable detail labels showing value and percentage. Color match slices to the fleet composition chart.
+   - **Visual Formatting**: Enable detail labels showing value and percentage.
 
 4. **Asset Yield Table (Table)**:
+   - **Business Value**: Solves **"How much revenue and bookings does each specific bus number bring in?"** (helps trace mechanical maintenance schedules vs. profitability).
    - **Visualization Pane**: Select **Table** icon.
    - **Coordinates**: X = `15px`, Y = `385px`, Width = `1250px`, Height = `310px`.
    - **Field Wells Configuration**:
-     - Drag these fields into the **Columns** well in this order:
-       1. `buses[Bus_ID]`
-       2. `buses[Bus_Number]`
-       3. `buses[Bus_Type]`
-       4. `buses[Capacity]`
-       5. `_Measures[Total Bookings]`
-       6. `_Measures[Total Revenue]`
-       7. `_Measures[Occupancy Rate]`
-   - **Visual Formatting**: Under style presets, select **Minimal** or **Alternating rows** (using Hex `#F8FAFC`). Color column headers Deep Marine Blue.
+     - Columns: `buses[Bus_ID]`, `buses[Bus_Number]`, `buses[Bus_Type]`, `buses[Capacity]`, `_Measures[Total Bookings]`, `_Measures[Total Revenue]`, `_Measures[Occupancy Rate]`.
+   - **Visual Formatting**: Alternating rows style, set headers to Deep Marine Blue.
 
 ---
 
@@ -304,40 +287,38 @@ Analyzes which coach configurations perform best and maps the fleet composition:
 Identifies the best-performing travel corridors and correlates distance with revenue output:
 
 1. **Route Performance Matrix (Matrix)**:
+   - **Business Value**: Solves **"What is the nested yield breakdown from each source city to its destinations?"** (allows route planners to check passenger volumes and seat utilization).
    - **Visualization Pane**: Select **Matrix** icon.
    - **Coordinates**: X = `15px`, Y = `85px`, Width = `780px`, Height = `280px`.
    - **Field Wells Configuration**:
-     - Drag `routes[Source]` and then `routes[Destination]` into the **Rows** well (in that order, to create a nestable hierarchy).
-     - Drag `_Measures[Total Bookings]`, `_Measures[Total Revenue]`, and `_Measures[Occupancy Rate]` into the **Values** well.
-   - **Formatting**: Expand **Row headers** in style options > Turn **On** the **Stepped layout** (this lets users click the `+` sign next to a source city to expand and view destinations).
+     - Rows: `routes[Source]` then `routes[Destination]`.
+     - Values: `_Measures[Total Bookings]`, `_Measures[Total Revenue]`, and `_Measures[Occupancy Rate]`.
+   - **Formatting**: Enable **Stepped layout** for drill-down functionality.
 
-2. **Traffic Share by Source Hub (Donut Chart - NEW)**:
+2. **Traffic Share by Source Hub (Donut Chart)**:
    - **Business Value**: Solves **"Which city hubs generate the highest volume of bookings?"** (essential for hub scheduling and fleet parking positioning).
    - **Visualization Pane**: Select **Donut Chart** icon.
    - **Coordinates**: X = `815px`, Y = `85px`, Width = `450px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `routes[Source]` into the **Legend** well.
      - Drag `_Measures[Total Bookings]` into the **Values** well.
-   - **Visual Formatting**: Set slice colors to match the cool Nordic Ocean theme (Arctic Cyan, Ocean Blue, Slate Gray).
+   - **Visual Formatting**: Set slice colors to Arctic Cyan, Ocean Blue, and Slate Gray.
 
 3. **Top Corridors by Revenue (Horizontal Bar Chart)**:
+   - **Business Value**: Solves **"What are our top revenue-producing corridors?"** (identifies main commercial corridors to safeguard and optimize).
    - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
    - **Coordinates**: X = `15px`, Y = `385px`, Width = `780px`, Height = `310px`.
    - **Field Wells Configuration**:
-     - Drag `routes[Route_ID]` (or corridor) into the **Y-axis** well.
-     - Drag `_Measures[Total Revenue]` into the **X-axis** well.
-     - Drag `routes[Source]` and `routes[Destination]` into the **Tooltips** well.
-   - **Formatting**: Sort the visual descending: click `...` on the visual > Sort Axis > select `Total Revenue`. Set bar color to Ocean Blue (`#054A75`).
+     - Drag `routes[Route_ID]` into the Y-axis. Drag `_Measures[Total Revenue]` into the X-axis. Drag `routes[Source]` and `routes[Destination]` into tooltips.
+   - **Formatting**: Sort descending by `Total Revenue`. Set bar color to Ocean Blue (`#054A75`).
 
-4. **Distance vs. Revenue Efficiency (Scatter Plot - NEW)**:
+4. **Distance vs. Revenue Efficiency (Scatter Plot)**:
    - **Business Value**: Solves **"Do longer travel distances guarantee higher revenue, or are short corridors more profitable?"** (directly helps price route tickets).
    - **Visualization Pane**: Select **Scatter Chart** icon.
    - **Coordinates**: X = `815px`, Y = `385px`, Width = `450px`, Height = `310px`.
    - **Field Wells Configuration**:
-     - Drag `routes[Distance]` into the **X-axis** well.
-     - Drag `_Measures[Total Revenue]` into the **Y-axis** well.
-     - Drag `routes[Route_ID]` (or the source-destination path) into the **Values / Details** well.
-   - **Visual Formatting**: Enable gridlines, color plot markers Arctic Cyan (`#06B6D4`) with a dark blue outline, and enable zoom sliders.
+     - X-axis: `routes[Distance]`, Y-axis: `_Measures[Total Revenue]`, Details: `routes[Route_ID]`.
+   - **Visual Formatting**: Color plot markers Arctic Cyan (`#06B6D4`) with a dark blue outline.
 
 ---
 
@@ -345,30 +326,17 @@ Identifies the best-performing travel corridors and correlates distance with rev
 Dedicated print-ready and exportable transaction ledger:
 
 1. **Top Right Search Bar (Search Slicer)**:
+   - **Business Value**: Solves **"How can customer service agents search and locate a passenger's transaction ledger by name?"**
    - **Visualization Pane**: Select **Slicer** icon.
-   - **Coordinates**: X = `1000px`, Y = `25px`, Width = `250px`, Height = `50px`.
+   - **Coordinates**: X = `1000px`, Y = `15px`, Width = `250px`, Height = `50px`.
    - **Field Wells Configuration**:
-     - Drag `customers[Name]` into the **Field** box.
-   - **Visual Settings**:
-     - Under Slicer Settings > Style: Select **`Dropdown`**.
-     - Click the `...` (More options) on the visual header > Select **`Search`** (this adds a text entry field inside the dropdown, turning it into an interactive text search bar).
-     - Selection Settings: Toggle **`Show "Select all"`** to **`On`**.
+     - Drag `customers[Name]` into the Field box.
+   - **Visual Settings**: Style: **`Dropdown`**, click `...` visual header > select **`Search`** to enable text search, toggle **`Show "Select all"`** to **`On`**.
 
 2. **Master Transaction Report (Table)**:
+   - **Business Value**: Solves **"How can accounting/audit teams review and export our entire transaction ledger to CSV/Excel?"**
    - **Visualization Pane**: Select **Table** icon.
-   - **Coordinates**: X = `200px`, Y = `85px`, Width = `1050px`, Height = `610px`.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `610px`.
    - **Field Wells Configuration**:
-     - Drag these fields into the **Columns** well in this order:
-       1. `bookings[Booking_ID]`
-       2. `customers[Name]`
-       3. `bookings[Booking_Date]`
-       4. `routes[Source]`
-       5. `routes[Destination]`
-       6. `buses[Bus_Type]`
-       7. `bookings[Fare_Amount]`
-       8. `bookings[Booking_Status]`
-   - **Formatting Settings**:
-     - Go to Style presets > select **Alternating rows** (renders light gray alternating rows).
-     - Go to Column headers > set font size to `10pt`, Bold.
-     - Under **Visual Headers**, ensure **Export data** icon is checked **On** (enables users to export this table to a CSV/Excel file in the Power BI Service).
-
+     - Drag fields in order: `bookings[Booking_ID]`, `customers[Name]`, `bookings[Booking_Date]`, `routes[Source]`, `routes[Destination]`, `buses[Bus_Type]`, `bookings[Fare_Amount]`, `bookings[Booking_Status]`.
+   - **Formatting Settings**: Alternating rows style, set headers to Deep Marine Blue, verify **Export data** icon is checked **On** under visual header settings.
