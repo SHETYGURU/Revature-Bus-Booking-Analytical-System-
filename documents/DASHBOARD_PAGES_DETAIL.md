@@ -178,6 +178,7 @@ Focuses on tracking booking statuses, customer planning behavior, and traffic lo
      - Drag `Routes[Source] & " → " & Routes[Destination]` into the **Y-axis** well.
      - Drag `_Measures[Total Bookings]` into the **X-axis** well.
    - **Visual Formatting**: Set bar color to Arctic Cyan (`#06B6D4`), enable **Data labels**.
+   - **Sorting**: Sort the visual descending: Click the **`...`** (More options) icon in the top right of the visual > hover over **Sort axis** > select **`Total Bookings`**, and ensure **`Sort descending`** is checked.
 
 ---
 
