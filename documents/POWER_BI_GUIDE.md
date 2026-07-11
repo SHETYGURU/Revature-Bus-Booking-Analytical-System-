@@ -148,7 +148,13 @@ Total Buses = DISTINCTCOUNT(buses[Bus_ID])
 
 #### Total Seating Capacity
 ```dax
-Total Seating Capacity = SUM(buses[Capacity])
+Total Seating Capacity = SUMX(bookings, RELATED(buses[Capacity]))
+```
+*Format: Whole Number.*
+
+#### Occupied Seats
+```dax
+Occupied Seats = CALCULATE([Total Bookings], bookings[Booking_Status] <> "Cancelled")
 ```
 *Format: Whole Number.*
 
@@ -157,12 +163,6 @@ Total Seating Capacity = SUM(buses[Capacity])
 Average Bus Capacity = AVERAGE(buses[Capacity])
 ```
 *Format: Decimal Number, 1 decimal place.*
-
-#### Occupied Seats
-```dax
-Occupied Seats = [Confirmed Bookings]
-```
-*Format: Whole Number.*
 
 ---
 
