@@ -248,11 +248,20 @@ Analyzes user booking behaviors and repeat customer rates:
 3. **Customer Bookings Leaderboard (Table)**:
    - **Business Value**: Solves **"Who are our top-value customers?"** (enables the CRM/loyalty team to distribute targeted rewards or premium memberships).
    - **Visualization Pane**: Select **Table** icon.
-   - **Coordinates**: X = `15px`, Y = `385px`, Width = `1250px`, Height = `310px`.
+   - **Coordinates**: X = `15px`, Y = `385px`, Width = `780px`, Height = `310px`.
    - **Field Wells Configuration**:
      - Drag `customers[Name]`, `customers[Gender]`, `customers[Age_Group]`, `_Measures[Total Bookings]`, and `_Measures[Total Revenue]` into the Columns well.
      - Click `Total Revenue` column header to sort descending.
    - **Visual Formatting**: Apply **Alternating rows** styling with light blue/slate accents.
+
+4. **Gender Booking Distribution (Donut Chart - NEW)**:
+   - **Business Value**: Solves **"Do our transport services appeal differently based on gender demographics?"** (helps target gender-specific promotional graphics and services).
+   - **Visualization Pane**: Select **Donut Chart** icon.
+   - **Coordinates**: X = `815px`, Y = `385px`, Width = `450px`, Height = `310px`.
+   - **Field Wells Configuration**:
+     - Drag `customers[Gender]` into the **Legend** well.
+     - Drag `_Measures[Total Bookings]` into the **Values** well.
+   - **Visual Formatting**: Set slice colors matching the theme: Male = Ocean Blue (`#054A75`), Female = Arctic Cyan (`#06B6D4`). Enable detail labels showing values and percentages.
 
 ---
 
