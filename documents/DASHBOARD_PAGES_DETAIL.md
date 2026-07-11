@@ -255,16 +255,15 @@ Analyzes user booking behaviors, repeat customer rates, and gender/age segments:
      - Drag `_Measures[Unique Customers]` into the **Values** well.
    - **Visual Formatting**: Set slice colors to match theme (Ocean Blue and Arctic Cyan). Enable detail labels showing value and percentage.
 
-4. **Bookings by Customer Gender (Horizontal Clustered Bar Chart)**:
-   - **Business Value**: Solves **"What is the booking volume split between customer genders?"** (helps target gender-specific promo offerings).
-   - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
+4. **Customer Demographic Segments (Treemap - NEW)**:
+   - **Business Value**: Solves **"Which specific combined customer segment (e.g., Female 25-45, Male 45+) drives our business?"** (helps design hyper-targeted marketing campaigns).
+   - **Visualization Pane**: Select **Treemap** icon.
    - **Coordinates**: X = `15px`, Y = `385px`, Width = `350px`, Height = `310px`.
    - **Field Wells Configuration**:
-     - Drag `customers[Gender]` into the **Y-axis** well.
-     - Drag `_Measures[Total Bookings]` into the **X-axis** well.
-   - **Visual Formatting**: 
-     - Set bar color to Ocean Blue (`#054A75`), enable **Data labels**.
-     - **Sorting**: Sort the visual descending: click **`...`** (More options) in the visual's top header > hover over **`Sort axis`** > select **`Total Bookings`**, then click the header again to select **`Sort descending`** (this ensures the gender with the highest booking count is at the top).
+     - Drag `customers[Gender]` into the **Category** well.
+     - Drag `customers[Age_Group]` into the **Details** well.
+     - Drag `_Measures[Total Bookings]` into the **Values** well.
+   - **Visual Formatting**: Set colors to alternate between Ocean Blue and Arctic Cyan tones. Enable **Data labels** to show booking counts inside the nested cards.
 
 5. **Customer Bookings Leaderboard (Table)**:
    - **Business Value**: Solves **"Who are our top-value customers?"** (enables the CRM/loyalty team to distribute targeted rewards or premium memberships).
