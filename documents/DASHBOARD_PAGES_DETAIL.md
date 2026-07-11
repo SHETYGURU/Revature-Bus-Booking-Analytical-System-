@@ -219,7 +219,7 @@ Tracks cash flows, pricing trends, and revenue yields:
    - **Coordinates**: X = `645px`, Y = `385px`, Width = `620px`, Height = `310px`.
    - **Field Wells Configuration**:
      - Drag `routes[Distance]` into the **X-axis** well.
-     - Drag `_Measures[Total Revenue]` into the **Y-axis** well.
+- Drag `_Measures[Total Revenue]` into the **Y-axis** well.
      - Drag `_Measures[Average Fare]` into the **Tooltips** well.
    - **Visual Formatting**: Set column colors to Deep Marine Blue (`#0F172A`).
 
@@ -228,51 +228,53 @@ Tracks cash flows, pricing trends, and revenue yields:
 ### Page 4: Customers (Demographics & Retention Profiles)
 Analyzes user booking behaviors, repeat customer rates, and gender/age segments:
 
-1. **Age Group Distribution (Clustered Column Chart)**:
-   - **Business Value**: Solves **"Which age demographic is our primary customer base?"** (allows marketing to refine digital ad campaign age targets).
-   - **Visualization Pane**: Select **Clustered Column Chart** icon.
-   - **Coordinates**: X = `15px`, Y = `85px`, Width = `430px`, Height = `280px`.
+1. **Customer Bookings Leaderboard (Table)**:
+   - **Business Value**: Solves **"Who are our top-value customers?"** (enables the CRM/loyalty team to distribute targeted rewards or premium memberships).
+   - **Visualization Pane**: Select **Table** icon.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `835px`, Height = `280px`.
    - **Field Wells Configuration**:
-     - Drag `customers[Age_Group]` (calculated column) into the **X-axis** well.
-     - Drag `_Measures[Unique Customers]` into the **Y-axis** well.
-   - **Visual Formatting**: Set color to Arctic Cyan (`#06B6D4`), sort the X-axis chronologically.
+     - Drag `customers[Name]`, `customers[Gender]`, `customers[Age_Group]`, `_Measures[Total Bookings]`, and `_Measures[Total Revenue]` into the Columns well.
+     - Click `Total Revenue` column header to sort descending.
+   - **Visual Formatting**: Apply **Alternating rows** styling with light blue/slate accents.
 
 2. **Customer Retention Profile (Gauge Visual)**:
    - **Business Value**: Solves **"Are we retaining customers month-over-month, or relying entirely on new acquisitions?"** (tracks customer loyalty against a high-performance 80% target).
    - **Visualization Pane**: Select **Gauge** icon.
-   - **Coordinates**: X = `460px`, Y = `85px`, Width = `350px`, Height = `280px`.
+   - **Coordinates**: X = `865px`, Y = `85px`, Width = `380px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `_Measures[Customer Retention Rate]` into the **Value** well.
      - Under Gauge axis > Target, set target to `0.80`.
    - **Visual Formatting**: Color active gauge area Ocean Blue (`#054A75`).
 
-3. **Customer Gender Split (Donut Chart - NEW)**:
-   - **Business Value**: Solves **"What is the total gender split of our unique customer base?"** (guides marketing team on demographic targeting).
-   - **Visualization Pane**: Select **Donut Chart** icon.
-   - **Coordinates**: X = `825px`, Y = `85px`, Width = `440px`, Height = `280px`.
+3. **Total Bookings by Gender & Age Group (Horizontal Clustered Bar Chart)**:
+   - **Business Value**: Solves **"Which gender and age configurations generate the most bookings?"** (useful for cross-segment demographic analysis).
+   - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
+   - **Coordinates**: X = `15px`, Y = `385px`, Width = `430px`, Height = `310px`.
    - **Field Wells Configuration**:
-     - Drag `customers[Gender]` into the **Legend** well.
-     - Drag `_Measures[Unique Customers]` into the **Values** well.
-   - **Visual Formatting**: Set slice colors to match theme (Ocean Blue and Arctic Cyan). Enable detail labels showing value and percentage.
+     - Drag `customers[Gender]` into the **Y-axis** well.
+     - Drag `customers[Age_Group]` into the **Legend** well.
+     - Drag `_Measures[Total Bookings]` into the **X-axis** well.
+   - **Visual Formatting**: 
+     - Set bar colors to Arctic Cyan, Ocean Blue, and Slate Gray. Enable **Data labels**.
+     - **Sorting**: Sort descending: click **`...`** (More options) visual header > Sort axis > select **`Total Bookings`**, and ensure **`Sort descending`** is checked.
 
-4. **Customer Demographic Segments (Treemap - NEW)**:
-   - **Business Value**: Solves **"Which specific combined customer segment (e.g., Female 25-45, Male 45+) drives our business?"** (helps design hyper-targeted marketing campaigns).
-   - **Visualization Pane**: Select **Treemap** icon.
-   - **Coordinates**: X = `15px`, Y = `385px`, Width = `350px`, Height = `310px`.
+4. **Unique Customers Trend by Month (Line Chart - NEW to fill space)**:
+   - **Business Value**: Solves **"Are we expanding our customer footprint over the months, and do we experience seasonal passenger spikes?"** (vital for demand forecasting and acquisition campaigns).
+   - **Visualization Pane**: Select **Line Chart** icon.
+   - **Coordinates**: X = `460px`, Y = `385px`, Width = `390px`, Height = `310px`.
    - **Field Wells Configuration**:
-     - Drag `customers[Gender]` into the **Category** well.
-     - Drag `customers[Age_Group]` into the **Details** well.
-     - Drag `_Measures[Total Bookings]` into the **Values** well.
-   - **Visual Formatting**: Set colors to alternate between Ocean Blue and Arctic Cyan tones. Enable **Data labels** to show booking counts inside the nested cards.
+     - Drag `Calendar[Month Name]` into the **X-axis** well.
+     - Drag `_Measures[Unique Customers]` into the **Y-axis** well.
+   - **Visual Formatting**: Set Line stroke width to `3px`, Line color to Ocean Blue (`#054A75`), enable markers in Arctic Cyan (`#06B6D4`), and turn **Data labels** to **`On`**.
 
-5. **Customer Bookings Leaderboard (Table)**:
-   - **Business Value**: Solves **"Who are our top-value customers?"** (enables the CRM/loyalty team to distribute targeted rewards or premium memberships).
-   - **Visualization Pane**: Select **Table** icon.
-   - **Coordinates**: X = `380px`, Y = `385px`, Width = `885px`, Height = `310px`.
+5. **Unique Customers by Age Group (Clustered Column Chart)**:
+   - **Business Value**: Solves **"Which age demographic is our primary customer base?"** (allows marketing to refine digital ad campaign age targets).
+   - **Visualization Pane**: Select **Clustered Column Chart** icon.
+   - **Coordinates**: X = `865px`, Y = `385px`, Width = `380px`, Height = `310px`.
    - **Field Wells Configuration**:
-     - Drag `customers[Name]`, `customers[Gender]`, `customers[Age_Group]`, `_Measures[Total Bookings]`, and `_Measures[Total Revenue]` into the Columns well.
-     - Click `Total Revenue` column header to sort descending.
-   - **Visual Formatting**: Apply **Alternating rows** styling with light blue/slate accents.
+     - Drag `customers[Age_Group]` (calculated column) into the **X-axis** well.
+     - Drag `_Measures[Unique Customers]` into the **Y-axis** well.
+   - **Visual Formatting**: Set column colors to Arctic Cyan (`#06B6D4`). Sort the X-axis chronologically.
 
 ---
 
