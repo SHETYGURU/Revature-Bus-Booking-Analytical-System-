@@ -140,6 +140,24 @@ Active Route Footprint = DISTINCTCOUNT(bookings[Route_ID])
 ```
 *Format: Whole Number.*
 
+#### Total Buses
+```dax
+Total Buses = DISTINCTCOUNT(buses[Bus_ID])
+```
+*Format: Whole Number.*
+
+#### Total Seating Capacity
+```dax
+Total Seating Capacity = SUM(buses[Capacity])
+```
+*Format: Whole Number.*
+
+#### Average Bus Capacity
+```dax
+Average Bus Capacity = AVERAGE(buses[Capacity])
+```
+*Format: Decimal Number, 1 decimal place.*
+
 ---
 
 ### 2. Time Intelligence (Previous Month)

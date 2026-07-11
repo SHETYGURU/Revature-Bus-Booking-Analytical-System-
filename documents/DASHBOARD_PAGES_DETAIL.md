@@ -279,42 +279,63 @@ Analyzes user booking behaviors, repeat customer rates, and gender/age segments:
 ---
 
 ### Page 5: Bus Types (Asset Utilization & Seat Capacity)
-Analyzes which coach configurations perform best and maps the fleet composition:
+Analyzes coach configurations, fleet seat capacities, and cancellation breakdowns:
 
-1. **Seat Occupancy Rate (Gauge Visual)**:
+1. **Top Row KPI Cards (Card (New) Visual - NEW)**:
+   - **Business Value**: Solves **"What is the physical size, passenger carrying potential, and overall space utilization of our fleet?"** (tracks macro fleet asset aggregates at a glance).
+   - **Visualization Pane**: Select **Card (new)** icon.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `120px`.
+   - **Field Wells Configuration**:
+     - Drag `_Measures[Total Buses]`, `_Measures[Total Seating Capacity]`, `_Measures[Average Bus Capacity]`, and `_Measures[Occupancy Rate]` into the Values box.
+   - **Visual Layout & Formatting**:
+     - Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
+     - Go to Cards > Fill > upload gradients matching theme: `Blue Bg Theme.png` (Buses / Capacity / Occupancy), `Peach Bg Image.jpg` or solid `#EF4444` at low opacity (if comparing average capacity outliers).
+     - Go to Cards > Image > upload matching 3D icons (`icon_bookings.png` for count, `icon_confirmed.png` for capacity, `icon_fare.png` for average, `icon_retention.png` for occupancy). Set size to **`50px`**.
+     - Go to Reference labels > Add trend labels, style backgrounds with `30%` transparency (capsule pill look).
+
+2. **Seat Occupancy Rate (Gauge Visual)**:
    - **Business Value**: Solves **"Are our buses running mostly full or empty?"** (essential for capacity utilization planning).
    - **Visualization Pane**: Select **Gauge** icon.
-   - **Coordinates**: X = `15px`, Y = `85px`, Width = `350px`, Height = `280px`.
+   - **Coordinates**: X = `15px`, Y = `220px`, Width = `350px`, Height = `240px`.
    - **Field Wells Configuration**:
      - Drag `_Measures[Occupancy Rate]` into the **Value** well.
      - Under Gauge axis > Target, set target to `0.80`.
    - **Visual Formatting**: Color the active arc Deep Marine Blue (`#0F172A`).
 
-2. **Fleet Composition (Pie Chart)**:
+3. **Fleet Composition (Pie Chart)**:
    - **Business Value**: Solves **"What is the configuration split of our active fleet?"** (guides procurement planning for new coaches).
    - **Visualization Pane**: Select **Pie Chart** icon.
-   - **Coordinates**: X = `380px`, Y = `85px`, Width = `430px`, Height = `280px`.
+   - **Coordinates**: X = `380px`, Y = `220px`, Width = `430px`, Height = `240px`.
    - **Field Wells Configuration**:
      - Drag `buses[Bus_Type]` into the **Legend** well.
      - Drag `buses[Bus_Number]` into the **Values** well (set aggregation type to **`Count (Distinct)`**).
    - **Visual Formatting**: Set slice colors to Deep Marine Blue (`#054A75`), Arctic Cyan (`#06B6D4`), and Slate Gray (`#64748B`).
 
-3. **Bookings Demand by Coach (Donut Chart)**:
+4. **Bookings Demand by Coach (Donut Chart)**:
    - **Business Value**: Solves **"Which bus types do customers choose the most?"** (identifies if fleet composition matches consumer demand).
    - **Visualization Pane**: Select **Donut Chart** icon.
-   - **Coordinates**: X = `825px`, Y = `85px`, Width = `440px`, Height = `280px`.
+   - **Coordinates**: X = `825px`, Y = `220px`, Width = `440px`, Height = `240px`.
    - **Field Wells Configuration**:
      - Drag `buses[Bus_Type]` into the **Legend** well.
      - Drag `_Measures[Total Bookings]` into the **Values** well.
    - **Visual Formatting**: Enable detail labels showing value and percentage.
 
-4. **Asset Yield Table (Table)**:
+5. **Asset Yield Table (Table)**:
    - **Business Value**: Solves **"How much revenue and bookings does each specific bus number bring in?"** (helps trace mechanical maintenance schedules vs. profitability).
    - **Visualization Pane**: Select **Table** icon.
-   - **Coordinates**: X = `15px`, Y = `385px`, Width = `1250px`, Height = `310px`.
+   - **Coordinates**: X = `15px`, Y = `475px`, Width = `780px`, Height = `230px`.
    - **Field Wells Configuration**:
      - Columns: `buses[Bus_ID]`, `buses[Bus_Number]`, `buses[Bus_Type]`, `buses[Capacity]`, `_Measures[Total Bookings]`, `_Measures[Total Revenue]`, `_Measures[Occupancy Rate]`.
    - **Visual Formatting**: Alternating rows style, set headers to Deep Marine Blue.
+
+6. **Cancellation Rate by Bus Type (Clustered Column Chart - NEW)**:
+   - **Business Value**: Solves **"Do premium sleepers or default seaters experience more reservation drops?"** (vital for setting cancellation fees and seat hold policies per bus type).
+   - **Visualization Pane**: Select **Clustered Column Chart** icon.
+   - **Coordinates**: X = `815px`, Y = `475px`, Width = `450px`, Height = `230px`.
+   - **Field Wells Configuration**:
+     - Drag `buses[Bus_Type]` into the **X-axis** well.
+     - Drag `_Measures[Cancellation Rate]` into the **Y-axis** well.
+   - **Visual Formatting**: Set column fill color to Rose Red (`#EF4444`) or Ocean Blue (`#054A75`), enable **Data labels** in percentage format.
 
 ---
 
