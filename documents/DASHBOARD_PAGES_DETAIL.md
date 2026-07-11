@@ -337,12 +337,18 @@ Analyzes coach configurations, fleet seat capacities, and cancellation breakdown
 ---
 
 ### Page 6: Routes (Financial Yields per Sourced City)
-Identifies the best-performing travel corridors and correlates distance with revenue output:
+Identifies the best-performing travel corridors and analyzes route distance classes:
+
+*Before building, create a **Distance Class** calculated column:*
+- Select the `routes` table in the Data pane > click **New Column** in the Modeling ribbon:
+  ```dax
+  Distance Class = IF(routes[Distance] < 150, "Short Haul (<150km)", IF(routes[Distance] <= 300, "Medium Haul (150-300km)", "Long Haul (>300km)"))
+  ```
 
 1. **Route Performance Matrix (Matrix)**:
    - **Business Value**: Solves **"What is the nested yield breakdown from each source city to its destinations?"** (allows route planners to check passenger volumes and seat utilization).
    - **Visualization Pane**: Select **Matrix** icon.
-   - **Coordinates**: X = `15px`, Y = `85px`, Width = `780px`, Height = `280px`.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `560px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Rows: `routes[Source]` then `routes[Destination]`.
      - Values: `_Measures[Total Bookings]`, `_Measures[Total Revenue]`, and `_Measures[Occupancy Rate]`.
@@ -351,27 +357,46 @@ Identifies the best-performing travel corridors and correlates distance with rev
 2. **Traffic Share by Source Hub (Donut Chart)**:
    - **Business Value**: Solves **"Which city hubs generate the highest volume of bookings?"** (essential for hub scheduling and fleet parking positioning).
    - **Visualization Pane**: Select **Donut Chart** icon.
-   - **Coordinates**: X = `815px`, Y = `85px`, Width = `450px`, Height = `280px`.
+   - **Coordinates**: X = `590px`, Y = `85px`, Width = `310px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `routes[Source]` into the **Legend** well.
      - Drag `_Measures[Total Bookings]` into the **Values** well.
    - **Visual Formatting**: Set slice colors to Arctic Cyan, Ocean Blue, and Slate Gray.
 
-3. **Top Corridors by Revenue (Horizontal Bar Chart)**:
+3. **Traffic Share by Destination Hub (Donut Chart - NEW)**:
+   - **Business Value**: Solves **"Which cities are our primary passenger destinations?"** (helps the marketing team direct regional advertising campaigns).
+   - **Visualization Pane**: Select **Donut Chart** icon.
+   - **Coordinates**: X = `915px`, Y = `85px`, Width = `350px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `routes[Destination]` into the **Legend** well.
+     - Drag `_Measures[Total Bookings]` into the **Values** well.
+   - **Visual Formatting**: Set slice colors to match theme. Enable detail labels showing value and percentage.
+
+4. **Top Corridors by Revenue (Horizontal Bar Chart)**:
    - **Business Value**: Solves **"What are our top revenue-producing corridors?"** (identifies main commercial corridors to safeguard and optimize).
    - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
-   - **Coordinates**: X = `15px`, Y = `385px`, Width = `780px`, Height = `310px`.
+   - **Coordinates**: X = `15px`, Y = `385px`, Width = `560px`, Height = `310px`.
    - **Field Wells Configuration**:
      - Drag `routes[Route_ID]` into the Y-axis. Drag `_Measures[Total Revenue]` into the X-axis. Drag `routes[Source]` and `routes[Destination]` into tooltips.
    - **Formatting**: Sort descending by `Total Revenue`. Set bar color to Ocean Blue (`#054A75`).
 
-4. **Distance vs. Revenue Efficiency (Scatter Plot)**:
-   - **Business Value**: Solves **"Do longer travel distances guarantee higher revenue, or are short corridors more profitable?"** (directly helps price route tickets).
-   - **Visualization Pane**: Select **Scatter Chart** icon.
-   - **Coordinates**: X = `815px`, Y = `385px`, Width = `450px`, Height = `310px`.
+5. **Revenue by Distance Class (Clustered Column Chart - REPLACES SCATTER PLOT)**:
+   - **Business Value**: Solves **"Which distance class (Short, Medium, or Long Haul) generates the most sales?"** (guides pricing policy per distance tier).
+   - **Visualization Pane**: Select **Clustered Column Chart** icon.
+   - **Coordinates**: X = `590px`, Y = `385px`, Width = `310px`, Height = `310px`.
    - **Field Wells Configuration**:
-     - X-axis: `routes[Distance]`, Y-axis: `_Measures[Total Revenue]`, Details: `routes[Route_ID]`.
-   - **Visual Formatting**: Color plot markers Arctic Cyan (`#06B6D4`) with a dark blue outline.
+     - Drag `routes[Distance Class]` into the **X-axis** well.
+     - Drag `_Measures[Total Revenue]` into the **Y-axis** well.
+   - **Visual Formatting**: Set column colors to Deep Marine Blue (`#0F172A`). Sort the X-axis chronologically.
+
+6. **Average Occupancy by Distance Class (Clustered Column Chart - NEW)**:
+   - **Business Value**: Solves **"Are longer routes running at higher occupancy levels than short routes?"** (identifies routes requiring seating capacity adjustments).
+   - **Visualization Pane**: Select **Clustered Column Chart** icon.
+   - **Coordinates**: X = `915px`, Y = `385px`, Width = `350px`, Height = `310px`.
+   - **Field Wells Configuration**:
+     - Drag `routes[Distance Class]` into the **X-axis** well.
+     - Drag `_Measures[Occupancy Rate]` into the **Y-axis** well.
+   - **Visual Formatting**: Set column colors to Arctic Cyan (`#06B6D4`). Sort the X-axis chronologically.
 
 ---
 
