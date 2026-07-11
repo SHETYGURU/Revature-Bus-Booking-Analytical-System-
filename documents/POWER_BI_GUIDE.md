@@ -158,6 +158,12 @@ Average Bus Capacity = AVERAGE(buses[Capacity])
 ```
 *Format: Decimal Number, 1 decimal place.*
 
+#### Occupied Seats
+```dax
+Occupied Seats = [Confirmed Bookings]
+```
+*Format: Whole Number.*
+
 ---
 
 ### 2. Time Intelligence (Previous Month)

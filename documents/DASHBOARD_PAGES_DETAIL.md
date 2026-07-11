@@ -328,14 +328,16 @@ Analyzes coach configurations, fleet seat capacities, and cancellation breakdown
      - Columns: `buses[Bus_ID]`, `buses[Bus_Number]`, `buses[Bus_Type]`, `buses[Capacity]`, `_Measures[Total Bookings]`, `_Measures[Total Revenue]`, `_Measures[Occupancy Rate]`.
    - **Visual Formatting**: Alternating rows style, set headers to Deep Marine Blue.
 
-6. **Cancellation Rate by Bus Type (Clustered Column Chart - NEW)**:
-   - **Business Value**: Solves **"Do premium sleepers or default seaters experience more reservation drops?"** (vital for setting cancellation fees and seat hold policies per bus type).
+6. **Total Seats vs. Occupied Seats by Bus Type (Clustered Column Chart - NEW)**:
+   - **Business Value**: Solves **"How many total seats do we offer for each bus type, and how many are successfully booked/occupied?"** (direct supply vs. demand comparison for fleet optimization).
    - **Visualization Pane**: Select **Clustered Column Chart** icon.
    - **Coordinates**: X = `815px`, Y = `475px`, Width = `450px`, Height = `230px`.
    - **Field Wells Configuration**:
      - Drag `buses[Bus_Type]` into the **X-axis** well.
-     - Drag `_Measures[Cancellation Rate]` into the **Y-axis** well.
-   - **Visual Formatting**: Set column fill color to Rose Red (`#EF4444`) or Ocean Blue (`#054A75`), enable **Data labels** in percentage format.
+     - Drag `_Measures[Total Seating Capacity]` and `_Measures[Occupied Seats]` into the **Y-axis** (Values) well.
+   - **Visual Formatting**: 
+     - Set column colors: `Total Seating Capacity` to Light Slate (`#94A3B8`), and `Occupied Seats` to Ocean Blue (`#054A75`).
+     - Enable **Data labels** to show seat quantities directly on the bars.
 
 ---
 
