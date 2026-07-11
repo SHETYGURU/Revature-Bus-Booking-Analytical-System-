@@ -226,7 +226,7 @@ Tracks cash flows, pricing trends, and revenue yields:
 ---
 
 ### Page 4: Customers (Demographics & Retention Profiles)
-Analyzes user booking behaviors and repeat customer rates:
+Analyzes user booking behaviors, repeat customer rates, and gender/age segments:
 
 1. **Age Group Distribution (Clustered Column Chart)**:
    - **Business Value**: Solves **"Which age demographic is our primary customer base?"** (allows marketing to refine digital ad campaign age targets).
@@ -246,10 +246,21 @@ Analyzes user booking behaviors and repeat customer rates:
      - Under Gauge axis > Target, set target to `0.80`.
    - **Visual Formatting**: Color active gauge area Ocean Blue (`#054A75`).
 
-3. **Customer Bookings Leaderboard (Table)**:
+3. **Bookings by Customer Gender (Horizontal Clustered Bar Chart - NEW)**:
+   - **Business Value**: Solves **"What is the booking volume split between customer genders?"** (helps target gender-specific promo offerings).
+   - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
+   - **Coordinates**: X = `15px`, Y = `385px`, Width = `350px`, Height = `310px`.
+   - **Field Wells Configuration**:
+     - Drag `customers[Gender]` into the **Y-axis** well.
+     - Drag `_Measures[Total Bookings]` into the **X-axis** well.
+   - **Visual Formatting**: 
+     - Set bar color to Ocean Blue (`#054A75`), enable **Data labels**.
+     - **Sorting**: Sort the visual descending: click **`...`** (More options) in the visual's top header > hover over **`Sort axis`** > select **`Total Bookings`**, then click the header again to select **`Sort descending`** (this ensures the gender with the highest booking count is at the top).
+
+4. **Customer Bookings Leaderboard (Table)**:
    - **Business Value**: Solves **"Who are our top-value customers?"** (enables the CRM/loyalty team to distribute targeted rewards or premium memberships).
    - **Visualization Pane**: Select **Table** icon.
-   - **Coordinates**: X = `15px`, Y = `385px`, Width = `1250px`, Height = `310px`.
+   - **Coordinates**: X = `380px`, Y = `385px`, Width = `885px`, Height = `310px`.
    - **Field Wells Configuration**:
      - Drag `customers[Name]`, `customers[Gender]`, `customers[Age_Group]`, `_Measures[Total Bookings]`, and `_Measures[Total Revenue]` into the Columns well.
      - Click `Total Revenue` column header to sort descending.
