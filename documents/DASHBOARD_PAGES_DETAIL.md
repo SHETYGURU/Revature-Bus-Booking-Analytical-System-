@@ -231,7 +231,7 @@ Analyzes user booking behaviors, repeat customer rates, and gender/age segments:
 1. **Age Group Distribution (Clustered Column Chart)**:
    - **Business Value**: Solves **"Which age demographic is our primary customer base?"** (allows marketing to refine digital ad campaign age targets).
    - **Visualization Pane**: Select **Clustered Column Chart** icon.
-   - **Coordinates**: X = `15px`, Y = `85px`, Width = `610px`, Height = `280px`.
+   - **Coordinates**: X = `15px`, Y = `85px`, Width = `430px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `customers[Age_Group]` (calculated column) into the **X-axis** well.
      - Drag `_Measures[Unique Customers]` into the **Y-axis** well.
@@ -240,13 +240,22 @@ Analyzes user booking behaviors, repeat customer rates, and gender/age segments:
 2. **Customer Retention Profile (Gauge Visual)**:
    - **Business Value**: Solves **"Are we retaining customers month-over-month, or relying entirely on new acquisitions?"** (tracks customer loyalty against a high-performance 80% target).
    - **Visualization Pane**: Select **Gauge** icon.
-   - **Coordinates**: X = `645px`, Y = `85px`, Width = `620px`, Height = `280px`.
+   - **Coordinates**: X = `460px`, Y = `85px`, Width = `350px`, Height = `280px`.
    - **Field Wells Configuration**:
      - Drag `_Measures[Customer Retention Rate]` into the **Value** well.
      - Under Gauge axis > Target, set target to `0.80`.
    - **Visual Formatting**: Color active gauge area Ocean Blue (`#054A75`).
 
-3. **Bookings by Customer Gender (Horizontal Clustered Bar Chart - NEW)**:
+3. **Customer Gender Split (Donut Chart - NEW)**:
+   - **Business Value**: Solves **"What is the total gender split of our unique customer base?"** (guides marketing team on demographic targeting).
+   - **Visualization Pane**: Select **Donut Chart** icon.
+   - **Coordinates**: X = `825px`, Y = `85px`, Width = `440px`, Height = `280px`.
+   - **Field Wells Configuration**:
+     - Drag `customers[Gender]` into the **Legend** well.
+     - Drag `_Measures[Unique Customers]` into the **Values** well.
+   - **Visual Formatting**: Set slice colors to match theme (Ocean Blue and Arctic Cyan). Enable detail labels showing value and percentage.
+
+4. **Bookings by Customer Gender (Horizontal Clustered Bar Chart)**:
    - **Business Value**: Solves **"What is the booking volume split between customer genders?"** (helps target gender-specific promo offerings).
    - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
    - **Coordinates**: X = `15px`, Y = `385px`, Width = `350px`, Height = `310px`.
@@ -257,7 +266,7 @@ Analyzes user booking behaviors, repeat customer rates, and gender/age segments:
      - Set bar color to Ocean Blue (`#054A75`), enable **Data labels**.
      - **Sorting**: Sort the visual descending: click **`...`** (More options) in the visual's top header > hover over **`Sort axis`** > select **`Total Bookings`**, then click the header again to select **`Sort descending`** (this ensures the gender with the highest booking count is at the top).
 
-4. **Customer Bookings Leaderboard (Table)**:
+5. **Customer Bookings Leaderboard (Table)**:
    - **Business Value**: Solves **"Who are our top-value customers?"** (enables the CRM/loyalty team to distribute targeted rewards or premium memberships).
    - **Visualization Pane**: Select **Table** icon.
    - **Coordinates**: X = `380px`, Y = `385px`, Width = `885px`, Height = `310px`.
