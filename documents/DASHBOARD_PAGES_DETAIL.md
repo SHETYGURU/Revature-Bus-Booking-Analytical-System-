@@ -371,14 +371,22 @@ Identifies the best-performing travel corridors and analyzes route distance clas
      - Drag `routes[Route_ID]` into the Y-axis. Drag `_Measures[Total Revenue]` into the X-axis. Drag `routes[Source]` and `routes[Destination]` into tooltips.
    - **Formatting**: Sort descending by `Total Revenue`. Set bar color to Ocean Blue (`#054A75`).
 
-4. **Route Hub Geography (Map Visual - NEW)**:
-   - **Business Value**: Solves **"Where are our highest-revenue route starting hubs located geographically?"** (assists fleet management in positioning buses near key hub regions).
-   - **Visualization Pane**: Select **Map** icon.
+4. **Route Flow & Connectivity Map (Flow Map / Route Map Visual)**:
+   - **Business Value**: Solves **"How do our bus routes connect geographically, and what is the booking density along each city corridor?"** (vital for regional route expansion and scheduling).
+   - **Visualization Pane**: 
+     - Click **`...`** (Get more visuals) in the Visualizations pane > select **Get more visuals**.
+     - Search for **`Flow Map`** or **`Route Map`** (free custom visuals) and click **Add**.
    - **Coordinates**: X = `460px`, Y = `385px`, Width = `390px`, Height = `310px`.
    - **Field Wells Configuration**:
-     - Drag `routes[Source]` into the **Location** well.
-     - Drag `_Measures[Total Revenue]` into the **Bubble size** well.
-   - **Visual Formatting**: Enable **Bubbles** (Bubble scale: `5` or `10`), set Bubble color to Ocean Blue (`#054A75`), and choose a clean **Light** or **Road** map style.
+     - Drag `routes[Source]` into the **Origin / Source** well.
+     - Drag `routes[Destination]` into the **Destination** well.
+     - Drag `_Measures[Total Bookings]` into the **Width / Size** well (makes high-demand routes draw thicker lines).
+     - Drag `_Measures[Total Revenue]` into the **Color / Legend** well.
+     - **Tooltips (Hover Details)**: Drag `routes[Route_ID]`, `buses[Bus_Number]`, `buses[Bus_Type]`, and `_Measures[Total Bookings]` into the **Tooltips** well.
+   - **Visual Formatting**:
+     - Set connection line type to **`Bezier (Curve)`** or **`Straight Line`**.
+     - Style line colors using a gradient matching theme (Ocean Blue for high volume, Arctic Cyan for low).
+     - Turn **`On`** map labels so city names are visible under the route links. (Hovering over any line instantly shows the route ID, active bus numbers, coach types, and total bookings).
 
 5. **Average Occupancy by Distance Class (Clustered Column Chart)**:
    - **Business Value**: Solves **"Are longer routes running at higher occupancy levels than short routes?"** (identifies routes requiring seating capacity adjustments).
