@@ -48,23 +48,49 @@ def generate_base_routes():
         {"Source": "Delhi", "Destination": "Agra", "Distance": 230}
     ]
     
+    city_coords = {
+        "Mumbai": (19.0760, 72.8777),
+        "Pune": (18.5204, 73.8567),
+        "Bangalore": (12.9716, 77.5946),
+        "Chennai": (13.0827, 80.2707),
+        "Delhi": (28.6139, 77.2090),
+        "Jaipur": (26.9124, 75.7873),
+        "Hyderabad": (17.3850, 78.4867),
+        "Ahmedabad": (23.0225, 72.5714),
+        "Chandigarh": (30.7333, 76.7794),
+        "Goa": (15.2993, 74.1240),
+        "Patna": (25.5941, 85.1376),
+        "Kolkata": (22.5726, 88.3639),
+        "Agra": (27.1767, 78.0081)
+    }
+    
     routes_data = []
     for idx, r_id in enumerate(route_ids):
         route_info = predefined_routes[idx]
         
         # Inject mixed-case casing dirt on some routes
-        source = route_info["Source"]
-        dest = route_info["Destination"]
+        raw_source = route_info["Source"]
+        raw_dest = route_info["Destination"]
+        
+        source = raw_source
+        dest = raw_dest
         if idx % 3 == 0:
             # e.g., mUmBaI, pUnE
             source = "".join([c.lower() if i % 2 == 0 else c.upper() for i, c in enumerate(source)])
             dest = "".join([c.lower() if i % 2 == 1 else c.upper() for i, c in enumerate(dest)])
             
+        s_lat, s_lon = city_coords[raw_source]
+        d_lat, d_lon = city_coords[raw_dest]
+            
         routes_data.append({
             "Route_ID": r_id,
             "Source": source,
             "Destination": dest,
-            "Distance": route_info["Distance"]
+            "Distance": route_info["Distance"],
+            "Source_Latitude": s_lat,
+            "Source_Longitude": s_lon,
+            "Dest_Latitude": d_lat,
+            "Dest_Longitude": d_lon
         })
     return pd.DataFrame(routes_data)
 

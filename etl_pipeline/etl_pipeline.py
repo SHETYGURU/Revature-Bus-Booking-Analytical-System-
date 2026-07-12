@@ -199,7 +199,11 @@ def load_to_sqlite(bookings, customers, buses, routes, db_path):
         Route_ID INTEGER PRIMARY KEY,
         Source TEXT NOT NULL,
         Destination TEXT NOT NULL,
-        Distance INTEGER NOT NULL
+        Distance INTEGER NOT NULL,
+        Source_Latitude REAL,
+        Source_Longitude REAL,
+        Dest_Latitude REAL,
+        Dest_Longitude REAL
     );
     """)
     
@@ -271,7 +275,11 @@ def load_to_mysql(bookings, customers, buses, routes, db_config):
                 Route_ID INT PRIMARY KEY,
                 Source VARCHAR(100) NOT NULL,
                 Destination VARCHAR(100) NOT NULL,
-                Distance INT NOT NULL
+                Distance INT NOT NULL,
+                Source_Latitude DECIMAL(9, 6),
+                Source_Longitude DECIMAL(9, 6),
+                Dest_Latitude DECIMAL(9, 6),
+                Dest_Longitude DECIMAL(9, 6)
             );
             """)
             
@@ -302,7 +310,7 @@ def load_to_mysql(bookings, customers, buses, routes, db_config):
             
             # Insert Routes
             route_tuples = [tuple(x) for x in routes.to_numpy()]
-            cursor.executemany("INSERT INTO Routes (Route_ID, Source, Destination, Distance) VALUES (%s, %s, %s, %s)", route_tuples)
+            cursor.executemany("INSERT INTO Routes (Route_ID, Source, Destination, Distance, Source_Latitude, Source_Longitude, Dest_Latitude, Dest_Longitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", route_tuples)
             
             # Insert Bookings
             booking_tuples = [tuple(x) for x in bookings.to_numpy()]
