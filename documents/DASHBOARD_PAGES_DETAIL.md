@@ -144,64 +144,60 @@ Tracks high-level business performance, sales trends, and source yields:
 ### Page 2: Bookings (Detailed Booking Status Analysis)
 Focuses on tracking booking statuses, customer planning behavior, and traffic load distribution:
 
-1. **Top Row KPI Cards (Card (New) Visual - NEW)**:
-   - **Business Value**: Solves **"How healthy are our passenger booking workflows, status partitions, and reservation cancellation rates?"** (tracks user booking actions and system loads instead of simple high-level totals).
+1. **Top Row KPI Cards (Card (New) Visual)**:
+   - **Business Value**: Solves **"How healthy are our passenger booking workflows, planning lead times, and financial cancellation impacts?"** (tracks user behavior efficiency, transaction attrition, and active route coverage).
    - **Visualization Pane**: Select **Card (new)** icon.
    - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `120px`.
    - **Field Wells Configuration**:
-     - Drag `_Measures[Confirmed Bookings]`, `_Measures[Cancelled Bookings]`, `_Measures[Pending Bookings]`, and `_Measures[Cancellation Rate]` into the Values box.
+     - Drag `_Measures[Average Lead Time]`, `_Measures[Cancellation Rate]`, `_Measures[Revenue Leakage]`, and `_Measures[Active Route Footprint]` into the Values box.
    - **Visual Layout & Formatting**:
      - Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
-     - Style backgrounds, fonts, and borders consistent with theme. Upload matching icons (e.g., `icon_confirmed.png` for confirmed, `icon_cancelled.png` for cancelled, `icon_pending.png` for pending, and `icon_cancellation_rate.png` for cancellation rate). Set size to **`50px`**.
+     - Style backgrounds, fonts, and borders consistent with theme. Upload matching icons (e.g., `icon_fare.png` for lead time, `icon_cancellation_rate.png` for cancellation rate, `icon_leakage.png` for leakage, and `icon_routes.png` for routes footprint).
 
-2. **Daily Bookings Volume (Area Chart)**:
-   - **Business Value**: Solves **"What are our daily booking volumes and seasonal spikes?"** (helps with staffing and server infrastructure management).
-   - **Visualization Pane**: Select **Area Chart** icon.
-   - **Coordinates**: X = `15px`, Y = `220px`, Width = `560px`, Height = `240px`.
-   - **Field Wells Configuration**:
-     - Drag `Calendar[Date]` from the Data pane into the **X-axis** well.
-     - Drag `_Measures[Total Bookings]` from the Data pane into the **Y-axis** well.
-   - **Visual Formatting**: Set Stroke width to `3px`, Color to Ocean Blue (`#054A75`), expand **Shade area** > Turn **On** (Set transparency to `85%`, color `#E0F2FE`).
-
-3. **Planning Behavior (Donut Chart)**:
+2. **Total Bookings by Lead Time Group (Donut Chart)**:
    - **Business Value**: Solves **"Do customers book last-minute or plan in advance?"** (helps adjust dynamic pricing models and booking policies).
    - **Visualization Pane**: Select **Donut Chart** icon.
-   - **Coordinates**: X = `590px`, Y = `220px`, Width = `310px`, Height = `240px`.
+   - **Coordinates**: X = `15px`, Y = `220px`, Width = `230px`, Height = `240px`.
    - **Field Wells Configuration**:
-     - Create a calculated column: `Lead Time Days = DATEDIFF(bookings[Booking_Date], bookings[Travel_Date], DAY)`.
-     - Create a grouping column: `Lead Time Group = IF([Lead Time Days]=0, "Same Day", IF([Lead Time Days]<=3, "1-3 Days", IF([Lead Time Days]<=7, "4-7 Days", "8+ Days")))`.
-     - Drag `Lead Time Group` into the **Legend** well.
+     - Drag `bookings[Lead Time Group]` (or hierarchy) into the **Legend** well.
      - Drag `_Measures[Total Bookings]` into the **Values** well.
    - **Visual Formatting**: Use light slate, ocean blue, and cyan colors for the segments.
 
-4. **Status Split (Clustered Column Chart)**:
+3. **Total Bookings by Booking_Status (Clustered Column Chart)**:
    - **Business Value**: Solves **"Is our cancellation volume within acceptable boundaries?"** (helps operations identify booking leakage).
    - **Visualization Pane**: Select **Clustered Column Chart** icon.
-   - **Coordinates**: X = `915px`, Y = `220px`, Width = `350px`, Height = `240px`.
+   - **Coordinates**: X = `260px`, Y = `220px`, Width = `250px`, Height = `240px`.
    - **Field Wells Configuration**:
      - Drag `bookings[Booking_Status]` into the **X-axis** well.
      - Drag `_Measures[Total Bookings]` into the **Y-axis** well.
-   - **Visual Formatting**: Color columns: Confirmed = Teal (`#0D9488`), Cancelled = Rose Red (`#EF4444`), Pending = Amber / Orange (`#F59E0B`).
+   - **Visual Formatting**: Color columns: Confirmed = Teal (`#0D9488`), Cancelled = Rose Red (`#EF4444`), Pending = Amber / Orange (`#F59E0B`). Enable data labels.
 
-5. **Status vs Bus Type Matrix (Matrix Table)**:
+4. **Total Bookings by Month Name (Area Chart)**:
+   - **Business Value**: Solves **"What are our monthly booking volumes and seasonal spikes?"** (helps with staffing and server infrastructure management).
+   - **Visualization Pane**: Select **Area Chart** icon.
+   - **Coordinates**: X = `525px`, Y = `220px`, Width = `740px`, Height = `240px`.
+   - **Field Wells Configuration**:
+     - Drag `Calendar[Month Name]` from the Data pane into the **X-axis** well.
+     - Drag `_Measures[Total Bookings]` from the Data pane into the **Y-axis** well.
+   - **Visual Formatting**: Set Stroke width to `3px`, Color to Ocean Blue (`#054A75`), expand **Shade area** > Turn **On** (Set transparency to `85%`, color `#E0F2FE`).
+
+5. **Total Bookings by Source (Horizontal Bar Chart)**:
+   - **Business Value**: Solves **"Which city hubs generate the highest volume of booking demands?"** (identifies prime starting locations for extra shuttle scheduling).
+   - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
+   - **Coordinates**: X = `15px`, Y = `475px`, Width = `560px`, Height = `230px`.
+   - **Field Wells Configuration**:
+     - Drag `routes[Source]` into the **Y-axis** well.
+     - Drag `_Measures[Total Bookings]` into the **X-axis** well.
+   - **Visual Formatting**: Set bar color to Ocean Blue (`#054A75`), enable **Data labels**. Sort descending.
+
+6. **Status vs Bus Type Matrix (Matrix Table)**:
    - **Business Value**: Solves **"Are cancellations concentrated on specific bus configurations?"** (identifies if seater or sleeper configurations experience more booking changes).
    - **Visualization Pane**: Select **Matrix** icon.
-   - **Coordinates**: X = `15px`, Y = `475px`, Width = `700px`, Height = `230px`.
+   - **Coordinates**: X = `590px`, Y = `475px`, Width = `675px`, Height = `230px`.
    - **Field Wells Configuration**:
      - Drag `buses[Bus_Type]` into the **Rows** well.
      - Drag `_Measures[Confirmed Bookings]`, `_Measures[Cancelled Bookings]`, and `_Measures[Pending Bookings]` into the **Values** well.
-   - **Visual Formatting**: Cell Elements > enable Data Bars individually for each column using matching status colors.
-
-6. **Route Demands & Traffic Load (Horizontal Clustered Bar Chart)**:
-   - **Business Value**: Solves **"Which routes have the highest passenger traffic?"** (guides fleet allocation managers to dispatch extra buses to high-demand corridors).
-   - **Visualization Pane**: Select **Clustered Bar Chart** (horizontal) icon.
-   - **Coordinates**: X = `730px`, Y = `475px`, Width = `535px`, Height = `230px`.
-   - **Field Wells Configuration**:
-     - Drag `Routes[Source] & " → " & Routes[Destination]` into the **Y-axis** well.
-     - Drag `_Measures[Total Bookings]` into the **X-axis** well.
-   - **Visual Formatting**: 
-     - Set bar color to Arctic Cyan (`#06B6D4`), enable **Data labels**.
-     - **Sorting**: Sort the visual descending: click **`...`** (More options) in the visual's top header > hover over **`Sort axis`** > select **`Total Bookings`**, then click the header again to select **`Sort descending`** (this ensures the highest-demanded routes are displayed at the top).
+   - **Visual Formatting**: Cell Elements > enable Data Bars individually for each column using matching status colors. Alternating rows styling.
 
 ---
 ### Page 3: Revenue (Yield & Yield Optimization)
