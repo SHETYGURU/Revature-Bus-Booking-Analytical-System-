@@ -67,17 +67,41 @@ Here are the step-by-step layout grids, visual types, and business rationale for
 ### Page 1: Overview
 Tracks high-level business performance, sales trends, and source yields:
 
-1. **Top Row KPI Cards (Card (New) Visual)**:
-   - **Business Value**: Solves **"What is the overall financial and volume health of our business today?"** (tracks core executive indicators at a glance).
-   - **Visualization Pane**: Select **Card (new)** icon.
-   - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `120px`.
-   - **Field Wells Configuration**:
-     - Drag `_Measures[Total Revenue]`, `_Measures[Total Bookings]`, `_Measures[Average Fare]`, and `_Measures[Customer Retention Rate]` into the Values box.
-   - **Visual Layout & Formatting**:
-     - Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
-     - Go to Cards > Fill > upload gradients matching theme: `Bg Theme.jpg` (Revenue), `Blue Bg Theme.png` (Bookings/Retention), `Peach Bg Image.jpg` (Fare).
-     - Go to Cards > Image > upload matching 3D icons (`icon_revenue.png`, `icon_bookings.png`, `icon_fare.png`, `icon_retention.png`). Set Image Fit to **`Fit`** and size to **`50px`**.
-     - Go to Reference labels > Add trend labels, style backgrounds with `30%` transparency (capsule pill look).
+1. **Top Row KPI Cards (4 Individual Native KPI Visuals - NEW)**:
+   - **Business Value**: Solves **"What is our core business growth and health, and are we improving month-over-month against our previous performance?"** (colors the card green/red depending on target performance and overlays a background trend sparkline).
+   - **Visualization Pane**: Select **KPI** (card with a green graph background) icon. Create 4 individual instances side-by-side:
+     
+     *   **KPI 1: Total Bookings**
+         - **Coordinates**: X = `15px`, Y = `85px`, Width = `300px`, Height = `120px`.
+         - **Field Wells**:
+           - **Value (Indicator)**: `_Measures[Total Bookings]`
+           - **Trend axis**: `Calendar[Year Month]`
+           - **Target**: `_Measures[Previous Month Bookings]`
+         - **Formatting**: Go to Visual formatting > Trend axis > toggle **`On`** (shows background sparkline). Go to Target > toggle **`On`**. Set **`Direction`** to **`High is Good`**.
+     
+     *   **KPI 2: Total Revenue**
+         - **Coordinates**: X = `330px`, Y = `85px`, Width = `300px`, Height = `120px`.
+         - **Field Wells**:
+           - **Value (Indicator)**: `_Measures[Total Revenue]`
+           - **Trend axis**: `Calendar[Year Month]`
+           - **Target**: `_Measures[Previous Month Revenue]`
+         - **Formatting**: Trend axis = **`On`**, Target = **`On`**, Direction = **`High is Good`**.
+     
+     *   **KPI 3: Average Fare**
+         - **Coordinates**: X = `645px`, Y = `85px`, Width = `300px`, Height = `120px`.
+         - **Field Wells**:
+           - **Value (Indicator)**: `_Measures[Average Fare]`
+           - **Trend axis**: `Calendar[Year Month]`
+           - **Target**: `_Measures[Previous Month Average Fare]`
+         - **Formatting**: Trend axis = **`On`**, Target = **`On`**, Direction = **`High is Good`**.
+     
+     *   **KPI 4: Customer Retention**
+         - **Coordinates**: X = `960px`, Y = `85px`, Width = `305px`, Height = `120px`.
+         - **Field Wells**:
+           - **Value (Indicator)**: `_Measures[Customer Retention Rate]`
+           - **Trend axis**: `Calendar[Year Month]`
+           - **Target**: `_Measures[Previous Month Retention Rate]`
+         - **Formatting**: Trend axis = **`On`**, Target = **`On`**, Direction = **`High is Good`**.
 
 2. **Total Bookings and Total Revenue (Dual Axis Line Chart)**:
    - **Business Value**: Solves **"Are revenue trends matching booking volume trends over the months?"** (identifies price performance alignment and booking peaks).

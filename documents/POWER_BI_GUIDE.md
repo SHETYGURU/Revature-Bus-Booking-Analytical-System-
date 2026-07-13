@@ -233,6 +233,16 @@ RETURN DIVIDE([Total Revenue] - PrevRev, PrevRev, 0)
 Previous Month Bookings = CALCULATE([Total Bookings], DATEADD('Calendar'[Date], -1, MONTH))
 ```
 
+#### Previous Month Lead Time
+```dax
+Previous Month Lead Time = CALCULATE([Avg Lead Time], DATEADD('Calendar'[Date], -1, MONTH))
+```
+
+#### Previous Month Retention Rate
+```dax
+Previous Month Retention Rate = CALCULATE([Customer Retention Rate], DATEADD('Calendar'[Date], -1, MONTH))
+```
+
 #### Bookings MoM %
 ```dax
 Bookings MoM % = 
