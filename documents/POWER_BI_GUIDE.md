@@ -164,6 +164,12 @@ Average Bus Capacity = AVERAGE(buses[Capacity])
 ```
 *Format: Decimal Number, 1 decimal place.*
 
+#### Total Buses
+```dax
+Total Buses = DISTINCTCOUNT(buses[Bus_ID])
+```
+*Format: Whole Number.*
+
 #### Net Realized Revenue
 ```dax
 Net Realized Revenue = CALCULATE([Total Revenue], bookings[Booking_Status] <> "Cancelled")
