@@ -39,7 +39,7 @@ Drag the appropriate slicers into the panel for each sheet:
 | Page Tab | Slicer 1 (Y = `80px`) | Slicer 2 (Y = `220px`) | Slicer 3 (Y = `420px`) |
 | :--- | :--- | :--- | :--- |
 | **Page 1: Overview** | `Calendar[Date]` (Between Slider) | `routes[Source]` (Dropdown) | `buses[Bus_Type]` (Checkbox List) |
-| **Page 2: Bookings** | `bookings[Booking_Status]` (Tile / Horizontal List) | `Calendar[Date]` (Between Slider) | `buses[Capacity]` (Numeric Range Slider) |
+| **Page 2: Bookings** | `Calendar[Date]` (Between Slider) | `routes[Source]` (Dropdown) | `buses[Bus_Type]` (Checkbox List) |
 | **Page 3: Revenue** | `Calendar[Date]` (Between Slider) | `bookings[Fare_Amount]` (Numeric Range Slider) | `routes[Source]` (Dropdown) |
 | **Page 4: Customers** | `customers[Gender]` (Tile) | `customers[Age_Group]` (Checkbox List) | `customers[Name]` (Searchable Dropdown) |
 | **Page 5: Bus Types** | `buses[Bus_Type]` (Checkbox List) | `buses[Capacity]` (Numeric Range Slider) | *Leave Empty* |
