@@ -164,6 +164,30 @@ Average Bus Capacity = AVERAGE(buses[Capacity])
 ```
 *Format: Decimal Number, 1 decimal place.*
 
+#### Average Bookings per Customer
+```dax
+Average Bookings per Customer = DIVIDE([Total Bookings], [Unique Customers], 0)
+```
+*Format: Decimal Number, 1 decimal place.*
+
+#### Customer Lifetime Value
+```dax
+Customer Lifetime Value = DIVIDE([Total Revenue], [Unique Customers], 0)
+```
+*Format: Currency (`$ English (United States)`), 0 decimal places.*
+
+#### Total Route Distance
+```dax
+Total Route Distance = SUM(routes[Distance])
+```
+*Format: Whole Number.*
+
+#### Average Route Distance
+```dax
+Average Route Distance = AVERAGE(routes[Distance])
+```
+*Format: Decimal Number, 1 decimal place.*
+
 ---
 
 ### 2. Time Intelligence (Previous Month)
