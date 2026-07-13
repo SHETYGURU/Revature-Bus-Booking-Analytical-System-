@@ -145,16 +145,14 @@ Tracks high-level business performance, sales trends, and source yields:
 Focuses on tracking booking statuses, customer planning behavior, and traffic load distribution:
 
 1. **Top Row KPI Cards (Card (New) Visual - NEW)**:
-   - **Business Value**: Solves **"How healthy are our passenger booking workflows, planning lead times, and financial cancellation impacts?"** (tracks user behavior efficiency, transaction attrition, and lost sales value instead of simple volume aggregates).
+   - **Business Value**: Solves **"How healthy are our passenger booking workflows, status partitions, and reservation cancellation rates?"** (tracks user booking actions and system loads instead of simple high-level totals).
    - **Visualization Pane**: Select **Card (new)** icon.
    - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `120px`.
    - **Field Wells Configuration**:
-     - Drag `_Measures[Average Lead Time]`, `_Measures[Cancellation Rate]`, `_Measures[Revenue Leakage]`, and `_Measures[Active Route Footprint]` into the Values box.
+     - Drag `_Measures[Confirmed Bookings]`, `_Measures[Cancelled Bookings]`, `_Measures[Pending Bookings]`, and `_Measures[Cancellation Rate]` into the Values box.
    - **Visual Layout & Formatting**:
      - Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
-     - Go to Cards > Fill > upload gradients matching theme: `Blue Bg Theme.png` (Lead Time / Routes), `Peach Bg Image.jpg` (Cancellation Rate), `Purple Bg Theme.jpg` (Revenue Leakage).
-     - Go to Cards > Image > upload matching 3D icons (`icon_fare.png` for lead time, `icon_cancelled.png` for cancellation rate, `icon_revenue.png` for leakage, `icon_confirmed.png` for routes). Set size to **`50px`**.
-     - Go to Reference labels > Add trend labels, style backgrounds with `30%` transparency (capsule pill look).
+     - Style backgrounds, fonts, and borders consistent with theme. Upload matching icons (e.g., `icon_confirmed.png` for confirmed, `icon_cancelled.png` for cancelled, `icon_pending.png` for pending, and `icon_cancellation_rate.png` for cancellation rate). Set size to **`50px`**.
 
 2. **Daily Bookings Volume (Area Chart)**:
    - **Business Value**: Solves **"What are our daily booking volumes and seasonal spikes?"** (helps with staffing and server infrastructure management).
@@ -210,14 +208,14 @@ Focuses on tracking booking statuses, customer planning behavior, and traffic lo
 Tracks cash flows, pricing trends, and revenue yields:
 
 1. **Top Row KPI Cards (Card (New) Visual - NEW)**:
-   - **Business Value**: Solves **"What is our gross financial performance, transaction value, and cancellation leakage?"** (vital for quick executive financial summaries).
+   - **Business Value**: Solves **"What is our realized pricing yield, cancellation revenue leakage, average yield per route, and daily booking revenue?"** (tracks localized financial health metrics instead of global totals).
    - **Visualization Pane**: Select **Card (new)** icon.
    - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `120px`.
    - **Field Wells Configuration**:
-     - Drag `_Measures[Total Revenue]`, `_Measures[Average Fare]`, `_Measures[Revenue Leakage]`, and `_Measures[Net Realized Revenue]` into the Values box.
+     - Drag `_Measures[Net Realized Revenue]`, `_Measures[Revenue Leakage]`, `_Measures[Avg Route Yield]`, and `_Measures[Avg Revenue per Day]` into the Values box.
    - **Visual Layout & Formatting**:
      - Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
-     - Style backgrounds, fonts, and borders consistent with theme. Upload matching icons (e.g., `icon_revenue.png` for total, `icon_fare.png` for average, `icon_leakage.png` for leakage, and `icon_confirmed.png` for net realized).
+     - Style backgrounds, fonts, and borders consistent with theme. Upload matching icons (e.g., `icon_confirmed.png` for realized, `icon_leakage.png` for leakage, `icon_routes.png` for route yield, and `icon_revenue.png` for daily revenue).
 
 2. **Cumulative Revenue Trend (Line Chart)**:
    - **Business Value**: Solves **"Is our business on track to hit its total revenue goals over time?"** (tracks running cumulative totals to forecast quarterly sales).
@@ -262,14 +260,14 @@ Tracks cash flows, pricing trends, and revenue yields:
 Analyzes user booking behaviors, repeat customer rates, and gender/age segments:
 
 1. **Top Row KPI Cards (Card (New) Visual - NEW)**:
-   - **Business Value**: Solves **"What is our aggregate customer size, booking engagement, average spending, and retention rate?"** (provides immediate customer demographic KPIs at a glance).
+   - **Business Value**: Solves **"What is our unique customer size, booking rate per person, average spending per passenger, and loyal user cohort size?"** (tracks customer engagement, loyalty, and average customer lifetime value).
    - **Visualization Pane**: Select **Card (new)** icon.
    - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `120px`.
    - **Field Wells Configuration**:
-     - Drag `_Measures[Total Bookings]`, `_Measures[Unique Customers]`, `_Measures[Avg Spend per Customer]`, and `_Measures[Customer Retention Rate]` into the Values box.
+     - Drag `_Measures[Unique Customers]`, `_Measures[Avg Bookings per Customer]`, `_Measures[Avg Spend per Customer]`, and `_Measures[Loyal Customers]` into the Values box.
    - **Visual Layout & Formatting**:
      - Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
-     - Style backgrounds, fonts, and borders consistent with theme. Upload matching icons (e.g., `icon_bookings.png` for bookings, `icon_routes.png` for customer size, `icon_fare.png` for spend, and `icon_retention.png` for retention).
+     - Style backgrounds, fonts, and borders consistent with theme. Upload matching icons (e.g., `icon_routes.png` for customer size, `icon_bookings.png` for booking frequency, `icon_fare.png` for spend, and `icon_retention.png` for loyal count).
 
 2. **Customer Bookings Leaderboard (Table)**:
    - **Business Value**: Solves **"Who are our top-value customers?"** (enables the CRM/loyalty team to distribute targeted rewards or premium memberships).
@@ -448,11 +446,11 @@ Identifies the best-performing travel corridors and analyzes route distance clas
 Dedicated print-ready and exportable transaction ledger with summary KPI cards:
 
 1. **Top Row KPI Cards (Card (New) Visual - NEW)**:
-   - **Business Value**: Solves **"What is the total booked tickets volume, gross sales value, average ticket fare, and successful booking counts?"** (provides a fast operational transaction summary of the filtered records).
+   - **Business Value**: Solves **"What is the total confirmed ticket volume, gross realized cash, average transaction ticket price, and pending payment queue?"** (provides a granular financial ledger summary for the audit team).
    - **Visualization Pane**: Select **Card (new)** icon.
    - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `120px`.
    - **Field Wells Configuration**:
-     - Drag `_Measures[Total Bookings]`, `_Measures[Total Revenue]`, `_Measures[Average Fare]`, and `_Measures[Successful Transactions]` into the Values box.
+     - Drag `_Measures[Confirmed Bookings]`, `_Measures[Net Realized Revenue]`, `_Measures[Average Confirmed Transaction Value]`, and `_Measures[Pending Bookings]` into the Values box.
    - **Visual Layout & Formatting**:
      - Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
      - Style backgrounds, fonts, and borders consistent with theme. Upload matching icons (e.g., `icon_bookings.png` for bookings, `icon_revenue.png` for revenue, `icon_fare.png` for average fare, and `icon_confirmed.png` for successful transactions).

@@ -211,6 +211,36 @@ Revenue per KM = DIVIDE([Total Revenue], [Total Distance Covered], 0)
 Successful Transactions = CALCULATE([Total Bookings], bookings[Booking_Status] = "Confirmed")
 ```
 *Format: Whole Number.*
+#### Avg Route Yield
+```dax
+Avg Route Yield = DIVIDE([Total Revenue], DISTINCTCOUNT(bookings[Route_ID]), 0)
+```
+*Format: Currency (`$ English (United States)`), 0 decimal places.*
+
+#### Avg Revenue per Day
+```dax
+Avg Revenue per Day = DIVIDE([Total Revenue], DISTINCTCOUNT(bookings[Booking_Date]), 0)
+```
+*Format: Currency (`$ English (United States)`), 0 decimal places.*
+
+#### Loyal Customers (2+ Bookings)
+```dax
+Loyal Customers = 
+CALCULATE(
+    DISTINCTCOUNT(bookings[Customer_ID]),
+    FILTER(
+        VALUES(bookings[Customer_ID]),
+        CALCULATE(COUNT(bookings[Booking_ID])) >= 2
+    )
+)
+```
+*Format: Whole Number.*
+
+#### Average Confirmed Transaction Value
+```dax
+Average Confirmed Transaction Value = DIVIDE([Net Realized Revenue], [Confirmed Bookings], 0)
+```
+*Format: Currency (`$ English (United States)`), 0 decimal places.*
 
 ---
 
