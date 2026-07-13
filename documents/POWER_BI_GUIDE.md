@@ -164,21 +164,27 @@ Average Bus Capacity = AVERAGE(buses[Capacity])
 ```
 *Format: Decimal Number, 1 decimal place.*
 
-#### Average Bookings per Customer
+#### Net Realized Revenue
 ```dax
-Average Bookings per Customer = DIVIDE([Total Bookings], [Unique Customers], 0)
-```
-*Format: Decimal Number, 1 decimal place.*
-
-#### Customer Lifetime Value
-```dax
-Customer Lifetime Value = DIVIDE([Total Revenue], [Unique Customers], 0)
+Net Realized Revenue = CALCULATE([Total Revenue], bookings[Booking_Status] <> "Cancelled")
 ```
 *Format: Currency (`$ English (United States)`), 0 decimal places.*
 
-#### Total Route Distance
+#### Avg Bookings per Customer
 ```dax
-Total Route Distance = SUM(routes[Distance])
+Avg Bookings per Customer = DIVIDE([Total Bookings], [Unique Customers], 0)
+```
+*Format: Decimal Number, 1 decimal place.*
+
+#### Avg Spend per Customer
+```dax
+Avg Spend per Customer = DIVIDE([Total Revenue], [Unique Customers], 0)
+```
+*Format: Currency (`$ English (United States)`), 0 decimal places.*
+
+#### Total Distance Covered
+```dax
+Total Distance Covered = SUMX(bookings, RELATED(routes[Distance]))
 ```
 *Format: Whole Number.*
 
@@ -187,6 +193,18 @@ Total Route Distance = SUM(routes[Distance])
 Average Route Distance = AVERAGE(routes[Distance])
 ```
 *Format: Decimal Number, 1 decimal place.*
+
+#### Revenue per KM
+```dax
+Revenue per KM = DIVIDE([Total Revenue], [Total Distance Covered], 0)
+```
+*Format: Currency (`$ English (United States)`), 2 decimal places.*
+
+#### Successful Transactions
+```dax
+Successful Transactions = CALCULATE([Total Bookings], bookings[Booking_Status] = "Confirmed")
+```
+*Format: Whole Number.*
 
 ---
 
