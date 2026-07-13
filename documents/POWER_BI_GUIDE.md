@@ -242,6 +242,18 @@ Average Confirmed Transaction Value = DIVIDE([Net Realized Revenue], [Confirmed 
 ```
 *Format: Currency (`$ English (United States)`), 0 decimal places.*
 
+#### Confirmation Rate
+```dax
+Confirmation Rate = DIVIDE([Confirmed Bookings], [Total Bookings], 0)
+```
+*Format: Percentage, 1 decimal place.*
+
+#### Pending Rate
+```dax
+Pending Rate = DIVIDE([Pending Bookings], [Total Bookings], 0)
+```
+*Format: Percentage, 1 decimal place.*
+
 ---
 
 ### 2. Time Intelligence (Previous Month)
