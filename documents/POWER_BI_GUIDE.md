@@ -108,11 +108,18 @@ RETURN
 #### Occupancy Rate
 ```dax
 Occupancy Rate = 
-DIVIDE(
-    CALCULATE([Total Bookings], bookings[Booking_Status] <> "Cancelled"),
-    SUMX(bookings, RELATED(buses[Capacity])),
-    0
-)
+VAR ActiveBookings = CALCULATE(COUNT(bookings[Booking_ID]), bookings[Booking_Status] <> "Cancelled")
+VAR TotalCapacityOfRuns = 
+    SUMX(
+        SUMMARIZE(
+            bookings,
+            bookings[Travel_Date],
+            bookings[Bus_ID]
+        ),
+        CALCULATE(MAX(buses[Capacity]))
+    )
+RETURN
+    DIVIDE(ActiveBookings, TotalCapacityOfRuns, 0)
 ```
 *Format: Percentage (`%`), 1 decimal place.*
 

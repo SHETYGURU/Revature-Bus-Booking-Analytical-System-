@@ -179,6 +179,18 @@ def generate_dirty_bookings(customers_df, buses_df, routes_df, num_records=2000)
     statuses = ["Confirmed", "Pending", "Cancelled"]
     bookings_data = []
     
+    # Skew customer bookings to achieve a realistic Customer Retention Rate (~40%)
+    # 60% of customers book exactly once (single-trip travelers)
+    # 40% of customers book repeatedly (frequent flyers)
+    num_customers = len(cust_ids)
+    single_trip_count = int(num_customers * 0.60) # ~180 customers
+    
+    single_trip_custs = cust_ids[:single_trip_count]
+    frequent_custs = cust_ids[single_trip_count:]
+    
+    single_trip_pool = list(single_trip_custs)
+    random.shuffle(single_trip_pool)
+    
     # We want to span from 2025-01-01 to 2026-07-14 (present month/date)
     start_date = datetime.date(2025, 1, 1)
     end_date = datetime.date(2026, 7, 14)
@@ -209,7 +221,10 @@ def generate_dirty_bookings(customers_df, buses_df, routes_df, num_records=2000)
         
         # Generate bookings for this run
         for seat_num in booked_seats:
-            cust_id = random.choice(cust_ids)
+            if single_trip_pool and random.random() < 0.05:
+                cust_id = single_trip_pool.pop()
+            else:
+                cust_id = random.choice(frequent_custs)
             
             # Booking Date is 0 to 14 days before Travel Date (lead time)
             # Use a weighted distribution for lead time (mostly 1-5 days)
