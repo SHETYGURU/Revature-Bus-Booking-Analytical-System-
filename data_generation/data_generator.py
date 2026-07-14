@@ -179,50 +179,84 @@ def generate_dirty_bookings(customers_df, buses_df, routes_df, num_records=2000)
     statuses = ["Confirmed", "Pending", "Cancelled"]
     bookings_data = []
     
+    # We want to span from 2025-01-01 to 2026-07-14 (present month/date)
     start_date = datetime.date(2025, 1, 1)
+    end_date = datetime.date(2026, 7, 14)
+    total_days = (end_date - start_date).days + 1
     
-    for b_id in range(1, num_records + 1):
-        cust_id = random.choice(cust_ids)
+    b_id = 1
+    
+    # Generate scheduled runs across the timeline
+    for d in range(total_days):
+        current_date = start_date + datetime.timedelta(days=d)
+        
+        # Schedule 1 run per day on average to keep data size around 15k-20k
+        # Choose a random Route and Bus for this day's run
         bus_id = random.choice(bus_ids)
         route_id = random.choice(route_ids)
         
-        # Travel date logic
-        days_offset = random.randint(0, 180)
-        booking_date = start_date + datetime.timedelta(days=days_offset)
-        
-        # Normally travel date is 1-5 days after booking date
-        travel_days = random.randint(1, 5)
-        travel_date = booking_date + datetime.timedelta(days=travel_days)
-        
-        # Normal Seat
         bus_cap = buses_df[buses_df["Bus_ID"] == bus_id]["Capacity"].values[0]
-        seat_num = random.randint(1, bus_cap)
-        
-        # Normal Fare
         dist = routes_df[routes_df["Route_ID"] == route_id]["Distance"].values[0]
         bus_type = buses_df[buses_df["Bus_ID"] == bus_id]["Bus_Type"].values[0]
-        base_rate = 1.5 if "AC" in bus_type else 1.0
-        fare = float(dist * base_rate + (200 if "Sleeper" in bus_type else 50))
         
-        status = random.choice(statuses)
+        # Target high occupancy rate: 70% to 90% (practically realistic)
+        occupancy_rate = random.uniform(0.70, 0.90)
+        num_seats_to_book = int(bus_cap * occupancy_rate)
         
-        # Date string formatting (normally YYYY-MM-DD)
-        b_date_str = booking_date.strftime('%Y-%m-%d')
-        t_date_str = travel_date.strftime('%Y-%m-%d')
+        # Select unique seat numbers for this run
+        all_seats = list(range(1, bus_cap + 1))
+        booked_seats = random.sample(all_seats, k=num_seats_to_book)
         
-        bookings_data.append({
-            "Booking_ID": b_id,
-            "Customer_ID": cust_id,
-            "Bus_ID": bus_id,
-            "Route_ID": route_id,
-            "Booking_Date": b_date_str,
-            "Travel_Date": t_date_str,
-            "Seat_Number": seat_num,
-            "Fare_Amount": fare,
-            "Booking_Status": status
-        })
-        
+        # Generate bookings for this run
+        for seat_num in booked_seats:
+            cust_id = random.choice(cust_ids)
+            
+            # Booking Date is 0 to 14 days before Travel Date (lead time)
+            # Use a weighted distribution for lead time (mostly 1-5 days)
+            lead_time = random.choice([0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 6, 7, 10, 14])
+            booking_date = current_date - datetime.timedelta(days=lead_time)
+            
+            # Prevent booking date from going before Jan 1, 2025
+            if booking_date < start_date:
+                booking_date = start_date
+                
+            # Base fare rate based on bus type
+            base_rate = 1.5 if "AC" in bus_type else 1.0
+            fare = float(dist * base_rate + (200 if "Sleeper" in bus_type else 50))
+            
+            # Inject pricing seasonality to make the revenue trend line unique from bookings line!
+            # Weekend surcharge (Friday, Saturday, Sunday)
+            if current_date.weekday() >= 4:
+                fare *= 1.15
+            # Summer peak (May & June)
+            if current_date.month in [5, 6]:
+                fare *= 1.20
+            # Festive season peak (October & November)
+            elif current_date.month in [10, 11]:
+                fare *= 0.85 if current_date.month == 11 else 1.25 # minor dip in late nov, peak oct
+                
+            # Add minor random price fluctuations
+            fare += random.uniform(-15.0, 15.0)
+            fare = round(fare, 2)
+            
+            # Dynamic status distribution: Confirmed is majority (82%), Cancelled (12%), Pending (6%)
+            status = random.choices(statuses, weights=[0.82, 0.12, 0.06])[0]
+            
+            bookings_data.append({
+                "Booking_ID": b_id,
+                "Customer_ID": cust_id,
+                "Bus_ID": bus_id,
+                "Route_ID": route_id,
+                "Booking_Date": booking_date.strftime('%Y-%m-%d'),
+                "Travel_Date": current_date.strftime('%Y-%m-%d'),
+                "Seat_Number": seat_num,
+                "Fare_Amount": fare,
+                "Booking_Status": status
+            })
+            b_id += 1
+            
     df = pd.DataFrame(bookings_data)
+    num_records = len(df)
     
     # --- Inject Dirt ---
     # 1. Duplicate records (5% duplicates)
