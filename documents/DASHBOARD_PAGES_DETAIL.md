@@ -39,7 +39,7 @@ Drag the appropriate slicers into the panel for each sheet:
 | Page Tab | Slicer 1 (Y = `80px`) | Slicer 2 (Y = `220px`) | Slicer 3 (Y = `420px`) |
 | :--- | :--- | :--- | :--- |
 | **Page 1: Overview** | `Calendar[Date]` (Between Slider) | `routes[Source]` (Dropdown) | `buses[Bus_Type]` (Checkbox List) |
-| **Page 2: Bookings** | `Calendar[Date]` (Between Slider) | `routes[Source]` (Dropdown) | `buses[Bus_Type]` (Checkbox List) |
+| **Page 2: Bookings** | `bookings[Booking_Status]` (Tile / Horizontal List) | `Calendar[Date]` (Between Slider) | `buses[Capacity]` (Numeric Range Slider) |
 | **Page 3: Revenue** | `Calendar[Date]` (Between Slider) | `bookings[Fare_Amount]` (Numeric Range Slider) | `routes[Source]` (Dropdown) |
 | **Page 4: Customers** | `customers[Gender]` (Tile) | `customers[Age_Group]` (Checkbox List) | `customers[Name]` (Searchable Dropdown) |
 | **Page 5: Bus Types** | `buses[Bus_Type]` (Checkbox List) | `buses[Capacity]` (Numeric Range Slider) | *Leave Empty* |
@@ -327,10 +327,10 @@ Analyzes coach configurations, fleet seat capacities, and capacity yield metrics
    - **Visualization Pane**: Select **Card (new)** icon.
    - **Coordinates**: X = `15px`, Y = `85px`, Width = `1250px`, Height = `120px`.
    - **Field Wells Configuration**:
-     - Drag `_Measures[Total Buses]`, `_Measures[Total Seating Capacity]`, `_Measures[Average Bus Capacity]`, and `_Measures[Occupancy Rate]` into the Values box.
+     - Drag `_Measures[Total Buses]`, `_Measures[Total Seating Capacity]`, `_Measures[Average Bus Capacity]`, and `_Measures[Seats Offered]` into the Values box.
    - **Visual Layout & Formatting**:
      - Orientation: **`Horizontal`**, Columns: **`4`**, Card spacing: `15px`, Vertical alignment: **`Middle`**.
-     - Style backgrounds, fonts, and borders consistent with theme. Upload matching icons (e.g., `icon_routes.png` for buses, `icon_confirmed.png` for capacity, `icon_fare.png` for average capacity, and `icon_retention.png` for occupancy).
+     - Style backgrounds, fonts, and borders consistent with theme. Upload matching icons (e.g., `icon_routes.png` for buses, `icon_confirmed.png` for capacity, `icon_fare.png` for average capacity, and `icon_bookings.png` for seats offered).
 
 2. **Capacity vs. Occupancy by Bus Type (Clustered Column Chart)**:
    - **Business Value**: Solves **"How many total seats do we offer vs how many do we actually sell per bus type?"** (directly highlights underutilized seating capacity across coach categories).

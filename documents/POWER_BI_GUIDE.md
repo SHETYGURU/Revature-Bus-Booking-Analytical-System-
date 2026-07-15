@@ -155,7 +155,13 @@ Total Buses = DISTINCTCOUNT(buses[Bus_ID])
 
 #### Total Seating Capacity
 ```dax
-Total Seating Capacity = SUMX(bookings, RELATED(buses[Capacity]))
+Total Seating Capacity = SUM(buses[Capacity])
+```
+*Format: Whole Number.*
+
+#### Seats Offered
+```dax
+Seats Offered = SUMX(bookings, RELATED(buses[Capacity]))
 ```
 *Format: Whole Number.*
 
