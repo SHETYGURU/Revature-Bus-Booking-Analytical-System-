@@ -25,11 +25,12 @@ def transform_and_validate(bookings, customers, buses, routes):
     initial_customers_count = len(customers)
     
     # --- 1. Date Format Standardization ---
-    # Parse dates flexibly. Since formats can be mixed (YYYY-MM-DD, DD/MM/YYYY, MM-DD-YYYY),
-    # we convert them to datetime objects, coercing invalid inputs to NaT.
+    # Our raw data has a mix of date strings (e.g. DD/MM/YYYY, YYYY-MM-DD, and MM-DD-YYYY).
+    # We parse them flexibly using format='mixed' to resolve inconsistencies and coerce errors into NaT.
     bookings['Booking_Date'] = pd.to_datetime(bookings['Booking_Date'], format='mixed', errors='coerce')
     bookings['Travel_Date'] = pd.to_datetime(bookings['Travel_Date'], format='mixed', errors='coerce')
     
+    # If any date fails to parse, it becomes a NaT value which we drop to keep database rows clean.
     invalid_dates_parsing = bookings['Booking_Date'].isna() | bookings['Travel_Date'].isna()
     invalid_parsing_count = invalid_dates_parsing.sum()
     if invalid_parsing_count > 0:
@@ -37,24 +38,24 @@ def transform_and_validate(bookings, customers, buses, routes):
         bookings = bookings[~invalid_dates_parsing]
         
     # --- 2. Duplicate Removal ---
-    # Deduplicate Bookings based on Booking_ID
+    # Check for duplicate bookings by Booking_ID and drop them so that Booking_ID remains a clean primary key.
     duplicates_count = bookings.duplicated(subset=['Booking_ID']).sum()
     bookings_clean = bookings.drop_duplicates(subset=['Booking_ID']).copy()
     print(f"Deduplication: Removed {duplicates_count} duplicate booking records.")
     
     # --- 3. Handling Null Values ---
-    # Drop records from Bookings where Fare_Amount is null
+    # If a booking has no fare amount, it is useless for financial analytics, so we remove it.
     null_fares_count = bookings_clean['Fare_Amount'].isnull().sum()
     bookings_clean = bookings_clean.dropna(subset=['Fare_Amount'])
     print(f"Null Handling: Removed {null_fares_count} booking records with missing Fare_Amount.")
     
-    # Fill missing phone numbers in Customers with "Unknown"
+    # If a customer phone number is missing, we fill it with "Unknown" rather than dropping the whole customer record.
     customers_clean = customers.copy()
     null_phones_count = customers_clean['Phone'].isnull().sum()
     customers_clean['Phone'] = customers_clean['Phone'].fillna('Unknown')
     print(f"Null Handling: Filled {null_phones_count} missing customer phone numbers with 'Unknown'.")
     
-    # Clean Gender column: normalize, map, fill nulls
+    # Normalize gender entries to a standard 'Male' or 'Female' string to keep visual category filters clean.
     null_genders_count = customers_clean['Gender'].isnull().sum()
     customers_clean['Gender'] = customers_clean['Gender'].fillna('Female')
     

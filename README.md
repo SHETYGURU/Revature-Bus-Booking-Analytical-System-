@@ -18,21 +18,23 @@ This project implements a multi-tier relational model using **Python** for ETL, 
 ```
 Bus Booking Analytics System/
 │
-├── documents/                               # Project Specs, Reference Data & Core Docs
+├── documents/                               # Main Project Documentation & Setup Specs
 │   ├── Bus Booking Analytics System.pdf     # System Objectives & Architecture Spec
 │   ├── bus_booking_1000_rows.csv            # Original baseline booking CSV
-│   ├── WALKTHROUGH.md                       # Detailed cleaning stats & SQL analytics
-│   ├── WORK_STRUCTURE.md                    # WBS & development workflow sequence
-│   ├── POWER_BI_GUIDE.md                    # Power BI Setup & DAX Visualisation Guide
-│   ├── DASHBOARD_DESIGN_GUIDE.md            # Slicers sizing, grid coordinates & typography
-│   └── DASHBOARD_PAGES_DETAIL.md            # Page-by-page visual setups & filter panel bookmarks
+│   ├── USER_FLOW_AND_STEPS.md               # User interactive flows & detailed setup steps
+│   │
+│   └── development/                         # Developer Technical Guides (DAX, Pages & WBS)
+│       ├── WALKTHROUGH.md                   # Detailed cleaning stats & SQL analytics
+│       ├── WORK_STRUCTURE.md                # WBS & development workflow sequence
+│       ├── POWER_BI_GUIDE.md                # Power BI Setup & DAX Visualisation Guide
+│       ├── DASHBOARD_DESIGN_GUIDE.md        # Slicers sizing, grid coordinates & typography
+│       └── DASHBOARD_PAGES_DETAIL.md        # Page-by-page visual setups & filter panel bookmarks
 │
 ├── data/                                    # Active Datasets Directory
-│   ├── bus_booking_raw.csv                  # Newly generated dirty bookings (>2,000 rows)
+│   ├── bus_booking_raw.csv                  # Newly generated dirty bookings (~11,000 rows)
 │   ├── customers.csv                        # Raw Customers list (injected casing & phone nulls)
 │   ├── buses.csv                            # Buses list (types & capacities)
 │   ├── routes.csv                           # Routes list (source, destination, distance)
-│   ├── bus_booking_analytics.db             # Local SQLite database with populated clean tables
 │   └── clean/                               # Cleansed, standardized, and validated CSV files
 │       ├── bookings_clean.csv
 │       ├── customers_clean.csv
@@ -40,7 +42,7 @@ Bus Booking Analytics System/
 │       └── routes_clean.csv
 │
 ├── data_generation/                         # Generation Module
-│   ├── data_generator.py                    # Generation script (seeds 2,100 records + anomalies)
+│   ├── data_generator.py                    # Generation script (with 65 bookings/customer cap)
 │   └── data_generation.ipynb                # Notebook detailing the generation strategy
 │
 ├── etl_pipeline/                            # ETL Pipeline Module
@@ -129,9 +131,10 @@ We are a core team of engineers and architects focused on product-driven systems
 ---
 
 ## Project Documentation Links
-- **Detailed Cleaning Results & Database Counts**: See **[WALKTHROUGH.md](documents/WALKTHROUGH.md)** ([local absolute link](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WALKTHROUGH.md)).
-- **Work Breakdown Structure & Sequences**: See **[WORK_STRUCTURE.md](documents/WORK_STRUCTURE.md)** ([local absolute link](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/WORK_STRUCTURE.md)).
-- **Power BI Connection & Setup Tutorial**: See **[POWER_BI_GUIDE.md](documents/POWER_BI_GUIDE.md)** ([local absolute link](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/POWER_BI_GUIDE.md)).
-- **Power BI Layout & Design Specs**: See **[DASHBOARD_DESIGN_GUIDE.md](documents/DASHBOARD_DESIGN_GUIDE.md)** ([local absolute link](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/DASHBOARD_DESIGN_GUIDE.md)).
-- **Power BI Pages & Filters Detail**: See **[DASHBOARD_PAGES_DETAIL.md](documents/DASHBOARD_PAGES_DETAIL.md)** ([local absolute link](file:///c:/Users/user/Desktop/Revature%20Phase%202/Bus%20Booking%20Analytics%20System/documents/DASHBOARD_PAGES_DETAIL.md)).
+- **Interactive User Flow & Steps**: See **[USER_FLOW_AND_STEPS.md](documents/USER_FLOW_AND_STEPS.md)**.
+- **Detailed Cleaning Results & Database Counts**: See **[WALKTHROUGH.md](documents/development/WALKTHROUGH.md)**.
+- **Work Breakdown Structure & Sequences**: See **[WORK_STRUCTURE.md](documents/development/WORK_STRUCTURE.md)**.
+- **Power BI Connection & Setup Tutorial**: See **[POWER_BI_GUIDE.md](documents/development/POWER_BI_GUIDE.md)**.
+- **Power BI Layout & Design Specs**: See **[DASHBOARD_DESIGN_GUIDE.md](documents/development/DASHBOARD_DESIGN_GUIDE.md)**.
+- **Power BI Pages & Filters Detail**: See **[DASHBOARD_PAGES_DETAIL.md](documents/development/DASHBOARD_PAGES_DETAIL.md)**.
 

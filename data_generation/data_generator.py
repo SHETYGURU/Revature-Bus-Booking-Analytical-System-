@@ -3,12 +3,16 @@ import random
 import os
 import datetime
 
-# Set seed for reproducibility
+# We set a fixed seed so that every run generates the exact same numbers.
+# This makes it easy to compare and test report visual outputs!
 random.seed(42)
 
 def generate_base_buses():
-    # 11 Buses (IDs 200 to 210)
+    # We generate a static fleet of 11 buses (mapped to IDs 200 through 210).
     bus_ids = list(range(200, 211))
+    
+    # We cycle through these 3 specific bus configurations. Modulo allocation 
+    # ensures all three are evenly represented across our 11 buses (4, 4, 3 split).
     bus_types = ["AC Sleeper", "Non-AC Sleeper", "AC Seater"]
     states = ["KA", "MH", "DL", "TS", "AP", "HR", "GJ", "UP"]
     
@@ -20,7 +24,10 @@ def generate_base_buses():
         num = f"{random.randint(1000, 9999)}"
         bus_number = f"{state}-{code1}-{code2}-{num}"
         
+        # Cycle through types (round-robin) to avoid random selection skipping any type.
         bus_type = bus_types[idx % len(bus_types)]
+        
+        # Sleeper configurations have a physical capacity of 40, seaters have 50.
         capacity = 40 if "Sleeper" in bus_type else 50
         
         buses_data.append({
@@ -179,19 +186,21 @@ def generate_dirty_bookings(customers_df, buses_df, routes_df, num_records=2000)
     statuses = ["Confirmed", "Pending", "Cancelled"]
     bookings_data = []
     
-    # Skew customer bookings to achieve a Customer Retention Rate (~73%, slightly below the 76% goal)
-    # 27% of customers book exactly once (single-trip travelers)
-    # 73% of customers book repeatedly (frequent flyers)
+    # Skew customer bookings to achieve a realistic Customer Retention Rate of ~74.6%.
+    # If the database represents mostly daily local commuters, we segment the customer pool:
+    # - 27% single-trip passengers who make exactly 1 booking throughout the entire timeline.
+    # - 73% frequent travelers who book multiple times.
     num_customers = len(cust_ids)
-    single_trip_count = int(num_customers * 0.27) # ~81 customers
+    single_trip_count = int(num_customers * 0.27) 
     
     single_trip_custs = cust_ids[:single_trip_count]
     frequent_custs = cust_ids[single_trip_count:]
     
+    # Store single-trip pool so we can pop them one-by-one and ensure they only travel once.
     single_trip_pool = list(single_trip_custs)
     random.shuffle(single_trip_pool)
     
-    # We want to span from 2025-01-01 to 2026-07-14 (present month/date)
+    # Span from Jan 1, 2025 up to July 14, 2026 (present month).
     start_date = datetime.date(2025, 1, 1)
     end_date = datetime.date(2026, 7, 14)
     total_days = (end_date - start_date).days + 1
@@ -201,14 +210,14 @@ def generate_dirty_bookings(customers_df, buses_df, routes_df, num_records=2000)
     
     # Generate scheduled runs across the timeline
     for d in range(total_days):
-        # Skip ~40% of the days randomly to reduce total bookings to a realistic level
+        # We skip roughly 40% of the calendar days. This scales down the total 
+        # bookings to ~11k, which matches a realistic regional fleet footprint.
         if random.random() > 0.60:
             continue
             
         current_date = start_date + datetime.timedelta(days=d)
         
-        # Schedule 1 run per day on average to keep data size around 15k-20k
-        # Choose a random Route and Bus for this day's run
+        # Dispatch 1 bus on 1 route for this operating day
         bus_id = random.choice(bus_ids)
         route_id = random.choice(route_ids)
         
@@ -216,11 +225,11 @@ def generate_dirty_bookings(customers_df, buses_df, routes_df, num_records=2000)
         dist = routes_df[routes_df["Route_ID"] == route_id]["Distance"].values[0]
         bus_type = buses_df[buses_df["Bus_ID"] == bus_id]["Bus_Type"].values[0]
         
-        # Target high occupancy rate: 70% to 90% (practically realistic)
+        # Target high occupancy rates (70% to 90%) so our buses run profitably.
         occupancy_rate = random.uniform(0.70, 0.90)
         num_seats_to_book = int(bus_cap * occupancy_rate)
         
-        # Select unique seat numbers for this run
+        # Select unique seat numbers for this specific run
         all_seats = list(range(1, bus_cap + 1))
         booked_seats = random.sample(all_seats, k=num_seats_to_book)
         
