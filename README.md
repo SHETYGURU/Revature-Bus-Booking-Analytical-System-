@@ -72,3 +72,38 @@ python data_generation/data_generator.py
 # Clean and load to MySQL database
 python etl_pipeline/etl_pipeline.py --user root --password YOUR_PASSWORD
 ```
+
+---
+
+## 🏷️ GitHub Project Management & Tracking
+
+We leverage **GitHub Issues** to systematically track database staging, WBS sprints, design reviews, and final deliverables. Every task is color-coded with specific scopes to maintain project clarity:
+
+### Custom Label Color Scheme
+
+*   **`final-project`** (`#8b5cf6` Amethyst) — Core final project deliverables.
+*   **`completed`** (`#10b981` Vibrant Green) — Cleared, verified, and merged sprints.
+*   **`data-engineering`** (`#2563eb` Royal Blue) — ETL pipelining, anomaly cleansing, and data structures.
+*   **`database`** (`#d97706` Amber) — Relational MySQL schema designs and DDL staging.
+*   **`documentation`** (`#ec4899` Deep Pink) — Slides, walkthroughs, user flows, and instructions.
+*   **`powerbi`** (`#eab308` Yellow) — Power BI calculated measures, cards, and bookmarks.
+*   **`tableau`** (`#06b6d4` Teal) — Tableau sheets, stencils, and parameter configurations.
+*   **`financial-analytics`** (`#f43f5e` Rose) — Fare yield optimization and pricing models.
+*   **`operational-analytics`** (`#14b8a6` Teal Emerald) — Dispatch schedules, lead times, and capacity loads.
+*   **`yield-management`** (`#0284c7` Sky Blue) — Fleet load factor and seating capacity scaling.
+
+### Closed & Completed Issues
+
+A history of all project steps is archived in closed issues on this repository:
+1.  **#9 Power BI: Enforce customer volume caps and fleet modulo allocation** (`data-engineering`, `powerbi`, `completed`, `final-project`, `yield-management`, `operational-analytics`)
+2.  **#10 Power BI: Suppress notebook warnings and clean up database loader** (`data-engineering`, `powerbi`, `completed`, `final-project`, `database`)
+3.  **#11 Power BI: Humanize Python code comments and script explanations** (`documentation`, `powerbi`, `completed`, `final-project`)
+4.  **#12 Power BI: Reorganize documentation subfolders and main directories** (`documentation`, `powerbi`, `completed`, `final-project`)
+5.  **#13 Power BI: Create interactive User Flow and Steps guide** (`documentation`, `powerbi`, `completed`, `final-project`, `operational-analytics`)
+6.  **#14 Power BI: Design light-themed presentation deck with transitions and screenshots** (`documentation`, `powerbi`, `completed`, `final-project`)
+7.  **#15 Power BI: Restructure and clean up DAX measures** (`powerbi`, `financial-analytics`, `completed`, `final-project`, `yield-management`)
+8.  **#16 Tableau: Restrict active fleet capacity to 3 coach classes** (`data-engineering`, `tableau`, `completed`, `final-project`, `yield-management`, `operational-analytics`)
+9.  **#17 Tableau: Implement insert ignore and remove drop SQL scripts** (`database`, `tableau`, `completed`, `final-project`, `financial-analytics`)
+10. **#18 Tableau: Design light-themed dashboard structure and parameter triggers** (`tableau`, `operational-analytics`, `completed`, `final-project`)
+11. **#19 Database: Perform schema checks and verify relational integrity** (`database`, `data-engineering`, `completed`, `final-project`)
+
