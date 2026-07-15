@@ -170,13 +170,8 @@ def load_to_mysql(bookings, customers, buses, routes, db_config):
             cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
             cursor.execute(f"USE {db_name}")
             
-            cursor.execute("DROP TABLE IF EXISTS Bookings;")
-            cursor.execute("DROP TABLE IF EXISTS Customers;")
-            cursor.execute("DROP TABLE IF EXISTS Buses;")
-            cursor.execute("DROP TABLE IF EXISTS Routes;")
-            
             cursor.execute("""
-            CREATE TABLE Customers (
+            CREATE TABLE IF NOT EXISTS Customers (
                 Customer_ID INT PRIMARY KEY,
                 Name VARCHAR(255) NOT NULL,
                 Email VARCHAR(255) NOT NULL UNIQUE,
@@ -187,7 +182,7 @@ def load_to_mysql(bookings, customers, buses, routes, db_config):
             """)
             
             cursor.execute("""
-            CREATE TABLE Buses (
+            CREATE TABLE IF NOT EXISTS Buses (
                 Bus_ID INT PRIMARY KEY,
                 Bus_Number VARCHAR(20) NOT NULL UNIQUE,
                 Bus_Type VARCHAR(50) NOT NULL,
@@ -196,7 +191,7 @@ def load_to_mysql(bookings, customers, buses, routes, db_config):
             """)
             
             cursor.execute("""
-            CREATE TABLE Routes (
+            CREATE TABLE IF NOT EXISTS Routes (
                 Route_ID INT PRIMARY KEY,
                 Source VARCHAR(100) NOT NULL,
                 Destination VARCHAR(100) NOT NULL,
@@ -209,7 +204,7 @@ def load_to_mysql(bookings, customers, buses, routes, db_config):
             """)
             
             cursor.execute("""
-            CREATE TABLE Bookings (
+            CREATE TABLE IF NOT EXISTS Bookings (
                 Booking_ID INT PRIMARY KEY,
                 Customer_ID INT NOT NULL,
                 Bus_ID INT NOT NULL,
@@ -227,20 +222,20 @@ def load_to_mysql(bookings, customers, buses, routes, db_config):
             
             # Insert Customers
             cust_tuples = [tuple(x) for x in customers.to_numpy()]
-            cursor.executemany("INSERT INTO Customers (Customer_ID, Name, Email, Phone, Gender, Age) VALUES (%s, %s, %s, %s, %s, %s)", cust_tuples)
+            cursor.executemany("INSERT IGNORE INTO Customers (Customer_ID, Name, Email, Phone, Gender, Age) VALUES (%s, %s, %s, %s, %s, %s)", cust_tuples)
             
             # Insert Buses
             bus_tuples = [tuple(x) for x in buses.to_numpy()]
-            cursor.executemany("INSERT INTO Buses (Bus_ID, Bus_Number, Bus_Type, Capacity) VALUES (%s, %s, %s, %s)", bus_tuples)
+            cursor.executemany("INSERT IGNORE INTO Buses (Bus_ID, Bus_Number, Bus_Type, Capacity) VALUES (%s, %s, %s, %s)", bus_tuples)
             
             # Insert Routes
             route_tuples = [tuple(x) for x in routes.to_numpy()]
-            cursor.executemany("INSERT INTO Routes (Route_ID, Source, Destination, Distance, Source_Latitude, Source_Longitude, Dest_Latitude, Dest_Longitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", route_tuples)
+            cursor.executemany("INSERT IGNORE INTO Routes (Route_ID, Source, Destination, Distance, Source_Latitude, Source_Longitude, Dest_Latitude, Dest_Longitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", route_tuples)
             
             # Insert Bookings
             booking_tuples = [tuple(x) for x in bookings.to_numpy()]
             cursor.executemany("""
-                INSERT INTO Bookings (Booking_ID, Customer_ID, Bus_ID, Route_ID, Booking_Date, Travel_Date, Seat_Number, Fare_Amount, Booking_Status)
+                INSERT IGNORE INTO Bookings (Booking_ID, Customer_ID, Bus_ID, Route_ID, Booking_Date, Travel_Date, Seat_Number, Fare_Amount, Booking_Status)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, booking_tuples)
             
