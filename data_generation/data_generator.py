@@ -13,14 +13,14 @@ def generate_base_buses():
     states = ["KA", "MH", "DL", "TS", "AP", "HR", "GJ", "UP"]
     
     buses_data = []
-    for b_id in bus_ids:
+    for idx, b_id in enumerate(bus_ids):
         state = random.choice(states)
         code1 = f"{random.randint(1, 99):02d}"
         code2 = random.choice(["A", "B", "C", "D", "E", "F", "G", "H", "J", "K"])
         num = f"{random.randint(1000, 9999)}"
         bus_number = f"{state}-{code1}-{code2}-{num}"
         
-        bus_type = random.choice(bus_types)
+        bus_type = bus_types[idx % len(bus_types)]
         capacity = 40 if "Sleeper" in bus_type else 50
         
         buses_data.append({
