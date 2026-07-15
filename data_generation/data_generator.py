@@ -9,7 +9,7 @@ random.seed(42)
 def generate_base_buses():
     # 11 Buses (IDs 200 to 210)
     bus_ids = list(range(200, 211))
-    bus_types = ["AC Sleeper", "Non-AC Sleeper", "AC Seater", "Non-AC Seater"]
+    bus_types = ["AC Sleeper", "Non-AC Sleeper", "AC Seater"]
     states = ["KA", "MH", "DL", "TS", "AP", "HR", "GJ", "UP"]
     
     buses_data = []
