@@ -1,5 +1,4 @@
 import pandas as pd
-import sqlite3
 import os
 import mysql.connector
 from mysql.connector import Error
@@ -159,81 +158,6 @@ def transform_and_validate(bookings, customers, buses, routes):
     
     return bookings_clean, customers_clean, buses, routes_clean
 
-def load_to_sqlite(bookings, customers, buses, routes, db_path):
-    print(f"Loading data into SQLite database: {db_path}...")
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    
-    # Enable foreign keys
-    cursor.execute("PRAGMA foreign_keys = ON;")
-    
-    # Drop tables to recreate them freshly
-    cursor.execute("DROP TABLE IF EXISTS Bookings;")
-    cursor.execute("DROP TABLE IF EXISTS Customers;")
-    cursor.execute("DROP TABLE IF EXISTS Buses;")
-    cursor.execute("DROP TABLE IF EXISTS Routes;")
-    
-    # Create tables
-    cursor.execute("""
-    CREATE TABLE Customers (
-        Customer_ID INTEGER PRIMARY KEY,
-        Name TEXT NOT NULL,
-        Email TEXT NOT NULL UNIQUE,
-        Phone TEXT NOT NULL,
-        Gender TEXT NOT NULL,
-        Age INTEGER NOT NULL
-    );
-    """)
-    
-    cursor.execute("""
-    CREATE TABLE Buses (
-        Bus_ID INTEGER PRIMARY KEY,
-        Bus_Number TEXT NOT NULL UNIQUE,
-        Bus_Type TEXT NOT NULL,
-        Capacity INTEGER NOT NULL
-    );
-    """)
-    
-    cursor.execute("""
-    CREATE TABLE Routes (
-        Route_ID INTEGER PRIMARY KEY,
-        Source TEXT NOT NULL,
-        Destination TEXT NOT NULL,
-        Distance INTEGER NOT NULL,
-        Source_Latitude REAL,
-        Source_Longitude REAL,
-        Dest_Latitude REAL,
-        Dest_Longitude REAL
-    );
-    """)
-    
-    cursor.execute("""
-    CREATE TABLE Bookings (
-        Booking_ID INTEGER PRIMARY KEY,
-        Customer_ID INTEGER NOT NULL,
-        Bus_ID INTEGER NOT NULL,
-        Route_ID INTEGER NOT NULL,
-        Booking_Date TEXT NOT NULL,
-        Travel_Date TEXT NOT NULL,
-        Seat_Number INTEGER NOT NULL,
-        Fare_Amount REAL NOT NULL,
-        Booking_Status TEXT NOT NULL,
-        FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID),
-        FOREIGN KEY (Bus_ID) REFERENCES Buses(Bus_ID),
-        FOREIGN KEY (Route_ID) REFERENCES Routes(Route_ID)
-    );
-    """)
-    
-    # Insert clean data
-    customers.to_sql('Customers', conn, if_exists='append', index=False)
-    buses.to_sql('Buses', conn, if_exists='append', index=False)
-    routes.to_sql('Routes', conn, if_exists='append', index=False)
-    bookings.to_sql('Bookings', conn, if_exists='append', index=False)
-    
-    conn.commit()
-    conn.close()
-    print("Successfully loaded datasets into SQLite database.")
-
 def load_to_mysql(bookings, customers, buses, routes, db_config):
     print("Connecting to MySQL...")
     try:
@@ -335,7 +259,6 @@ def main():
     import getpass
 
     parser = argparse.ArgumentParser(description="Run ETL Pipeline for Bus Booking Analytics System")
-    parser.add_argument('--mysql', action='store_true', help='Load clean datasets into MySQL database')
     parser.add_argument('--user', default='root', help='MySQL database username (default: root)')
     parser.add_argument('--password', help='MySQL database password')
     parser.add_argument('--host', default='localhost', help='MySQL database host (default: localhost)')
@@ -360,27 +283,24 @@ def main():
     buses_c.to_csv(os.path.join(clean_dir, 'buses_clean.csv'), index=False)
     routes_c.to_csv(os.path.join(clean_dir, 'routes_clean.csv'), index=False)
     print(f"Cleaned CSVs saved to {clean_dir}")
-    
-    # Load into local SQLite database
-    db_path = os.path.join(data_dir, 'bus_booking_analytics.db')
-    load_to_sqlite(bookings_c, customers_c, buses_c, routes_c, db_path)
 
-    if args.mysql:
-        password = args.password
-        if not password:
-            try:
-                password = getpass.getpass("Enter MySQL Password: ")
-            except Exception:
-                # Fallback if getpass is not supported in the running environment
-                password = input("Enter MySQL Password: ")
-                
-        db_config = {
-            'host': args.host,
-            'user': args.user,
-            'password': password,
-            'database': args.db_name
-        }
-        load_to_mysql(bookings_c, customers_c, buses_c, routes_c, db_config)
+    password = args.password
+    if not password and password is not None:  # explicit empty password check
+        password = ""
+    elif password is None:
+        try:
+            password = getpass.getpass("Enter MySQL Password: ")
+        except Exception:
+            # Fallback if getpass is not supported in the running environment
+            password = input("Enter MySQL Password: ")
+            
+    db_config = {
+        'host': args.host,
+        'user': args.user,
+        'password': password,
+        'database': args.db_name
+    }
+    load_to_mysql(bookings_c, customers_c, buses_c, routes_c, db_config)
 
 if __name__ == "__main__":
     main()

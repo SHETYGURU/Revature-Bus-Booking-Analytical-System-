@@ -179,11 +179,11 @@ def generate_dirty_bookings(customers_df, buses_df, routes_df, num_records=2000)
     statuses = ["Confirmed", "Pending", "Cancelled"]
     bookings_data = []
     
-    # Skew customer bookings to achieve a realistic Customer Retention Rate (~40%)
-    # 60% of customers book exactly once (single-trip travelers)
-    # 40% of customers book repeatedly (frequent flyers)
+    # Skew customer bookings to achieve a Customer Retention Rate (~73%, slightly below the 76% goal)
+    # 27% of customers book exactly once (single-trip travelers)
+    # 73% of customers book repeatedly (frequent flyers)
     num_customers = len(cust_ids)
-    single_trip_count = int(num_customers * 0.60) # ~180 customers
+    single_trip_count = int(num_customers * 0.27) # ~81 customers
     
     single_trip_custs = cust_ids[:single_trip_count]
     frequent_custs = cust_ids[single_trip_count:]
