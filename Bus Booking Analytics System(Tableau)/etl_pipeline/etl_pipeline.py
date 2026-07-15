@@ -1,0 +1,283 @@
+import pandas as pd
+import os
+import mysql.connector
+from mysql.connector import Error
+
+def load_csv_data(data_dir):
+    print("Loading CSV files...")
+    raw_bookings_path = os.path.join(data_dir, 'bus_booking_raw.csv')
+    if os.path.exists(raw_bookings_path):
+        print(f"Loading raw bookings from {raw_bookings_path}")
+        bookings = pd.read_csv(raw_bookings_path)
+    else:
+        print("Raw bookings not found, falling back to 1000 rows.")
+        bookings = pd.read_csv(os.path.join(data_dir, 'bus_booking_1000_rows.csv'))
+        
+    customers = pd.read_csv(os.path.join(data_dir, 'customers.csv'))
+    buses = pd.read_csv(os.path.join(data_dir, 'buses.csv'))
+    routes = pd.read_csv(os.path.join(data_dir, 'routes.csv'))
+    return bookings, customers, buses, routes
+
+def transform_and_validate(bookings, customers, buses, routes):
+    print("--- ETL CLEANING & TRANSFORMATION REPORT ---")
+    initial_bookings_count = len(bookings)
+    initial_customers_count = len(customers)
+    
+    # --- 1. Date Format Standardization ---
+    bookings['Booking_Date'] = pd.to_datetime(bookings['Booking_Date'], format='mixed', errors='coerce')
+    bookings['Travel_Date'] = pd.to_datetime(bookings['Travel_Date'], format='mixed', errors='coerce')
+    
+    invalid_dates_parsing = bookings['Booking_Date'].isna() | bookings['Travel_Date'].isna()
+    invalid_parsing_count = invalid_dates_parsing.sum()
+    if invalid_parsing_count > 0:
+        print(f"[Warning] Date Parsing: Found {invalid_parsing_count} rows with unparseable dates. Removing them.")
+        bookings = bookings[~invalid_dates_parsing]
+        
+    # --- 2. Duplicate Removal ---
+    duplicates_count = bookings.duplicated(subset=['Booking_ID']).sum()
+    bookings_clean = bookings.drop_duplicates(subset=['Booking_ID']).copy()
+    print(f"Deduplication: Removed {duplicates_count} duplicate booking records.")
+    
+    # --- 3. Handling Null Values ---
+    null_fares_count = bookings_clean['Fare_Amount'].isnull().sum()
+    bookings_clean = bookings_clean.dropna(subset=['Fare_Amount'])
+    print(f"Null Handling: Removed {null_fares_count} booking records with missing Fare_Amount.")
+    
+    customers_clean = customers.copy()
+    null_phones_count = customers_clean['Phone'].isnull().sum()
+    customers_clean['Phone'] = customers_clean['Phone'].fillna('Unknown')
+    print(f"Null Handling: Filled {null_phones_count} missing customer phone numbers with 'Unknown'.")
+    
+    null_genders_count = customers_clean['Gender'].isnull().sum()
+    customers_clean['Gender'] = customers_clean['Gender'].fillna('Female')
+    
+    def standardize_gender(val):
+        if not isinstance(val, str):
+            return 'Female'
+        val_clean = val.strip().lower()
+        if val_clean in ['m', 'male']:
+            return 'Male'
+        elif val_clean in ['f', 'female']:
+            return 'Female'
+        return 'Female'
+        
+    customers_clean['Gender'] = customers_clean['Gender'].apply(standardize_gender)
+    print(f"Null Handling/Standardization: Cleansed Gender field, filling {null_genders_count} missing values.")
+    
+    valid_ages = pd.to_numeric(customers_clean['Age'], errors='coerce').dropna()
+    valid_ages = valid_ages[(valid_ages >= 18) & (valid_ages <= 100)]
+    median_age = int(valid_ages.median()) if len(valid_ages) > 0 else 35
+    
+    customers_clean['Age'] = pd.to_numeric(customers_clean['Age'], errors='coerce')
+    null_ages_count = customers_clean['Age'].isnull().sum()
+    customers_clean['Age'] = customers_clean['Age'].fillna(median_age)
+    
+    outlier_ages_mask = (customers_clean['Age'] < 18) | (customers_clean['Age'] > 100)
+    outlier_ages_count = outlier_ages_mask.sum()
+    customers_clean.loc[outlier_ages_mask, 'Age'] = median_age
+    customers_clean['Age'] = customers_clean['Age'].astype(int)
+    print(f"Null Handling/Outliers: Cleansed Age field, filling {null_ages_count} nulls and correcting {outlier_ages_count} outliers to median ({median_age}).")
+    
+    # --- 4. Data Standardization ---
+    bookings_clean['Booking_Date'] = bookings_clean['Booking_Date'].dt.strftime('%Y-%m-%d')
+    bookings_clean['Travel_Date'] = bookings_clean['Travel_Date'].dt.strftime('%Y-%m-%d')
+    
+    customers_clean['Name'] = customers_clean['Name'].str.title()
+    
+    routes_clean = routes.copy()
+    routes_clean['Source'] = routes_clean['Source'].str.title()
+    routes_clean['Destination'] = routes_clean['Destination'].str.title()
+    
+    bookings_clean['Booking_Status'] = bookings_clean['Booking_Status'].str.capitalize()
+    
+    # --- 5. Data Consistency Checks ---
+    date_check_mask = pd.to_datetime(bookings_clean['Travel_Date']) >= pd.to_datetime(bookings_clean['Booking_Date'])
+    invalid_travel_dates_count = (~date_check_mask).sum()
+    if invalid_travel_dates_count > 0:
+        print(f"Constraint Check: Removed {invalid_travel_dates_count} bookings where Travel_Date was before Booking_Date.")
+        bookings_clean = bookings_clean[date_check_mask]
+        
+    fare_check_mask = bookings_clean['Fare_Amount'] > 0
+    invalid_fares_count = (~fare_check_mask).sum()
+    if invalid_fares_count > 0:
+        print(f"Constraint Check: Removed {invalid_fares_count} bookings with non-positive Fare_Amount (e.g. negative values).")
+        bookings_clean = bookings_clean[fare_check_mask]
+        
+    invalid_custs_mask = ~bookings_clean['Customer_ID'].isin(customers_clean['Customer_ID'])
+    invalid_custs_count = invalid_custs_mask.sum()
+    if invalid_custs_count > 0:
+        print(f"Referential Integrity: Removed {invalid_custs_count} bookings mapping to non-existent Customer_IDs.")
+        bookings_clean = bookings_clean[~invalid_custs_mask]
+        
+    invalid_buses_mask = ~bookings_clean['Bus_ID'].isin(buses['Bus_ID'])
+    invalid_buses_count = invalid_buses_mask.sum()
+    if invalid_buses_count > 0:
+        print(f"Referential Integrity: Removed {invalid_buses_count} bookings mapping to non-existent Bus_IDs.")
+        bookings_clean = bookings_clean[~invalid_buses_mask]
+        
+    invalid_routes_mask = ~bookings_clean['Route_ID'].isin(routes_clean['Route_ID'])
+    invalid_routes_count = invalid_routes_mask.sum()
+    if invalid_routes_count > 0:
+        print(f"Referential Integrity: Removed {invalid_routes_count} bookings mapping to non-existent Route_IDs.")
+        bookings_clean = bookings_clean[~invalid_routes_mask]
+        
+    merged_seats = bookings_clean.merge(buses, on='Bus_ID', how='left')
+    over_capacity_mask = merged_seats['Seat_Number'] > merged_seats['Capacity']
+    over_capacity_count = over_capacity_mask.sum()
+    if over_capacity_count > 0:
+        over_capacity_ids = merged_seats.loc[over_capacity_mask, 'Booking_ID']
+        print(f"Capacity Check: Removed {over_capacity_count} bookings where Seat_Number exceeded Bus Capacity.")
+        bookings_clean = bookings_clean[~bookings_clean['Booking_ID'].isin(over_capacity_ids)]
+        
+    final_bookings_count = len(bookings_clean)
+    final_customers_count = len(customers_clean)
+    
+    print("\n--- SUMMARY OF PROCESS ---")
+    print(f"Bookings: {initial_bookings_count} raw rows -> {final_bookings_count} clean rows (Removed {initial_bookings_count - final_bookings_count} rows).")
+    print(f"Customers: {initial_customers_count} raw rows -> {final_customers_count} clean rows.")
+    print("--------------------------------------------")
+    
+    return bookings_clean, customers_clean, buses, routes_clean
+
+
+
+def load_to_mysql(bookings, customers, buses, routes, db_config):
+    print("Connecting to MySQL...")
+    try:
+        conn_config = db_config.copy()
+        db_name = conn_config.pop('database', 'bus_booking_tableau')
+        conn = mysql.connector.connect(**conn_config)
+        if conn.is_connected():
+            cursor = conn.cursor()
+            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
+            cursor.execute(f"USE {db_name}")
+            
+            cursor.execute("DROP TABLE IF EXISTS Bookings;")
+            cursor.execute("DROP TABLE IF EXISTS Customers;")
+            cursor.execute("DROP TABLE IF EXISTS Buses;")
+            cursor.execute("DROP TABLE IF EXISTS Routes;")
+            
+            cursor.execute("""
+            CREATE TABLE Customers (
+                Customer_ID INT PRIMARY KEY,
+                Name VARCHAR(255) NOT NULL,
+                Email VARCHAR(255) NOT NULL UNIQUE,
+                Phone VARCHAR(20) NOT NULL,
+                Gender VARCHAR(10) NOT NULL,
+                Age INT NOT NULL
+            );
+            """)
+            
+            cursor.execute("""
+            CREATE TABLE Buses (
+                Bus_ID INT PRIMARY KEY,
+                Bus_Number VARCHAR(20) NOT NULL UNIQUE,
+                Bus_Type VARCHAR(50) NOT NULL,
+                Capacity INT NOT NULL
+            );
+            """)
+            
+            cursor.execute("""
+            CREATE TABLE Routes (
+                Route_ID INT PRIMARY KEY,
+                Source VARCHAR(100) NOT NULL,
+                Destination VARCHAR(100) NOT NULL,
+                Distance INT NOT NULL,
+                Source_Latitude DECIMAL(9, 6),
+                Source_Longitude DECIMAL(9, 6),
+                Dest_Latitude DECIMAL(9, 6),
+                Dest_Longitude DECIMAL(9, 6)
+            );
+            """)
+            
+            cursor.execute("""
+            CREATE TABLE Bookings (
+                Booking_ID INT PRIMARY KEY,
+                Customer_ID INT NOT NULL,
+                Bus_ID INT NOT NULL,
+                Route_ID INT NOT NULL,
+                Booking_Date DATE NOT NULL,
+                Travel_Date DATE NOT NULL,
+                Seat_Number INT NOT NULL,
+                Fare_Amount DECIMAL(10, 2) NOT NULL,
+                Booking_Status VARCHAR(20) NOT NULL,
+                FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID),
+                FOREIGN KEY (Bus_ID) REFERENCES Buses(Bus_ID),
+                FOREIGN KEY (Route_ID) REFERENCES Routes(Route_ID)
+            );
+            """)
+            
+            cust_tuples = [tuple(x) for x in customers.to_numpy()]
+            cursor.executemany("INSERT INTO Customers (Customer_ID, Name, Email, Phone, Gender, Age) VALUES (%s, %s, %s, %s, %s, %s)", cust_tuples)
+            
+            bus_tuples = [tuple(x) for x in buses.to_numpy()]
+            cursor.executemany("INSERT INTO Buses (Bus_ID, Bus_Number, Bus_Type, Capacity) VALUES (%s, %s, %s, %s)", bus_tuples)
+            
+            route_tuples = [tuple(x) for x in routes.to_numpy()]
+            cursor.executemany("INSERT INTO Routes (Route_ID, Source, Destination, Distance, Source_Latitude, Source_Longitude, Dest_Latitude, Dest_Longitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", route_tuples)
+            
+            booking_tuples = [tuple(x) for x in bookings.to_numpy()]
+            cursor.executemany("""
+                INSERT INTO Bookings (Booking_ID, Customer_ID, Bus_ID, Route_ID, Booking_Date, Travel_Date, Seat_Number, Fare_Amount, Booking_Status)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, booking_tuples)
+            
+            conn.commit()
+            print("Successfully loaded datasets into MySQL database.")
+            
+    except Error as e:
+        print(f"Error connecting to MySQL: {e}")
+        print("Falling back... Configure your connection details in MySQL configuration to execute directly.")
+    finally:
+        if 'conn' in locals() and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+def main():
+    import argparse
+    import getpass
+
+    parser = argparse.ArgumentParser(description="Run ETL Pipeline for Bus Booking Analytics System (Tableau)")
+    parser.add_argument('--user', default='root', help='MySQL database username (default: root)')
+    parser.add_argument('--password', help='MySQL database password')
+    parser.add_argument('--host', default='localhost', help='MySQL database host (default: localhost)')
+    parser.add_argument('--db-name', default='bus_booking_tableau', help='MySQL database name (default: bus_booking_tableau)')
+
+    args = parser.parse_args()
+
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    data_dir = os.path.join(base_dir, 'data')
+    
+    if not os.path.exists(data_dir):
+        data_dir = 'data'
+        
+    bookings, customers, buses, routes = load_csv_data(data_dir)
+    bookings_c, customers_c, buses_c, routes_c = transform_and_validate(bookings, customers, buses, routes)
+    
+    clean_dir = os.path.join(data_dir, 'clean')
+    os.makedirs(clean_dir, exist_ok=True)
+    bookings_c.to_csv(os.path.join(clean_dir, 'bookings_clean.csv'), index=False)
+    customers_c.to_csv(os.path.join(clean_dir, 'customers_clean.csv'), index=False)
+    buses_c.to_csv(os.path.join(clean_dir, 'buses_clean.csv'), index=False)
+    routes_c.to_csv(os.path.join(clean_dir, 'routes_clean.csv'), index=False)
+    print(f"Cleaned CSVs saved to {clean_dir}")
+
+    password = args.password
+    if not password and password is not None:  # explicit empty password check
+        password = ""
+    elif password is None:
+        try:
+            password = getpass.getpass("Enter MySQL Password: ")
+        except Exception:
+            password = input("Enter MySQL Password: ")
+            
+    db_config = {
+        'host': args.host,
+        'user': args.user,
+        'password': password,
+        'database': args.db_name
+    }
+    load_to_mysql(bookings_c, customers_c, buses_c, routes_c, db_config)
+
+if __name__ == "__main__":
+    main()
